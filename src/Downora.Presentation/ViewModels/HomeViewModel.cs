@@ -55,7 +55,7 @@ public sealed partial class HomeViewModel(
     public override Task OnNavigatedToAsync(CancellationToken cancellationToken) => RunSafeAsync(async () =>
     {
         Greeting = L[GreetingKey(time.GetLocalNow().Hour)];
-        SavedInText = L.Format("Home_SavedIn", settings.Current.DownloadDirectory);
+        SavedInText = L.Format("Home_SavedIn", Localizer.LeftToRight(settings.Current.DownloadDirectory));
 
         var stats = await jobs.GetStatisticsAsync(cancellationToken).ConfigureAwait(true);
         var active = await jobs.GetActiveAsync(cancellationToken).ConfigureAwait(true);
@@ -109,7 +109,7 @@ public sealed partial class DownloaderViewModel(
 
     public override Task OnNavigatedToAsync(CancellationToken cancellationToken)
     {
-        EmptyBody = L.Format("Downloader_EmptyBody", settings.Current.DownloadDirectory);
+        EmptyBody = L.Format("Downloader_EmptyBody", Localizer.LeftToRight(settings.Current.DownloadDirectory));
         return Task.CompletedTask;
     }
 

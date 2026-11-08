@@ -36,6 +36,13 @@ public sealed class Localizer : INotifyPropertyChanged
     public string this[string key] =>
         Strings.GetString(key, Culture) ?? $"[{key}]";
 
+    /// <summary>
+    /// Marks text that must read left-to-right (file paths, URLs) so an Arabic sentence around it doesn't reorder its parts.
+    /// Uses LEFT-TO-RIGHT EMBEDDING ... POP DIRECTIONAL FORMATTING, which WPF's text engine honors.
+    /// </summary>
+    public static string LeftToRight(string? text) =>
+        string.IsNullOrEmpty(text) ? string.Empty : $"\u202A{text}\u202C";
+
     public string Format(string key, params object?[] args) =>
         string.Format(Culture, this[key], args);
 

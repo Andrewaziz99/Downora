@@ -18,6 +18,17 @@
     <conv:MediaGlyphConverter x:Key="MediaGlyphConverter" />
     <conv:CountToVisibilityConverter x:Key="CountToVisibility" />
 
+    <!-- Focus ring: WPF shows FocusVisualStyle only for keyboard navigation, never after a mouse click. -->
+    <Style x:Key="FocusRing">
+        <Setter Property="Control.Template">
+            <Setter.Value>
+                <ControlTemplate>
+                    <Rectangle Margin="-1" RadiusX="5" RadiusY="5" Stroke="{StaticResource Brush.Accent}" StrokeThickness="2" SnapsToDevicePixels="True" />
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
     <!-- Text -->
     <Style x:Key="Text.Display" TargetType="TextBlock">
         <Setter Property="FontFamily" Value="{StaticResource Font.Display}" />
@@ -310,7 +321,7 @@
         <Setter Property="Cursor" Value="Hand" />
         <Setter Property="GroupName" Value="Navigation" />
         <Setter Property="Foreground" Value="{DynamicResource Brush.TextSecondary}" />
-        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+        <Setter Property="FocusVisualStyle" Value="{StaticResource FocusRing}" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="RadioButton">
@@ -336,10 +347,6 @@
                             <Setter TargetName="Root" Property="Background" Value="{DynamicResource Brush.NavSelected}" />
                             <Setter TargetName="Indicator" Property="Visibility" Value="Visible" />
                             <Setter Property="Foreground" Value="{DynamicResource Brush.TextPrimary}" />
-                        </Trigger>
-                        <Trigger Property="IsKeyboardFocused" Value="True">
-                            <Setter TargetName="Root" Property="BorderBrush" Value="{StaticResource Brush.Accent}" />
-                            <Setter TargetName="Root" Property="BorderThickness" Value="1" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -374,7 +381,7 @@
                     <Setter Property="Margin" Value="0,0,4,0" />
                     <Setter Property="Cursor" Value="Hand" />
                     <Setter Property="Foreground" Value="{DynamicResource Brush.TextSecondary}" />
-                    <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+                    <Setter Property="FocusVisualStyle" Value="{StaticResource FocusRing}" />
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate TargetType="ListBoxItem">
@@ -388,10 +395,6 @@
                                     <Trigger Property="IsSelected" Value="True">
                                         <Setter TargetName="Root" Property="Background" Value="{DynamicResource Brush.NavSelected}" />
                                         <Setter Property="Foreground" Value="{DynamicResource Brush.TextPrimary}" />
-                                    </Trigger>
-                                    <Trigger Property="IsKeyboardFocused" Value="True">
-                                        <Setter TargetName="Root" Property="BorderBrush" Value="{StaticResource Brush.Accent}" />
-                                        <Setter TargetName="Root" Property="BorderThickness" Value="1" />
                                     </Trigger>
                                 </ControlTemplate.Triggers>
                             </ControlTemplate>

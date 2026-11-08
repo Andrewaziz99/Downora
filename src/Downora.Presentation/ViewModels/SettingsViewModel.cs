@@ -68,9 +68,15 @@ public sealed partial class SettingsViewModel : Navigation.PageViewModel
     public partial OptionViewModel<AppLanguage> SelectedLanguage { get; set; }
 
     [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(DownloadDirectoryDisplay))]
     public partial string DownloadDirectory { get; private set; } = string.Empty;
 
+    /// <summary>The folder as shown on screen: kept left-to-right inside the Arabic layout.</summary>
+    public string DownloadDirectoryDisplay => Localizer.LeftToRight(DownloadDirectory);
+
     public string DataDirectory => _app.DataDirectory;
+
+    public string DataDirectoryDisplay => Localizer.LeftToRight(DataDirectory);
 
     public override Task OnNavigatedToAsync(CancellationToken cancellationToken)
     {

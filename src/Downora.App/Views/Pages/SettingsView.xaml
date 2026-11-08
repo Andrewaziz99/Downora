@@ -52,7 +52,7 @@
                 <ui:CardControl.Header>
                     <StackPanel>
                         <TextBlock Style="{StaticResource Text.Body}" Text="{l:Loc Settings_Folder}" />
-                        <TextBlock Style="{StaticResource Text.Caption}" Text="{Binding DownloadDirectory}" TextTrimming="CharacterEllipsis" ToolTip="{Binding DownloadDirectory}" />
+                        <TextBlock Style="{StaticResource Text.Caption}" Text="{Binding DownloadDirectoryDisplay}" TextTrimming="CharacterEllipsis" ToolTip="{Binding DownloadDirectoryDisplay}" />
                     </StackPanel>
                 </ui:CardControl.Header>
                 <StackPanel Orientation="Horizontal">
@@ -67,7 +67,7 @@
                 <ui:CardControl.Header>
                     <StackPanel>
                         <TextBlock Style="{StaticResource Text.Body}" Text="{l:Loc Settings_DataFolder}" />
-                        <TextBlock Style="{StaticResource Text.Caption}" Text="{Binding DataDirectory}" TextTrimming="CharacterEllipsis" ToolTip="{Binding DataDirectory}" />
+                        <TextBlock Style="{StaticResource Text.Caption}" Text="{Binding DataDirectoryDisplay}" TextTrimming="CharacterEllipsis" ToolTip="{Binding DataDirectoryDisplay}" />
                     </StackPanel>
                 </ui:CardControl.Header>
                 <ui:Button Command="{Binding OpenDataFolderCommand}" Content="{l:Loc Common_Open}" />

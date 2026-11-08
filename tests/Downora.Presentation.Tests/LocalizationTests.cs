@@ -102,6 +102,13 @@ public partial class LocalizationTests
     }
 
     [Fact]
+    public void Paths_are_wrapped_to_stay_left_to_right_in_arabic_text()
+    {
+        Assert.Equal("\u202AC:\\Users\\me\\Downloads\u202C", Localizer.LeftToRight(@"C:\Users\me\Downloads"));
+        Assert.Equal(string.Empty, Localizer.LeftToRight(null));
+    }
+
+    [Fact]
     public void Missing_keys_are_visible_not_blank() =>
         Assert.Equal("[No_Such_Key]", new Localizer()["No_Such_Key"]);
 
