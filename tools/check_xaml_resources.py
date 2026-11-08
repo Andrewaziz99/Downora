@@ -13,6 +13,15 @@ for f in files:
         if key not in defined:
             problems.append(f"{f.relative_to(root)}: {kind} {key}")
     # Each dictionary/view must not use a StaticResource from a file it can't see at load time is checked by merge structure.
+# Type check for the one place WPF needs a GridLength: Column/Row definitions fed from a resource.
+types = {}
+for f in files:
+    for tag, key in re.findall(r'<(?:\w+:)?(\w+) x:Key="([^"]+)"', f.read_text(encoding="utf-8")):
+        types[key] = tag
+for f in files:
+    for key in re.findall(r'<(?:ColumnDefinition|RowDefinition)[^>]*(?:Width|Height)="\{StaticResource ([A-Za-z0-9_.]+)\}"', f.read_text(encoding="utf-8")):
+        if types.get(key) != "GridLength":
+            problems.append(f"{f.relative_to(root)}: {key} is a {types.get(key)}, but a column/row size needs a GridLength")
 palettes = {}
 for name in ("Palette.Dark.xaml", "Palette.Light.xaml"):
     palettes[name] = set(re.findall(r'x:Key="([^"]+)"', (root / "Resources/Theme" / name).read_text(encoding="utf-8")))

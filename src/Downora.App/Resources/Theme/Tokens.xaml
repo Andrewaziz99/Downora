@@ -57,5 +57,6 @@
     <CornerRadius x:Key="Radius.Pill">10</CornerRadius>
     <Thickness x:Key="Padding.Page">24,16,24,24</Thickness>
     <Thickness x:Key="Padding.Card">16</Thickness>
-    <sys:Double x:Key="Width.Sidebar">240</sys:Double>
+    <!-- GridLength, not Double: it is used as a ColumnDefinition width. -->
+    <GridLength x:Key="Width.Sidebar">240</GridLength>
 </ResourceDictionary>

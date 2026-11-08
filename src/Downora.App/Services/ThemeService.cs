@@ -1,4 +1,5 @@
 using System.Windows;
+using System.Windows.Interop;
 using System.Windows.Media;
 using Downora.Core.Enums;
 using Downora.Presentation.Services;
@@ -95,6 +96,14 @@ internal sealed class ThemeService : IThemeService
             return;
         }
 
+        // The watcher hooks the native window, which only exists once the window has been shown.
+        if (new WindowInteropHelper(_window).Handle == IntPtr.Zero)
+        {
+            _window.SourceInitialized -= OnSourceInitialized;
+            _window.SourceInitialized += OnSourceInitialized;
+            return;
+        }
+
         if (Theme == AppTheme.System && !_watching)
         {
             SystemThemeWatcher.Watch(_window, WindowBackdropType.None, false);
@@ -105,6 +114,12 @@ internal sealed class ThemeService : IThemeService
             SystemThemeWatcher.UnWatch(_window);
             _watching = false;
         }
+    }
+
+    private void OnSourceInitialized(object? sender, EventArgs e)
+    {
+        _window!.SourceInitialized -= OnSourceInitialized;
+        UpdateSystemWatch();
     }
 
     /// <summary>Windows' "Choose your app mode" setting (Settings › Personalization › Colors).</summary>
