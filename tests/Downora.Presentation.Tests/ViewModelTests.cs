@@ -25,6 +25,9 @@ public class ViewModelTests
     private readonly IDialogService _dialogs = Substitute.For<IDialogService>();
     private readonly IDiskSpaceService _disk = Substitute.For<IDiskSpaceService>();
     private readonly FakeTimeProvider _time = new(new DateTimeOffset(2026, 11, 8, 19, 0, 0, TimeSpan.Zero));
+    private readonly IClipboardService _clipboard = Substitute.For<IClipboardService>();
+    private readonly IMediaExtractor _extractor = Substitute.For<IMediaExtractor>();
+    private readonly IToolManager _tools = Substitute.For<IToolManager>();
 
     public ViewModelTests()
     {
@@ -33,6 +36,7 @@ public class ViewModelTests
         _jobs.CountByStatusAsync(Arg.Any<CancellationToken>()).Returns(new Dictionary<DownloadStatus, int>());
         _jobs.GetStatisticsAsync(Arg.Any<CancellationToken>()).Returns(new DownloadStatistics(0, 0, 0, 0, null));
         _library.QueryAsync(Arg.Any<LibraryQuery>(), Arg.Any<CancellationToken>()).Returns([]);
+        _tools.GetStatusAsync(Arg.Any<CancellationToken>()).Returns([]);
     }
 
     private ServiceProvider BuildServices()
@@ -50,6 +54,10 @@ public class ViewModelTests
         services.AddSingleton(_disk);
         services.AddSingleton<TimeProvider>(_time);
         services.AddSingleton(Fakes.AppInfo());
+        services.AddSingleton(_clipboard);
+        services.AddSingleton(_extractor);
+        services.AddSingleton(_tools);
+        services.AddSingleton<IUrlValidator>(new Core.Services.UrlValidator(new Core.Services.SourceDetector()));
         return services.BuildServiceProvider();
     }
 
@@ -532,7 +540,8 @@ public class ViewModelTests
         await downloader.OnNavigatedToAsync(CancellationToken.None);
         await downloader.ChangeFolderCommand.ExecuteAsync(null);
 
-        Assert.Contains(_settings.Current.DownloadDirectory, downloader.EmptyBody, StringComparison.Ordinal);
+        Assert.Contains(_settings.Current.DownloadDirectory, downloader.IdleBody, StringComparison.Ordinal);
+        Assert.True(downloader.IsIdle);
         Assert.IsType<SettingsViewModel>(services.GetRequiredService<INavigationService>().Current);
     }
 }

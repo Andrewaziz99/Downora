@@ -129,6 +129,75 @@
   <data name="About_Source" xml:space="preserve"><value>الشيفرة المصدرية</value></data>
   <data name="About_OpenLogs" xml:space="preserve"><value>فتح مجلد السجلات</value></data>
   <data name="About_ThirdParty" xml:space="preserve"><value>برمجيات الجهات الخارجية</value></data>
+  <data name="Common_Paste" xml:space="preserve"><value>لصق</value></data>
+  <data name="Common_Analyze" xml:space="preserve"><value>تحليل</value></data>
+  <data name="Common_TryAgain" xml:space="preserve"><value>إعادة المحاولة</value></data>
+  <data name="Home_UrlPlaceholder" xml:space="preserve"><value>الصق رابطًا من YouTube أو SoundCloud أو Vimeo أو رابط وسائط مباشر…</value></data>
+  <data name="Home_Supported" xml:space="preserve"><value>يعمل مع YouTube وSoundCloud وVimeo وDailymotion والروابط المباشرة ومواقع أخرى كثيرة.</value></data>
+  <data name="Url_Empty" xml:space="preserve"><value>الصق رابطًا أولًا.</value></data>
+  <data name="Url_NotAUrl" xml:space="preserve"><value>لا يبدو هذا رابط ويب.</value></data>
+  <data name="Url_UnsupportedScheme" xml:space="preserve"><value>الروابط المدعومة هي http وhttps فقط.</value></data>
+  <data name="Url_TooLong" xml:space="preserve"><value>هذا الرابط طويل جدًا.</value></data>
+  <data name="Platform_Other" xml:space="preserve"><value>موقع ويب</value></data>
+  <data name="Platform_DirectFile" xml:space="preserve"><value>رابط مباشر</value></data>
+  <data name="Platform_Unknown" xml:space="preserve"><value>موقع ويب</value></data>
+  <data name="Downloader_Analyzing" xml:space="preserve"><value>جارٍ قراءة الرابط…</value></data>
+  <data name="Downloader_AnalyzingHint" xml:space="preserve"><value>يستغرق هذا عادةً بضع ثوانٍ.</value></data>
+  <data name="Downloader_Qualities" xml:space="preserve"><value>الجودات المتاحة</value></data>
+  <data name="Downloader_NotOffered" xml:space="preserve"><value>غير متاحة</value></data>
+  <data name="Downloader_SizeApprox" xml:space="preserve"><value>≈ {0}</value></data>
+  <data name="Downloader_SizeUnknown" xml:space="preserve"><value>الحجم غير معروف</value></data>
+  <data name="Downloader_BestAudio" xml:space="preserve"><value>أفضل صوت: {0}</value></data>
+  <data name="Downloader_Live" xml:space="preserve"><value>هذا بث مباشر. تنزيل البث المباشر غير مدعوم.</value></data>
+  <data name="Downloader_OpenInBrowser" xml:space="preserve"><value>فتح في المتصفح</value></data>
+  <data name="Downloader_SavedTo" xml:space="preserve"><value>يتم حفظ التنزيلات في {0}</value></data>
+  <data name="Downloader_Playlist" xml:space="preserve"><value>قائمة تشغيل</value></data>
+  <data name="Downloader_PlaylistCount" xml:space="preserve"><value>{0} عنصرًا</value></data>
+  <data name="Downloader_PlaylistTotal" xml:space="preserve"><value>المدة الكلية {0}</value></data>
+  <data name="Downloader_EntryUnavailable" xml:space="preserve"><value>غير متاح</value></data>
+  <data name="Downloader_Details" xml:space="preserve"><value>تفاصيل من yt-dlp: {0}</value></data>
+  <data name="Downloader_InstallTools" xml:space="preserve"><value>تثبيت الأدوات المطلوبة</value></data>
+  <data name="Downloader_Installing" xml:space="preserve"><value>جارٍ تنزيل {0}… {1}</value></data>
+  <data name="Quality_Best" xml:space="preserve"><value>أفضل جودة متاحة</value></data>
+  <data name="Quality_P2160" xml:space="preserve"><value>4K ‏(2160p)</value></data>
+  <data name="Quality_P1440" xml:space="preserve"><value>1440p</value></data>
+  <data name="Quality_P1080" xml:space="preserve"><value>1080p</value></data>
+  <data name="Quality_P720" xml:space="preserve"><value>720p</value></data>
+  <data name="Quality_P480" xml:space="preserve"><value>480p</value></data>
+  <data name="Quality_P360" xml:space="preserve"><value>360p</value></data>
+  <data name="Quality_AudioOnly" xml:space="preserve"><value>صوت فقط</value></data>
+  <data name="Error_Unsupported_Title" xml:space="preserve"><value>هذا الرابط غير مدعوم</value></data>
+  <data name="Error_Unsupported_Body" xml:space="preserve"><value>لم يعثر Downora على فيديو أو صوت في هذه الصفحة. تحقّق من الرابط أو افتح صفحة الفيديو نفسها.</value></data>
+  <data name="Error_RequiresSignIn_Title" xml:space="preserve"><value>يلزم تسجيل الدخول</value></data>
+  <data name="Error_RequiresSignIn_Body" xml:space="preserve"><value>لا يعرض الموقع هذا المحتوى إلا للمستخدمين المسجّلين، أو طلب التأكد من أنك لست برنامجًا آليًا.</value></data>
+  <data name="Error_Drm_Title" xml:space="preserve"><value>محتوى محمي</value></data>
+  <data name="Error_Drm_Body" xml:space="preserve"><value>هذا المحتوى محمي بتقنية DRM ولا يزيلها Downora.</value></data>
+  <data name="Error_GeoRestricted_Title" xml:space="preserve"><value>غير متاح في منطقتك</value></data>
+  <data name="Error_GeoRestricted_Body" xml:space="preserve"><value>لا يتيح الموقع هذا المحتوى في بلدك.</value></data>
+  <data name="Error_Unavailable_Title" xml:space="preserve"><value>المحتوى غير متاح</value></data>
+  <data name="Error_Unavailable_Body" xml:space="preserve"><value>ربما تمت إزالته أو جعله خاصًا، أو أن الرابط غير صحيح.</value></data>
+  <data name="Error_Network_Title" xml:space="preserve"><value>تعذّر الوصول إلى الموقع</value></data>
+  <data name="Error_Network_Body" xml:space="preserve"><value>تحقّق من اتصالك بالإنترنت وأعد المحاولة. إذا تكرر ذلك فقد يكون الموقع يحدّ من الطلبات مؤقتًا.</value></data>
+  <data name="Error_ToolMissing_Title" xml:space="preserve"><value>أداة yt-dlp غير مثبّتة</value></data>
+  <data name="Error_ToolMissing_Body" xml:space="preserve"><value>يستخدم Downora أداة yt-dlp (وDeno لروابط YouTube) لقراءة الروابط. يتم تنزيلهما من الإصدارات الرسمية والتحقق منهما قبل الاستخدام.</value></data>
+  <data name="Error_DiskFull_Title" xml:space="preserve"><value>القرص ممتلئ</value></data>
+  <data name="Error_DiskFull_Body" xml:space="preserve"><value>أفرغ بعض المساحة أو اختر مجلد تنزيل آخر من الإعدادات.</value></data>
+  <data name="Error_Unknown_Title" xml:space="preserve"><value>حدث خطأ ما</value></data>
+  <data name="Error_Unknown_Body" xml:space="preserve"><value>تعذّر على Downora تحليل هذا الرابط.</value></data>
+  <data name="Error_InstallFailed" xml:space="preserve"><value>تعذّر التثبيت: {0}</value></data>
+  <data name="Settings_Tools" xml:space="preserve"><value>الأدوات</value></data>
+  <data name="Tool_YtDlp" xml:space="preserve"><value>yt-dlp</value></data>
+  <data name="Tool_YtDlpDesc" xml:space="preserve"><value>يقرأ الروابط وينزّل الوسائط.</value></data>
+  <data name="Tool_Ffmpeg" xml:space="preserve"><value>FFmpeg وFFprobe</value></data>
+  <data name="Tool_FfmpegDesc" xml:space="preserve"><value>يدمج ملفات الوسائط ويحوّلها ويتحقق منها.</value></data>
+  <data name="Tool_Deno" xml:space="preserve"><value>Deno</value></data>
+  <data name="Tool_DenoDesc" xml:space="preserve"><value>بيئة تشغيل JavaScript يحتاجها yt-dlp لروابط YouTube.</value></data>
+  <data name="Tool_NotInstalled" xml:space="preserve"><value>غير مثبّت</value></data>
+  <data name="Tool_Version" xml:space="preserve"><value>الإصدار {0}</value></data>
+  <data name="Tool_InstalledNoVersion" xml:space="preserve"><value>مثبّت</value></data>
+  <data name="Tool_Install" xml:space="preserve"><value>تثبيت</value></data>
+  <data name="Tool_Update" xml:space="preserve"><value>التحقق من التحديثات</value></data>
+  <data name="Tool_Checking" xml:space="preserve"><value>جارٍ التحقق…</value></data>
   <data name="Common_Open" xml:space="preserve"><value>فتح</value></data>
   <data name="Common_Cancel" xml:space="preserve"><value>إلغاء</value></data>
   <data name="Common_Refresh" xml:space="preserve"><value>تحديث</value></data>

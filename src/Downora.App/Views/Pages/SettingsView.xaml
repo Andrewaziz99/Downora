@@ -72,6 +72,30 @@
                 </ui:CardControl.Header>
                 <ui:Button Command="{Binding OpenDataFolderCommand}" Content="{l:Loc Common_Open}" />
             </ui:CardControl>
+
+            <!-- Tools -->
+            <TextBlock Margin="0,20,0,8" Style="{StaticResource Text.BodyStrong}" Text="{l:Loc Settings_Tools}" />
+            <ItemsControl ItemsSource="{Binding ToolRows}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate DataType="{x:Type vm:ToolRowViewModel}">
+                        <ui:CardControl Margin="0,0,0,4" Icon="{ui:SymbolIcon Wrench24}">
+                            <ui:CardControl.Header>
+                                <StackPanel>
+                                    <TextBlock Style="{StaticResource Text.Body}" Text="{Binding Title}" />
+                                    <TextBlock Style="{StaticResource Text.Caption}" Text="{Binding Description}" TextWrapping="Wrap" />
+                                    <TextBlock Margin="0,2,0,0" Style="{StaticResource Text.Caption}" Text="{Binding StatusText}" />
+                                    <TextBlock Margin="0,2,0,0" Style="{StaticResource Text.Error}" Text="{Binding ErrorMessage}" TextWrapping="Wrap" Visibility="{Binding ErrorMessage, Converter={StaticResource HasValueToVisibility}}" />
+                                </StackPanel>
+                            </ui:CardControl.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <ui:ProgressRing Width="20" Height="20" Margin="0,0,8,0" IsIndeterminate="True" Visibility="{Binding IsBusy, Converter={StaticResource BoolToVisibility}}" />
+                                <ui:Button Appearance="Primary" Command="{Binding InstallCommand}" Content="{l:Loc Tool_Install}" Icon="{ui:SymbolIcon ArrowDownload24}" Visibility="{Binding ShowInstall, Converter={StaticResource BoolToVisibility}}" />
+                                <ui:Button Command="{Binding UpdateCommand}" Content="{l:Loc Tool_Update}" Icon="{ui:SymbolIcon ArrowSync24}" Visibility="{Binding ShowUpdate, Converter={StaticResource BoolToVisibility}}" />
+                            </StackPanel>
+                        </ui:CardControl>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
         </StackPanel>
     </ScrollViewer>
 </UserControl>

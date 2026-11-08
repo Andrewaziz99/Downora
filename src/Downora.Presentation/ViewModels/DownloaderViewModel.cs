@@ -1,0 +1,421 @@
+using System.Collections.ObjectModel;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using Downora.Core.Enums;
+using Downora.Core.Interfaces;
+using Downora.Core.Models;
+using Downora.Core.Services;
+using Downora.Presentation.Localization;
+using Downora.Presentation.Navigation;
+using Downora.Presentation.Services;
+using Microsoft.Extensions.Logging;
+
+namespace Downora.Presentation.ViewModels;
+
+public enum DownloaderState
+{
+    Idle,
+    Analyzing,
+    Media,
+    Playlist,
+    Error,
+}
+
+/// <summary>Paste a link, analyze it, and see what it offers. Downloading is added in Phase 4.</summary>
+public sealed partial class DownloaderViewModel : PageViewModel, IDisposable
+{
+    /// <summary>Tools needed just to read links: yt-dlp, plus Deno for YouTube's JavaScript challenges.</summary>
+    internal static readonly ToolKind[] AnalysisTools = [ToolKind.YtDlp, ToolKind.Deno];
+
+    private readonly IUrlValidator _validator;
+    private readonly IMediaExtractor _extractor;
+    private readonly IToolManager _tools;
+    private readonly ISettingsService _settings;
+    private readonly IShellService _shell;
+    private readonly IClipboardService _clipboard;
+    private readonly INavigationService _navigation;
+    private CancellationTokenSource? _analysis;
+    private string? _lastAnalyzedUrl;
+
+    public DownloaderViewModel(
+        IUrlValidator validator,
+        IMediaExtractor extractor,
+        IToolManager tools,
+        ISettingsService settings,
+        IShellService shell,
+        IClipboardService clipboard,
+        INavigationService navigation,
+        Localizer localizer,
+        ILogger<DownloaderViewModel> logger)
+        : base(localizer, logger)
+    {
+        _validator = validator;
+        _extractor = extractor;
+        _tools = tools;
+        _settings = settings;
+        _shell = shell;
+        _clipboard = clipboard;
+        _navigation = navigation;
+    }
+
+    [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(AnalyzeCommand))]
+    public partial string UrlText { get; set; } = string.Empty;
+
+    /// <summary>Why the typed link was rejected; null when it's fine.</summary>
+    [ObservableProperty]
+    public partial string? ValidationMessage { get; private set; }
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(IsIdle), nameof(IsAnalyzing), nameof(IsMedia), nameof(IsPlaylist), nameof(IsError))]
+    [NotifyCanExecuteChangedFor(nameof(AnalyzeCommand))]
+    public partial DownloaderState State { get; private set; }
+
+    public bool IsIdle => State == DownloaderState.Idle;
+    public bool IsAnalyzing => State == DownloaderState.Analyzing;
+    public bool IsMedia => State == DownloaderState.Media;
+    public bool IsPlaylist => State == DownloaderState.Playlist;
+    public bool IsError => State == DownloaderState.Error;
+
+    [ObservableProperty]
+    public partial string SavedToText { get; private set; } = string.Empty;
+
+    [ObservableProperty]
+    public partial string IdleBody { get; private set; } = string.Empty;
+
+    // ---- Single media ----
+
+    [ObservableProperty]
+    public partial string Title { get; private set; } = string.Empty;
+
+    [ObservableProperty]
+    public partial string? Uploader { get; private set; }
+
+    [ObservableProperty]
+    public partial string? DurationText { get; private set; }
+
+    [ObservableProperty]
+    public partial string? ThumbnailUrl { get; private set; }
+
+    [ObservableProperty]
+    public partial string PlatformLabel { get; private set; } = string.Empty;
+
+    [ObservableProperty]
+    public partial bool IsLive { get; private set; }
+
+    [ObservableProperty]
+    public partial string? BestAudioText { get; private set; }
+
+    [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(OpenInBrowserCommand))]
+    public partial string? WebpageUrl { get; private set; }
+
+    public ObservableCollection<QualityOptionViewModel> Qualities { get; } = [];
+
+    // ---- Playlist ----
+
+    [ObservableProperty]
+    public partial string? PlaylistCountText { get; private set; }
+
+    [ObservableProperty]
+    public partial string? PlaylistDurationText { get; private set; }
+
+    public ObservableCollection<PlaylistEntryViewModel> Entries { get; } = [];
+
+    // ---- Failure ----
+
+    [ObservableProperty]
+    public partial DownloadErrorKind ErrorKind { get; private set; }
+
+    [ObservableProperty]
+    public partial string ErrorTitle { get; private set; } = string.Empty;
+
+    [ObservableProperty]
+    public partial string ErrorBody { get; private set; } = string.Empty;
+
+    [ObservableProperty]
+    public partial string? ErrorDetail { get; private set; }
+
+    public bool CanInstallTools => ErrorKind == DownloadErrorKind.ToolMissing;
+
+    [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(InstallToolsCommand))]
+    public partial bool IsInstalling { get; private set; }
+
+    [ObservableProperty]
+    public partial string? InstallStatus { get; private set; }
+
+    public override Task OnNavigatedToAsync(CancellationToken cancellationToken)
+    {
+        var folder = Localizer.LeftToRight(_settings.Current.DownloadDirectory);
+        SavedToText = L.Format("Downloader_SavedTo", folder);
+        IdleBody = L.Format("Downloader_EmptyBody", folder);
+        return Task.CompletedTask;
+    }
+
+    /// <summary>Used by Home: fill in the link and analyze it right away.</summary>
+    public Task AnalyzeAsync(string url)
+    {
+        UrlText = url;
+        return AnalyzeCommand.ExecuteAsync(null);
+    }
+
+    private bool CanAnalyze() => State != DownloaderState.Analyzing && !string.IsNullOrWhiteSpace(UrlText);
+
+    [RelayCommand(CanExecute = nameof(CanAnalyze))]
+    private async Task AnalyzeAsync()
+    {
+        var url = _validator.Validate(UrlText);
+        if (!url.IsValid)
+        {
+            ValidationMessage = L[$"Url_{url.Problem}"];
+            return;
+        }
+
+        ValidationMessage = null;
+        UrlText = url.Url!.AbsoluteUri;
+        _lastAnalyzedUrl = UrlText;
+
+        _analysis?.Dispose();
+        _analysis = new CancellationTokenSource();
+        var token = _analysis.Token;
+        State = DownloaderState.Analyzing;
+
+        try
+        {
+            var result = await _extractor.AnalyzeAsync(url, token).ConfigureAwait(true);
+            token.ThrowIfCancellationRequested();
+            Show(result);
+        }
+        catch (OperationCanceledException) when (token.IsCancellationRequested)
+        {
+            State = DownloaderState.Idle;
+        }
+#pragma warning disable CA1031 // Any failure becomes a readable error card, never a crash.
+        catch (Exception ex)
+#pragma warning restore CA1031
+        {
+            ShowError(DownloadErrorKind.Unknown, ex.Message);
+        }
+    }
+
+    [RelayCommand]
+    private void Cancel() => _analysis?.Cancel();
+
+    [RelayCommand]
+    private void Paste()
+    {
+        if (_clipboard.GetText() is { Length: > 0 } text)
+        {
+            UrlText = text.Trim();
+            ValidationMessage = null;
+        }
+    }
+
+    private bool CanOpenInBrowser() => WebpageUrl is not null;
+
+    [RelayCommand(CanExecute = nameof(CanOpenInBrowser))]
+    private void OpenInBrowser()
+    {
+        if (Uri.TryCreate(WebpageUrl, UriKind.Absolute, out var url))
+        {
+            _shell.OpenUrl(url);
+        }
+    }
+
+    [RelayCommand]
+    private Task ChangeFolderAsync() => _navigation.NavigateToAsync<SettingsViewModel>();
+
+    private bool CanInstallToolsNow() => !IsInstalling;
+
+    [RelayCommand(CanExecute = nameof(CanInstallToolsNow))]
+    private async Task InstallToolsAsync()
+    {
+        IsInstalling = true;
+        try
+        {
+            foreach (var tool in AnalysisTools.Where(t => _tools.GetPath(t) is null))
+            {
+                var name = L[$"Tool_{tool}"];
+                InstallStatus = L.Format("Downloader_Installing", name, string.Empty);
+                var progress = new Progress<ToolInstallProgress>(p =>
+                    InstallStatus = L.Format("Downloader_Installing", name, p.Fraction is { } f ? f.ToString("P0", L.Culture) : string.Empty));
+                await _tools.InstallAsync(tool, progress).ConfigureAwait(true);
+            }
+
+            InstallStatus = null;
+        }
+        catch (ToolInstallException ex)
+        {
+            InstallStatus = L.Format("Error_InstallFailed", ex.Message);
+            return;
+        }
+        finally
+        {
+            IsInstalling = false;
+        }
+
+        if (_lastAnalyzedUrl is { } url)
+        {
+            await AnalyzeAsync(url).ConfigureAwait(true);
+        }
+    }
+
+    [RelayCommand]
+    private Task RetryAsync() => _lastAnalyzedUrl is { } url ? AnalyzeAsync(url) : Task.CompletedTask;
+
+    private void Show(AnalysisResult result)
+    {
+        switch (result.Kind)
+        {
+            case AnalysisKind.Media:
+                ShowMedia(result.Media!);
+                break;
+            case AnalysisKind.Playlist:
+                ShowPlaylist(result.Playlist!);
+                break;
+            default:
+                ShowError(result.ErrorKind, result.ErrorDetail);
+                break;
+        }
+    }
+
+    private void ShowMedia(MediaInfo media)
+    {
+        var culture = L.Culture;
+        Title = media.Title;
+        Uploader = media.Uploader;
+        DurationText = Formatting.Duration(media.Duration, culture);
+        ThumbnailUrl = media.ThumbnailUrl;
+        PlatformLabel = PlatformName(media.Platform);
+        WebpageUrl = media.WebpageUrl.Length > 0 ? media.WebpageUrl : _lastAnalyzedUrl;
+        IsLive = media.IsLive;
+
+        Qualities.Clear();
+        foreach (var option in QualityOptions.Build(media))
+        {
+            Qualities.Add(new QualityOptionViewModel(option, L));
+        }
+
+        var audio = QualityOptions.BestAudio(media);
+        BestAudioText = audio is null
+            ? null
+            : L.Format("Downloader_BestAudio", string.Join(" · ", new[]
+            {
+                QualityOptions.ShortCodec(audio.AudioCodec),
+                audio.AudioBitrateKbps is { } abr ? $"{abr.ToString("0", culture)} kbps" : null,
+            }.Where(p => p is not null)));
+
+        State = DownloaderState.Media;
+    }
+
+    private void ShowPlaylist(PlaylistInfo playlist)
+    {
+        var culture = L.Culture;
+        Title = playlist.Title;
+        Uploader = playlist.Uploader;
+        ThumbnailUrl = playlist.Entries.FirstOrDefault(e => e.ThumbnailUrl is not null)?.ThumbnailUrl;
+        PlatformLabel = PlatformName(playlist.Platform);
+        WebpageUrl = playlist.WebpageUrl.Length > 0 ? playlist.WebpageUrl : _lastAnalyzedUrl;
+        PlaylistCountText = L.Format("Downloader_PlaylistCount", (playlist.TotalCount ?? playlist.Entries.Count).ToString("N0", culture));
+
+        var total = playlist.Entries.Aggregate(TimeSpan.Zero, (sum, e) => sum + (e.Duration ?? TimeSpan.Zero));
+        PlaylistDurationText = total > TimeSpan.Zero ? L.Format("Downloader_PlaylistTotal", Formatting.Duration(total, culture)) : null;
+
+        Entries.Clear();
+        var index = 1;
+        foreach (var entry in playlist.Entries)
+        {
+            Entries.Add(new PlaylistEntryViewModel(index++, entry, L));
+        }
+
+        State = DownloaderState.Playlist;
+    }
+
+    private void ShowError(DownloadErrorKind kind, string? detail)
+    {
+        ErrorKind = kind;
+        ErrorTitle = L[$"Error_{kind}_Title"];
+        ErrorBody = L[$"Error_{kind}_Body"];
+        ErrorDetail = kind == DownloadErrorKind.ToolMissing || string.IsNullOrWhiteSpace(detail)
+            ? null
+            : L.Format("Downloader_Details", detail);
+        OnPropertyChanged(nameof(CanInstallTools));
+        State = DownloaderState.Error;
+    }
+
+    private string PlatformName(SourcePlatform platform) => platform switch
+    {
+        SourcePlatform.YouTube => "YouTube",
+        SourcePlatform.YouTubeShorts => "YouTube Shorts",
+        SourcePlatform.SoundCloud => "SoundCloud",
+        SourcePlatform.Vimeo => "Vimeo",
+        SourcePlatform.Dailymotion => "Dailymotion",
+        SourcePlatform.Facebook => "Facebook",
+        SourcePlatform.Instagram => "Instagram",
+        SourcePlatform.X => "X",
+        _ => L[$"Platform_{platform}"],
+    };
+
+    public void Dispose() => _analysis?.Dispose();
+}
+
+/// <summary>One row of the "Available qualities" list.</summary>
+public sealed class QualityOptionViewModel
+{
+    public QualityOptionViewModel(QualityOption option, Localizer localizer)
+    {
+        ArgumentNullException.ThrowIfNull(option);
+        ArgumentNullException.ThrowIfNull(localizer);
+        var culture = localizer.Culture;
+
+        Preset = option.Preset;
+        Label = localizer[$"Quality_{option.Preset}"];
+        IsAvailable = option.IsAvailable;
+        Detail = !option.IsAvailable
+            ? localizer["Downloader_NotOffered"]
+            : string.Join(" · ", new[]
+            {
+                option.Height is { } h ? $"{h}p" : null,
+                option.Fps is { } fps and > 0 ? $"{fps.ToString("0", culture)} fps" : null,
+                option.VideoCodec,
+            }.Where(p => p is not null));
+        SizeText = !option.IsAvailable
+            ? string.Empty
+            : option.EstimatedBytes is { } bytes
+                ? option.IsEstimateApproximate
+                    ? localizer.Format("Downloader_SizeApprox", Formatting.Bytes(bytes, culture))
+                    : Formatting.Bytes(bytes, culture)
+                : localizer["Downloader_SizeUnknown"];
+    }
+
+    public QualityPreset Preset { get; }
+    public string Label { get; }
+    public string Detail { get; }
+    public string SizeText { get; }
+    public bool IsAvailable { get; }
+}
+
+public sealed class PlaylistEntryViewModel
+{
+    public PlaylistEntryViewModel(int index, PlaylistEntry entry, Localizer localizer)
+    {
+        ArgumentNullException.ThrowIfNull(entry);
+        ArgumentNullException.ThrowIfNull(localizer);
+        Index = index.ToString("00", localizer.Culture);
+        Title = entry.Title;
+        Uploader = entry.Uploader;
+        DurationText = Formatting.Duration(entry.Duration, localizer.Culture) ?? "—";
+        ThumbnailUrl = entry.ThumbnailUrl;
+        IsAvailable = entry.IsAvailable;
+        StatusText = entry.IsAvailable ? string.Empty : localizer["Downloader_EntryUnavailable"];
+    }
+
+    public string Index { get; }
+    public string Title { get; }
+    public string? Uploader { get; }
+    public string DurationText { get; }
+    public string? ThumbnailUrl { get; }
+    public bool IsAvailable { get; }
+    public string StatusText { get; }
+}

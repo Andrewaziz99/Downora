@@ -1,0 +1,128 @@
+{
+ "modified_date": "20261001",
+ "extractor": "youtube:tab",
+ "view_count": 1424495,
+ "uploader": "Rick Astley",
+ "_type": "playlist",
+ "playlist_count": 43,
+ "channel": "Rick Astley",
+ "webpage_url": "https://www.youtube.com/playlist?list=PLlaN88a7y2_plecYoJxvRFTLHVbIVAOoc",
+ "extractor_key": "YoutubeTab",
+ "id": "PLlaN88a7y2_plecYoJxvRFTLHVbIVAOoc",
+ "title": "Rick Astley: Official Music Videos",
+ "entries": [
+  {
+   "_type": "url",
+   "ie_key": "Youtube",
+   "id": "LLFhKaqnWwk",
+   "url": "https://www.youtube.com/watch?v=LLFhKaqnWwk",
+   "title": "Rick Astley - Never Gonna Give You Up (Official Animated Video)",
+   "duration": 213,
+   "channel": "Rick Astley",
+   "uploader": "Rick Astley",
+   "thumbnails": [
+    {
+     "url": "https://i.ytimg.com/vi/LLFhKaqnWwk/hqdefault.jpg?sqp=-oaymwEcCNACELwBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLDusd4WFC6H-_uZVN5YwU_Rfrn_hw",
+     "height": 188,
+     "width": 336
+    }
+   ]
+  },
+  {
+   "_type": "url",
+   "ie_key": "Youtube",
+   "id": "LjmOX9jGoR4",
+   "url": "https://www.youtube.com/watch?v=LjmOX9jGoR4",
+   "title": "Rick Astley - Raindrops (Official Video)",
+   "duration": 216,
+   "channel": "Rick Astley",
+   "uploader": "Rick Astley",
+   "thumbnails": [
+    {
+     "url": "https://i.ytimg.com/vi/LjmOX9jGoR4/hqdefault.jpg?sqp=-oaymwEcCNACELwBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLAs9ulSFogi7mVjBqc-Oc58i9wliA",
+     "height": 188,
+     "width": 336
+    }
+   ]
+  },
+  {
+   "_type": "url",
+   "ie_key": "Youtube",
+   "id": "zRVjZ2DJ9Cg",
+   "url": "https://www.youtube.com/watch?v=zRVjZ2DJ9Cg",
+   "title": "Rick Astley - Waiting On You (Official Video)",
+   "duration": 231,
+   "channel": "Rick Astley",
+   "uploader": "Rick Astley",
+   "thumbnails": [
+    {
+     "url": "https://i.ytimg.com/vi/zRVjZ2DJ9Cg/hqdefault.jpg?sqp=-oaymwEcCNACELwBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLAzkc0lYgg_rpsttH4nI0R0Ah7GPQ",
+     "height": 188,
+     "width": 336
+    }
+   ]
+  },
+  {
+   "_type": "url",
+   "ie_key": "Youtube",
+   "id": "yPYZpwSpKmA",
+   "url": "https://www.youtube.com/watch?v=yPYZpwSpKmA",
+   "title": "Rick Astley - Together Forever (Official Video) [4K Remaster]",
+   "duration": 204,
+   "channel": "Rick Astley",
+   "uploader": "Rick Astley",
+   "thumbnails": [
+    {
+     "url": "https://i.ytimg.com/vi/yPYZpwSpKmA/hqdefault.jpg?sqp=-oaymwEcCNACELwBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLD6igKYt99JwlgbMCpf5I2GwXNVow",
+     "height": 188,
+     "width": 336
+    }
+   ]
+  },
+  {
+   "_type": "url",
+   "ie_key": "Youtube",
+   "id": "dQw4w9WgXcQ",
+   "url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+   "title": "Rick Astley - Never Gonna Give You Up (Official Video) (4K Remaster)",
+   "duration": 214,
+   "channel": "Rick Astley",
+   "uploader": "Rick Astley",
+   "thumbnails": [
+    {
+     "url": "https://i.ytimg.com/vi/dQw4w9WgXcQ/hqdefault.jpg?sqp=-oaymwEcCNACELwBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLB_p0PncTtkrhaNDZtntrE3gKkoYw",
+     "height": 188,
+     "width": 336
+    }
+   ]
+  },
+  {
+   "_type": "url",
+   "ie_key": "Youtube",
+   "id": "C2xel6q0yao",
+   "url": "https://www.youtube.com/watch?v=C2xel6q0yao",
+   "title": "Rick Astley - Cry for Help (Official Video) (4K Remaster)",
+   "duration": 292,
+   "channel": "Rick Astley",
+   "uploader": "Rick Astley",
+   "thumbnails": [
+    {
+     "url": "https://i.ytimg.com/vi/C2xel6q0yao/hqdefault.jpg?sqp=-oaymwEcCNACELwBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLD8pI7Uuuris5eACex-0_MoiPt40g",
+     "height": 188,
+     "width": 336
+    }
+   ]
+  },
+  {
+   "_type": "url",
+   "ie_key": "Youtube",
+   "id": "xxxxxxxxxxx",
+   "url": "https://www.youtube.com/watch?v=xxxxxxxxxxx",
+   "title": "[Private video]",
+   "duration": null,
+   "channel": null,
+   "uploader": null,
+   "thumbnails": []
+  }
+ ]
+}

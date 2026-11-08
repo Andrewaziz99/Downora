@@ -17,12 +17,21 @@ public sealed partial class HomeViewModel(
     ISettingsService settings,
     IShellService shell,
     INavigationService navigation,
+    IUrlValidator urlValidator,
+    IClipboardService clipboard,
     TimeProvider time,
     Localizer localizer,
     ILogger<HomeViewModel> logger) : PageViewModel(localizer, logger)
 {
     public const int ActivePreviewCount = 3;
     public const int RecentPreviewCount = 4;
+
+    [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(AnalyzeCommand))]
+    public partial string UrlText { get; set; } = string.Empty;
+
+    [ObservableProperty]
+    public partial string? ValidationMessage { get; private set; }
 
     [ObservableProperty]
     public partial string Greeting { get; private set; } = string.Empty;
@@ -82,6 +91,38 @@ public sealed partial class HomeViewModel(
         _ => "Home_GreetingEvening",
     };
 
+    private bool CanAnalyze() => !string.IsNullOrWhiteSpace(UrlText);
+
+    /// <summary>Checks the link here, then hands it to the Downloader page to analyze.</summary>
+    [RelayCommand(CanExecute = nameof(CanAnalyze))]
+    private async Task AnalyzeAsync()
+    {
+        var url = urlValidator.Validate(UrlText);
+        if (!url.IsValid)
+        {
+            ValidationMessage = L[$"Url_{url.Problem}"];
+            return;
+        }
+
+        ValidationMessage = null;
+        UrlText = string.Empty;
+        await navigation.NavigateToAsync<DownloaderViewModel>().ConfigureAwait(true);
+        if (navigation.Current is DownloaderViewModel downloader)
+        {
+            await downloader.AnalyzeAsync(url.Url!.AbsoluteUri).ConfigureAwait(true);
+        }
+    }
+
+    [RelayCommand]
+    private void Paste()
+    {
+        if (clipboard.GetText() is { Length: > 0 } text)
+        {
+            UrlText = text.Trim();
+            ValidationMessage = null;
+        }
+    }
+
     [RelayCommand]
     private void OpenDownloadFolder() => shell.OpenFolder(settings.Current.DownloadDirectory);
 
@@ -97,23 +138,3 @@ public sealed partial class HomeViewModel(
         }
     }
 }
-
-public sealed partial class DownloaderViewModel(
-    ISettingsService settings,
-    INavigationService navigation,
-    Localizer localizer,
-    ILogger<DownloaderViewModel> logger) : PageViewModel(localizer, logger)
-{
-    [ObservableProperty]
-    public partial string EmptyBody { get; private set; } = string.Empty;
-
-    public override Task OnNavigatedToAsync(CancellationToken cancellationToken)
-    {
-        EmptyBody = L.Format("Downloader_EmptyBody", Localizer.LeftToRight(settings.Current.DownloadDirectory));
-        return Task.CompletedTask;
-    }
-
-    [RelayCommand]
-    private Task ChangeFolderAsync() => navigation.NavigateToAsync<SettingsViewModel>();
-}
-

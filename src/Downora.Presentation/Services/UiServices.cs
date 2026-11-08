@@ -46,3 +46,10 @@ public interface IAppInfo
 
     string LogsDirectory { get; }
 }
+
+/// <summary>Reads text the user copied (the Paste button).</summary>
+public interface IClipboardService
+{
+    /// <summary>The clipboard text, or null when it holds no text or can't be read right now.</summary>
+    string? GetText();
+}

@@ -1,5 +1,9 @@
 using Downora.Core.Interfaces;
+using Downora.Core.Services;
 using Downora.Infrastructure.Database;
+using Downora.Infrastructure.Extraction;
+using Downora.Infrastructure.Processes;
+using Downora.Infrastructure.Tools;
 using Downora.Infrastructure.Services;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
@@ -34,6 +38,19 @@ public static class DependencyInjection
         services.AddSingleton<IDownloadJobQueries, DownloadJobQueries>();
         services.AddSingleton<IMediaLibraryService, MediaLibraryService>();
         services.AddSingleton<IDiskSpaceService, DiskSpaceService>();
+
+        // Analysis and external tools.
+        services.AddSingleton<ISourceDetector, SourceDetector>();
+        services.AddSingleton<IUrlValidator, UrlValidator>();
+        services.AddSingleton<IProcessRunner, ProcessRunner>();
+        services.AddSingleton<IToolManager, ToolManager>();
+        services.AddSingleton<IMediaExtractor, YtDlpMediaExtractor>();
+        services.AddSingleton(_ =>
+        {
+            var http = new HttpClient { Timeout = TimeSpan.FromMinutes(15) };
+            http.DefaultRequestHeaders.UserAgent.ParseAdd("Downora/0.3 (+https://github.com/Andrewaziz99/Downora)");
+            return http;
+        });
 
         return services;
     }

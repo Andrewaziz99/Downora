@@ -21,6 +21,7 @@ public sealed partial class SettingsViewModel : Navigation.PageViewModel
     private readonly IDialogService _dialogs;
     private readonly IShellService _shell;
     private readonly IAppInfo _app;
+    private readonly IToolManager _tools;
     private bool _loading;
 
     public SettingsViewModel(
@@ -29,10 +30,19 @@ public sealed partial class SettingsViewModel : Navigation.PageViewModel
         IDialogService dialogs,
         IShellService shell,
         IAppInfo app,
+        IToolManager tools,
         Localizer localizer,
         ILogger<SettingsViewModel> logger)
         : base(localizer, logger)
     {
+        _tools = tools;
+        ToolRows =
+        [
+            new("YtDlp", [ToolKind.YtDlp], tools, localizer),
+            new("Ffmpeg", [ToolKind.Ffmpeg, ToolKind.Ffprobe], tools, localizer),
+            new("Deno", [ToolKind.Deno], tools, localizer),
+        ];
+
         // Picking the initial options below must not apply or save anything.
         _loading = true;
         _settings = settings;
@@ -57,6 +67,8 @@ public sealed partial class SettingsViewModel : Navigation.PageViewModel
         _loading = false;
     }
 
+    public IReadOnlyList<ToolRowViewModel> ToolRows { get; }
+
     public IReadOnlyList<OptionViewModel<AppTheme>> ThemeOptions { get; }
 
     public IReadOnlyList<OptionViewModel<AppLanguage>> LanguageOptions { get; }
@@ -78,7 +90,22 @@ public sealed partial class SettingsViewModel : Navigation.PageViewModel
 
     public string DataDirectoryDisplay => Localizer.LeftToRight(DataDirectory);
 
-    public override Task OnNavigatedToAsync(CancellationToken cancellationToken)
+    public override async Task OnNavigatedToAsync(CancellationToken cancellationToken)
+    {
+        LoadSettings();
+
+        // Versions come from running each tool, so they load after the rest of the page is shown.
+        await RunSafeAsync(async () =>
+        {
+            var statuses = await _tools.GetStatusAsync(cancellationToken).ConfigureAwait(true);
+            foreach (var row in ToolRows)
+            {
+                row.Apply(statuses);
+            }
+        }, showLoading: false).ConfigureAwait(true);
+    }
+
+    private void LoadSettings()
     {
         var current = _settings.Current;
         _loading = true;
@@ -93,8 +120,6 @@ public sealed partial class SettingsViewModel : Navigation.PageViewModel
         {
             _loading = false;
         }
-
-        return Task.CompletedTask;
     }
 
     partial void OnSelectedThemeChanged(OptionViewModel<AppTheme> value)
@@ -153,7 +178,7 @@ public sealed partial class SettingsViewModel : Navigation.PageViewModel
         }
         catch (SettingsValidationException ex)
         {
-            await OnNavigatedToAsync(CancellationToken.None).ConfigureAwait(true);
+            LoadSettings();
             ErrorMessage = L.Format("Settings_SaveFailed", ex.Message);
             return false;
         }

@@ -20,6 +20,33 @@
 
             <TextBlock Margin="0,0,0,12" Style="{StaticResource Text.Error}" Text="{Binding ErrorMessage}" Visibility="{Binding ErrorMessage, Converter={StaticResource HasValueToVisibility}}" />
 
+            <!-- Paste a link -->
+            <Border Margin="0,0,0,20" Padding="20" Style="{StaticResource Card}">
+                <StackPanel>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <ui:TextBox
+                            AutomationProperties.Name="{l:Loc Home_UrlPlaceholder}"
+                            FlowDirection="LeftToRight"
+                            Icon="{ui:SymbolIcon Link24}"
+                            PlaceholderText="{l:Loc Home_UrlPlaceholder}"
+                            Text="{Binding UrlText, UpdateSourceTrigger=PropertyChanged}">
+                            <ui:TextBox.InputBindings>
+                                <KeyBinding Key="Enter" Command="{Binding AnalyzeCommand}" />
+                            </ui:TextBox.InputBindings>
+                        </ui:TextBox>
+                        <ui:Button Grid.Column="1" Margin="8,0,0,0" Command="{Binding PasteCommand}" Content="{l:Loc Common_Paste}" Icon="{ui:SymbolIcon ClipboardPaste24}" />
+                        <ui:Button Grid.Column="2" Margin="8,0,0,0" Appearance="Primary" Command="{Binding AnalyzeCommand}" Content="{l:Loc Common_Analyze}" Icon="{ui:SymbolIcon Search24}" />
+                    </Grid>
+                    <TextBlock Margin="0,8,0,0" Style="{StaticResource Text.Error}" Text="{Binding ValidationMessage}" Visibility="{Binding ValidationMessage, Converter={StaticResource HasValueToVisibility}}" />
+                    <TextBlock Margin="0,10,0,0" Style="{StaticResource Text.Caption}" Text="{l:Loc Home_Supported}" TextWrapping="Wrap" />
+                </StackPanel>
+            </Border>
+
             <!-- Statistics -->
             <UniformGrid Columns="4">
                 <controls:StatCard Margin="0,0,12,0" Hint="{Binding TotalDownloadsHint}" Icon="ArrowDownload24" Label="{l:Loc Home_StatTotal}" Value="{Binding TotalDownloads}" />

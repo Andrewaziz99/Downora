@@ -129,6 +129,75 @@
   <data name="About_Source" xml:space="preserve"><value>Source code</value></data>
   <data name="About_OpenLogs" xml:space="preserve"><value>Open logs folder</value></data>
   <data name="About_ThirdParty" xml:space="preserve"><value>Third-party software</value></data>
+  <data name="Common_Paste" xml:space="preserve"><value>Paste</value></data>
+  <data name="Common_Analyze" xml:space="preserve"><value>Analyze</value></data>
+  <data name="Common_TryAgain" xml:space="preserve"><value>Try again</value></data>
+  <data name="Home_UrlPlaceholder" xml:space="preserve"><value>Paste a YouTube, SoundCloud, Vimeo or direct media link…</value></data>
+  <data name="Home_Supported" xml:space="preserve"><value>Works with YouTube, SoundCloud, Vimeo, Dailymotion, direct links and many more sites.</value></data>
+  <data name="Url_Empty" xml:space="preserve"><value>Paste a link first.</value></data>
+  <data name="Url_NotAUrl" xml:space="preserve"><value>That doesn't look like a web link.</value></data>
+  <data name="Url_UnsupportedScheme" xml:space="preserve"><value>Only http and https links are supported.</value></data>
+  <data name="Url_TooLong" xml:space="preserve"><value>That link is too long.</value></data>
+  <data name="Platform_Other" xml:space="preserve"><value>Website</value></data>
+  <data name="Platform_DirectFile" xml:space="preserve"><value>Direct link</value></data>
+  <data name="Platform_Unknown" xml:space="preserve"><value>Website</value></data>
+  <data name="Downloader_Analyzing" xml:space="preserve"><value>Reading the link…</value></data>
+  <data name="Downloader_AnalyzingHint" xml:space="preserve"><value>This usually takes a few seconds.</value></data>
+  <data name="Downloader_Qualities" xml:space="preserve"><value>Available qualities</value></data>
+  <data name="Downloader_NotOffered" xml:space="preserve"><value>Not offered</value></data>
+  <data name="Downloader_SizeApprox" xml:space="preserve"><value>≈ {0}</value></data>
+  <data name="Downloader_SizeUnknown" xml:space="preserve"><value>Size unknown</value></data>
+  <data name="Downloader_BestAudio" xml:space="preserve"><value>Best audio: {0}</value></data>
+  <data name="Downloader_Live" xml:space="preserve"><value>This is a live stream. Downloading live streams isn't supported.</value></data>
+  <data name="Downloader_OpenInBrowser" xml:space="preserve"><value>Open in browser</value></data>
+  <data name="Downloader_SavedTo" xml:space="preserve"><value>Downloads are saved to {0}</value></data>
+  <data name="Downloader_Playlist" xml:space="preserve"><value>Playlist</value></data>
+  <data name="Downloader_PlaylistCount" xml:space="preserve"><value>{0} items</value></data>
+  <data name="Downloader_PlaylistTotal" xml:space="preserve"><value>Total {0}</value></data>
+  <data name="Downloader_EntryUnavailable" xml:space="preserve"><value>Unavailable</value></data>
+  <data name="Downloader_Details" xml:space="preserve"><value>Details from yt-dlp: {0}</value></data>
+  <data name="Downloader_InstallTools" xml:space="preserve"><value>Install required tools</value></data>
+  <data name="Downloader_Installing" xml:space="preserve"><value>Downloading {0}… {1}</value></data>
+  <data name="Quality_Best" xml:space="preserve"><value>Best available</value></data>
+  <data name="Quality_P2160" xml:space="preserve"><value>4K (2160p)</value></data>
+  <data name="Quality_P1440" xml:space="preserve"><value>1440p</value></data>
+  <data name="Quality_P1080" xml:space="preserve"><value>1080p</value></data>
+  <data name="Quality_P720" xml:space="preserve"><value>720p</value></data>
+  <data name="Quality_P480" xml:space="preserve"><value>480p</value></data>
+  <data name="Quality_P360" xml:space="preserve"><value>360p</value></data>
+  <data name="Quality_AudioOnly" xml:space="preserve"><value>Audio only</value></data>
+  <data name="Error_Unsupported_Title" xml:space="preserve"><value>This link isn't supported</value></data>
+  <data name="Error_Unsupported_Body" xml:space="preserve"><value>Downora couldn't find video or audio on this page. Check the link, or open the page of the video itself.</value></data>
+  <data name="Error_RequiresSignIn_Title" xml:space="preserve"><value>Sign-in required</value></data>
+  <data name="Error_RequiresSignIn_Body" xml:space="preserve"><value>The site only shows this to signed-in users, or asked to confirm you're not a bot.</value></data>
+  <data name="Error_Drm_Title" xml:space="preserve"><value>Protected content</value></data>
+  <data name="Error_Drm_Body" xml:space="preserve"><value>This content is protected with DRM, which Downora doesn't remove.</value></data>
+  <data name="Error_GeoRestricted_Title" xml:space="preserve"><value>Not available in your region</value></data>
+  <data name="Error_GeoRestricted_Body" xml:space="preserve"><value>The site doesn't offer this content in your country.</value></data>
+  <data name="Error_Unavailable_Title" xml:space="preserve"><value>Content unavailable</value></data>
+  <data name="Error_Unavailable_Body" xml:space="preserve"><value>It may have been removed or made private, or the link may be wrong.</value></data>
+  <data name="Error_Network_Title" xml:space="preserve"><value>Couldn't reach the site</value></data>
+  <data name="Error_Network_Body" xml:space="preserve"><value>Check your internet connection and try again. If it keeps happening, the site may be limiting requests for a while.</value></data>
+  <data name="Error_ToolMissing_Title" xml:space="preserve"><value>yt-dlp isn't installed</value></data>
+  <data name="Error_ToolMissing_Body" xml:space="preserve"><value>Downora uses yt-dlp (and Deno for YouTube) to read links. They're downloaded from their official releases and checked before use.</value></data>
+  <data name="Error_DiskFull_Title" xml:space="preserve"><value>The disk is full</value></data>
+  <data name="Error_DiskFull_Body" xml:space="preserve"><value>Free some space or choose another download folder in Settings.</value></data>
+  <data name="Error_Unknown_Title" xml:space="preserve"><value>Something went wrong</value></data>
+  <data name="Error_Unknown_Body" xml:space="preserve"><value>Downora couldn't analyze this link.</value></data>
+  <data name="Error_InstallFailed" xml:space="preserve"><value>Couldn't install: {0}</value></data>
+  <data name="Settings_Tools" xml:space="preserve"><value>Tools</value></data>
+  <data name="Tool_YtDlp" xml:space="preserve"><value>yt-dlp</value></data>
+  <data name="Tool_YtDlpDesc" xml:space="preserve"><value>Reads links and downloads media.</value></data>
+  <data name="Tool_Ffmpeg" xml:space="preserve"><value>FFmpeg and FFprobe</value></data>
+  <data name="Tool_FfmpegDesc" xml:space="preserve"><value>Merges, converts and checks media files.</value></data>
+  <data name="Tool_Deno" xml:space="preserve"><value>Deno</value></data>
+  <data name="Tool_DenoDesc" xml:space="preserve"><value>JavaScript runtime yt-dlp needs for YouTube.</value></data>
+  <data name="Tool_NotInstalled" xml:space="preserve"><value>Not installed</value></data>
+  <data name="Tool_Version" xml:space="preserve"><value>Version {0}</value></data>
+  <data name="Tool_InstalledNoVersion" xml:space="preserve"><value>Installed</value></data>
+  <data name="Tool_Install" xml:space="preserve"><value>Install</value></data>
+  <data name="Tool_Update" xml:space="preserve"><value>Check for updates</value></data>
+  <data name="Tool_Checking" xml:space="preserve"><value>Checking…</value></data>
   <data name="Common_Open" xml:space="preserve"><value>Open</value></data>
   <data name="Common_Cancel" xml:space="preserve"><value>Cancel</value></data>
   <data name="Common_Refresh" xml:space="preserve"><value>Refresh</value></data>

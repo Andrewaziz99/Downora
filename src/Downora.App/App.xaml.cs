@@ -41,6 +41,7 @@ public partial class App : Application
             builder.Services.AddSingleton<IDialogService, DialogService>();
             builder.Services.AddSingleton<IShellService, ShellService>();
             builder.Services.AddSingleton<IAppInfo, AppInfoProvider>();
+            builder.Services.AddSingleton<IClipboardService, ClipboardService>();
             builder.Services.AddSingleton<MainWindow>();
 
             _host = builder.Build();
@@ -51,6 +52,7 @@ public partial class App : Application
             var settingsService = services.GetRequiredService<ISettingsService>();
             await settingsService.LoadAsync().ConfigureAwait(true);
             await services.GetRequiredService<IJobRecoveryService>().RecoverInterruptedJobsAsync().ConfigureAwait(true);
+            await services.GetRequiredService<IToolManager>().PrepareAsync().ConfigureAwait(true);
 
             var settings = settingsService.Current;
             services.GetRequiredService<Localizer>().SetLanguage(settings.Language);

@@ -12,6 +12,7 @@ Built with C#, .NET 10 and WPF (MVVM). Media extraction runs through yt-dlp and 
 
 - **Phase 1, foundation:** the solution, the Generic Host with DI, Serilog logging, SQLite with migrations, persistent settings, crash recovery and CI.
 - **Phase 2, shell UI:** the Fluent Velocity design system in dark and light, a sidebar with all seven pages, English and Arabic with a right-to-left layout, and real data on every page.
+- **Phase 3, analyze:** paste a YouTube, SoundCloud, Vimeo or other supported link and Downora validates it, detects the platform, and shows the title, uploader, duration, thumbnail and every available quality with its estimated size (or the full list of a playlist). Clear messages for sign-in-only, region-locked, DRM-protected and unavailable content. yt-dlp, FFmpeg and Deno are copied from the bundle or downloaded from their official releases with SHA-256 verification, and can be installed or updated from Settings › Tools.
 
 The download engine arrives in Phases 3–7. See [docs/roadmap.md](docs/roadmap.md).
 

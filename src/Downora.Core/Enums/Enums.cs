@@ -82,6 +82,7 @@ public enum DownloadErrorKind
     RequiresSignIn,
     Drm,
     GeoRestricted,
+    Unavailable,
     Network,
     ToolMissing,
     DiskFull,
