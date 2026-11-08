@@ -8,7 +8,12 @@ Built with C#, .NET 10 and WPF (MVVM). Media extraction runs through yt-dlp and 
 
 ## Status
 
-**Phase 1 of 11 is complete: the foundation.** That covers the solution structure, dependency injection through the .NET Generic Host, Serilog logging, the SQLite database with migrations, persistent settings, crash recovery for interrupted downloads, and CI. The download features arrive in Phases 3–7. See [docs/roadmap.md](docs/roadmap.md).
+**Phases 1–2 of 11 are complete.**
+
+- **Phase 1, foundation:** the solution, the Generic Host with DI, Serilog logging, SQLite with migrations, persistent settings, crash recovery and CI.
+- **Phase 2, shell UI:** the Fluent Velocity design system in dark and light, a sidebar with all seven pages, English and Arabic with a right-to-left layout, and real data on every page.
+
+The download engine arrives in Phases 3–7. See [docs/roadmap.md](docs/roadmap.md).
 
 ## Requirements
 
@@ -42,16 +47,20 @@ The first launch creates:
 ```text
 src/
   Downora.Core/            Models, enums, interfaces, pure business rules (no UI, no IO)
-  Downora.Infrastructure/  EF Core database, settings, logging, processes, tools
-  Downora.App/             WPF views, view models, app services (composition root)
+  Downora.Infrastructure/  EF Core database, settings, queries, logging, processes, tools
+  Downora.Presentation/    View models, navigation, localization (en/ar) - no WPF, testable anywhere
+  Downora.App/             WPF views, theme, Windows services (composition root)
 tests/
   Downora.Core.Tests/            Unit tests
   Downora.Infrastructure.Tests/  Real SQLite files in temp folders
+  Downora.Presentation.Tests/    View models, navigation and translations
+design/                    Stitch design reference and logo sources
+tools/                     strings.py (UI text), check_xaml_resources.py (CI check)
 docs/                      Developer guide and roadmap
 installer/                 Inno Setup script (Phase 10)
 ```
 
-Dependencies point one way: App → Infrastructure → Core. See [docs/developer-guide.md](docs/developer-guide.md) for the conventions.
+Dependencies point one way: App → Presentation / Infrastructure → Core. See [docs/developer-guide.md](docs/developer-guide.md) for the conventions.
 
 ## Third-party tools
 

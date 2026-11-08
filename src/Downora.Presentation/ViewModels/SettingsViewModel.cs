@@ -1,0 +1,201 @@
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using Downora.Core.Enums;
+using Downora.Core.Interfaces;
+using Downora.Core.Models;
+using Downora.Core.Services;
+using Downora.Presentation.Localization;
+using Downora.Presentation.Services;
+using Microsoft.Extensions.Logging;
+
+namespace Downora.Presentation.ViewModels;
+
+/// <summary>
+/// Settings that already do something. Each change applies and saves immediately (Windows Settings style).
+/// Download defaults, startup and tool options are added with the features that use them.
+/// </summary>
+public sealed partial class SettingsViewModel : Navigation.PageViewModel
+{
+    private readonly ISettingsService _settings;
+    private readonly IThemeService _theme;
+    private readonly IDialogService _dialogs;
+    private readonly IShellService _shell;
+    private readonly IAppInfo _app;
+    private bool _loading;
+
+    public SettingsViewModel(
+        ISettingsService settings,
+        IThemeService theme,
+        IDialogService dialogs,
+        IShellService shell,
+        IAppInfo app,
+        Localizer localizer,
+        ILogger<SettingsViewModel> logger)
+        : base(localizer, logger)
+    {
+        // Picking the initial options below must not apply or save anything.
+        _loading = true;
+        _settings = settings;
+        _theme = theme;
+        _dialogs = dialogs;
+        _shell = shell;
+        _app = app;
+
+        ThemeOptions =
+        [
+            new(AppTheme.System, "Theme_System", localizer),
+            new(AppTheme.Dark, "Theme_Dark", localizer),
+            new(AppTheme.Light, "Theme_Light", localizer),
+        ];
+        LanguageOptions =
+        [
+            new(AppLanguage.English, "Language_English", localizer),
+            new(AppLanguage.Arabic, "Language_Arabic", localizer),
+        ];
+        SelectedTheme = ThemeOptions[0];
+        SelectedLanguage = LanguageOptions[0];
+        _loading = false;
+    }
+
+    public IReadOnlyList<OptionViewModel<AppTheme>> ThemeOptions { get; }
+
+    public IReadOnlyList<OptionViewModel<AppLanguage>> LanguageOptions { get; }
+
+    [ObservableProperty]
+    public partial OptionViewModel<AppTheme> SelectedTheme { get; set; }
+
+    [ObservableProperty]
+    public partial OptionViewModel<AppLanguage> SelectedLanguage { get; set; }
+
+    [ObservableProperty]
+    public partial string DownloadDirectory { get; private set; } = string.Empty;
+
+    public string DataDirectory => _app.DataDirectory;
+
+    public override Task OnNavigatedToAsync(CancellationToken cancellationToken)
+    {
+        var current = _settings.Current;
+        _loading = true;
+        try
+        {
+            SelectedTheme = ThemeOptions.First(o => o.Value == current.Theme);
+            SelectedLanguage = LanguageOptions.First(o => o.Value == current.Language);
+            DownloadDirectory = current.DownloadDirectory;
+            ErrorMessage = null;
+        }
+        finally
+        {
+            _loading = false;
+        }
+
+        return Task.CompletedTask;
+    }
+
+    partial void OnSelectedThemeChanged(OptionViewModel<AppTheme> value)
+    {
+        if (_loading)
+        {
+            return;
+        }
+
+        _theme.Apply(value.Value);
+        _ = SaveAsync(s => s.Theme = value.Value);
+    }
+
+    partial void OnSelectedLanguageChanged(OptionViewModel<AppLanguage> value)
+    {
+        if (_loading)
+        {
+            return;
+        }
+
+        L.SetLanguage(value.Value);
+        _ = SaveAsync(s => s.Language = value.Value);
+    }
+
+    [RelayCommand]
+    private async Task BrowseFolderAsync()
+    {
+        var picked = _dialogs.PickFolder(L["Settings_PickFolderTitle"], DownloadDirectory);
+        if (string.IsNullOrWhiteSpace(picked) || string.Equals(picked, DownloadDirectory, StringComparison.OrdinalIgnoreCase))
+        {
+            return;
+        }
+
+        if (await SaveAsync(s => s.DownloadDirectory = picked).ConfigureAwait(true))
+        {
+            DownloadDirectory = picked;
+        }
+    }
+
+    [RelayCommand]
+    private void OpenDownloadFolder() => _shell.OpenFolder(DownloadDirectory);
+
+    [RelayCommand]
+    private void OpenDataFolder() => _shell.OpenFolder(DataDirectory);
+
+    /// <summary>Saves one change. On failure the message is shown and the screen goes back to the stored values.</summary>
+    private async Task<bool> SaveAsync(Action<AppSettings> change)
+    {
+        var updated = _settings.Current;
+        change(updated);
+        try
+        {
+            await _settings.SaveAsync(updated).ConfigureAwait(true);
+            ErrorMessage = null;
+            return true;
+        }
+        catch (SettingsValidationException ex)
+        {
+            await OnNavigatedToAsync(CancellationToken.None).ConfigureAwait(true);
+            ErrorMessage = L.Format("Settings_SaveFailed", ex.Message);
+            return false;
+        }
+    }
+}
+
+public sealed partial class AboutViewModel : Navigation.PageViewModel
+{
+    private static readonly Uri RepositoryUrl = new("https://github.com/Andrewaziz99/Downora");
+
+    private readonly IShellService _shell;
+    private readonly IAppInfo _app;
+
+    public AboutViewModel(IShellService shell, IAppInfo app, Localizer localizer, ILogger<AboutViewModel> logger)
+        : base(localizer, logger)
+    {
+        _shell = shell;
+        _app = app;
+        localizer.LanguageChanged += (_, _) => OnPropertyChanged(nameof(VersionText));
+    }
+
+    public string VersionText => L.Format("About_Version", _app.Version);
+
+    public IReadOnlyList<ThirdPartyComponent> ThirdParty { get; } =
+    [
+        new("yt-dlp", "Unlicense", new Uri("https://github.com/yt-dlp/yt-dlp")),
+        new("FFmpeg", "LGPL 2.1+", new Uri("https://ffmpeg.org")),
+        new("Deno", "MIT", new Uri("https://github.com/denoland/deno")),
+        new("WPF UI", "MIT", new Uri("https://github.com/lepoco/wpfui")),
+        new("CommunityToolkit.Mvvm", "MIT", new Uri("https://github.com/CommunityToolkit/dotnet")),
+        new("Entity Framework Core", "MIT", new Uri("https://github.com/dotnet/efcore")),
+        new("Serilog", "Apache 2.0", new Uri("https://github.com/serilog/serilog")),
+    ];
+
+    [RelayCommand]
+    private void OpenSource() => _shell.OpenUrl(RepositoryUrl);
+
+    [RelayCommand]
+    private void OpenLogs() => _shell.OpenFolder(_app.LogsDirectory);
+
+    [RelayCommand]
+    private void OpenLink(ThirdPartyComponent? component)
+    {
+        if (component is not null)
+        {
+            _shell.OpenUrl(component.Url);
+        }
+    }
+}
+
+public sealed record ThirdPartyComponent(string Name, string License, Uri Url);

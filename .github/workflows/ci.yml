@@ -32,6 +32,9 @@ jobs:
         with:
           global-json-file: global.json
 
+      - name: Check XAML resource keys
+        run: python tools/check_xaml_resources.py
+
       - name: Restore
         run: dotnet restore Downora.sln
 

@@ -1,0 +1,123 @@
+<UserControl
+    x:Class="Downora.App.Views.Pages.LibraryView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    xmlns:l="clr-namespace:Downora.App.Localization"
+    xmlns:controls="clr-namespace:Downora.App.Controls"
+    xmlns:vm="clr-namespace:Downora.Presentation.ViewModels;assembly=Downora.Presentation"
+    x:Name="Root"
+    mc:Ignorable="d"
+    d:DataContext="{d:DesignInstance Type=vm:LibraryViewModel}">
+
+    <Grid Margin="{StaticResource Padding.Page}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <TextBlock Style="{StaticResource PageHeader}" Text="{l:Loc Nav_Library}" />
+
+        <!-- Toolbar: search, kind filter, sort -->
+        <Border Grid.Row="1" Margin="0,0,0,16" Padding="8" Style="{StaticResource Card}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="320" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="180" />
+                </Grid.ColumnDefinitions>
+                <ui:TextBox
+                    AutomationProperties.Name="{l:Loc Library_Search}"
+                    Icon="{ui:SymbolIcon Search24}"
+                    PlaceholderText="{l:Loc Library_Search}"
+                    Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" />
+                <ListBox
+                    Grid.Column="1"
+                    Margin="12,0"
+                    VerticalAlignment="Center"
+                    DisplayMemberPath="Label"
+                    ItemsSource="{Binding KindFilters}"
+                    SelectedItem="{Binding SelectedKind, Mode=TwoWay}"
+                    Style="{StaticResource TabStrip}" />
+                <TextBlock Grid.Column="2" Margin="0,0,8,0" VerticalAlignment="Center" Style="{StaticResource Text.Secondary}" Text="{l:Loc Library_SortBy}" />
+                <ComboBox
+                    Grid.Column="3"
+                    AutomationProperties.Name="{l:Loc Library_SortBy}"
+                    DisplayMemberPath="Label"
+                    ItemsSource="{Binding SortOptions}"
+                    SelectedItem="{Binding SelectedSort, Mode=TwoWay}" />
+            </Grid>
+        </Border>
+
+        <TextBlock Grid.Row="2" Margin="0,0,0,12" Style="{StaticResource Text.Error}" Text="{Binding ErrorMessage}" Visibility="{Binding ErrorMessage, Converter={StaticResource HasValueToVisibility}}" />
+
+        <Grid Grid.Row="3">
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <ItemsControl ItemsSource="{Binding Items}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate DataType="{x:Type vm:MediaItemViewModel}">
+                            <Border Width="232" Margin="0,0,12,12" Padding="0" Style="{StaticResource Card.Hover}">
+                                <StackPanel>
+                                    <Border Height="130" CornerRadius="8,8,0,0" Style="{StaticResource Thumbnail}">
+                                        <Grid>
+                                            <ui:SymbolIcon FontSize="30" Foreground="{DynamicResource Brush.TextTertiary}" Symbol="{Binding IsAudio, Converter={StaticResource MediaGlyphConverter}}" />
+                                            <Image Source="{Binding ThumbnailPath, Converter={StaticResource ThumbnailConverter}, ConverterParameter=464}" Stretch="UniformToFill" />
+                                            <Border Margin="8" HorizontalAlignment="Right" VerticalAlignment="Bottom" Background="#B3000000" Style="{StaticResource Tag}" Visibility="{Binding DurationText, Converter={StaticResource HasValueToVisibility}}">
+                                                <TextBlock FontFamily="{StaticResource Font.Mono}" Foreground="White" Style="{StaticResource Tag.Text}" Text="{Binding DurationText}" />
+                                            </Border>
+                                        </Grid>
+                                    </Border>
+                                    <StackPanel Margin="12,10,12,12">
+                                        <TextBlock Style="{StaticResource Text.BodyStrong}" Text="{Binding Title}" ToolTip="{Binding Title}" />
+                                        <TextBlock Margin="0,2,0,0" Style="{StaticResource Text.Caption}" Text="{Binding Subtitle}" Visibility="{Binding Subtitle, Converter={StaticResource HasValueToVisibility}}" />
+                                        <StackPanel Margin="0,8,0,0" Orientation="Horizontal">
+                                            <Border Style="{StaticResource Tag}">
+                                                <TextBlock Style="{StaticResource Tag.Text}" Text="{Binding FileType}" />
+                                            </Border>
+                                            <Border Margin="4,0,0,0" Style="{StaticResource Tag}" Visibility="{Binding Resolution, Converter={StaticResource HasValueToVisibility}}">
+                                                <TextBlock Style="{StaticResource Tag.Text}" Text="{Binding Resolution}" />
+                                            </Border>
+                                            <TextBlock Margin="8,0,0,0" VerticalAlignment="Center" Style="{StaticResource Text.Metric}" Text="{Binding SizeText}" />
+                                        </StackPanel>
+                                        <TextBlock Margin="0,6,0,0" Foreground="{DynamicResource Brush.Status.Failed.Fg}" Style="{StaticResource Text.Caption}" Text="{l:Loc Library_Missing}" Visibility="{Binding IsMissing, Converter={StaticResource BoolToVisibility}}" />
+                                        <StackPanel Margin="0,10,0,0" Orientation="Horizontal" Visibility="{Binding IsMissing, Converter={StaticResource BoolToVisibility}, ConverterParameter=Invert}">
+                                            <ui:Button
+                                                Command="{Binding DataContext.OpenCommand, ElementName=Root}"
+                                                CommandParameter="{Binding}"
+                                                Content="{l:Loc Library_Open}"
+                                                Icon="{ui:SymbolIcon Play24}" />
+                                            <ui:Button
+                                                Margin="6,0,0,0"
+                                                AutomationProperties.Name="{l:Loc Library_ShowInFolder}"
+                                                Command="{Binding DataContext.ShowInFolderCommand, ElementName=Root}"
+                                                CommandParameter="{Binding}"
+                                                Icon="{ui:SymbolIcon FolderOpen24}"
+                                                ToolTip="{l:Loc Library_ShowInFolder}" />
+                                        </StackPanel>
+                                    </StackPanel>
+                                </StackPanel>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+            <controls:EmptyState
+                VerticalAlignment="Top"
+                Description="{l:Loc Library_EmptyBody}"
+                Icon="Library24"
+                Title="{l:Loc Library_EmptyTitle}"
+                Visibility="{Binding IsLibraryEmpty, Converter={StaticResource BoolToVisibility}}" />
+            <TextBlock VerticalAlignment="Top" Style="{StaticResource Text.Secondary}" Text="{l:Loc Library_NoResults}" Visibility="{Binding HasNoResults, Converter={StaticResource BoolToVisibility}}" />
+        </Grid>
+    </Grid>
+</UserControl>

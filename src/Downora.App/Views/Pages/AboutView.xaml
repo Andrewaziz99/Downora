@@ -1,0 +1,74 @@
+<UserControl
+    x:Class="Downora.App.Views.Pages.AboutView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    xmlns:l="clr-namespace:Downora.App.Localization"
+    xmlns:vm="clr-namespace:Downora.Presentation.ViewModels;assembly=Downora.Presentation"
+    x:Name="Root"
+    mc:Ignorable="d"
+    d:DataContext="{d:DesignInstance Type=vm:AboutViewModel}">
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel MaxWidth="760" Margin="{StaticResource Padding.Page}" HorizontalAlignment="Left">
+            <TextBlock Style="{StaticResource PageHeader}" Text="{l:Loc Nav_About}" />
+
+            <Border Style="{StaticResource Card}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Image Width="72" Height="72" VerticalAlignment="Top" Source="pack://application:,,,/Downora;component/Assets/downora-256.png" RenderOptions.BitmapScalingMode="HighQuality" />
+                    <StackPanel Grid.Column="1" Margin="20,0,0,0">
+                        <TextBlock Style="{StaticResource Text.TitleLg}" Text="Downora" />
+                        <TextBlock Margin="0,2,0,0" Style="{StaticResource Text.Metric}" Text="{Binding VersionText}" />
+                        <TextBlock Margin="0,10,0,0" Style="{StaticResource Text.Secondary}" Text="{l:Loc About_Description}" TextTrimming="None" TextWrapping="Wrap" />
+                        <StackPanel Margin="0,14,0,0" Orientation="Horizontal">
+                            <ui:Button Command="{Binding OpenSourceCommand}" Content="{l:Loc About_Source}" Icon="{ui:SymbolIcon Code24}" />
+                            <ui:Button Margin="8,0,0,0" Command="{Binding OpenLogsCommand}" Content="{l:Loc About_OpenLogs}" Icon="{ui:SymbolIcon Document24}" />
+                        </StackPanel>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <Border Margin="0,12,0,0" Background="{StaticResource Brush.Status.Processing.Bg}" BorderBrush="{StaticResource Brush.Status.Processing.Border}" Style="{StaticResource Card}">
+                <StackPanel Orientation="Horizontal">
+                    <ui:SymbolIcon VerticalAlignment="Top" FontSize="18" Foreground="{DynamicResource Brush.Status.Processing.Fg}" Symbol="Warning24" />
+                    <TextBlock MaxWidth="640" Margin="10,0,0,0" Style="{StaticResource Text.Body}" Text="{l:Loc About_Legal}" TextTrimming="None" TextWrapping="Wrap" />
+                </StackPanel>
+            </Border>
+
+            <TextBlock Style="{StaticResource SectionHeader}" Text="{l:Loc About_ThirdParty}" />
+            <Border Padding="0" Style="{StaticResource Card}">
+                <ItemsControl ItemsSource="{Binding ThirdParty}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate DataType="{x:Type vm:ThirdPartyComponent}">
+                            <Border Padding="16,8" BorderBrush="{DynamicResource Brush.Border}" BorderThickness="0,0,0,1">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="140" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock VerticalAlignment="Center" Style="{StaticResource Text.BodyStrong}" Text="{Binding Name}" />
+                                    <TextBlock Grid.Column="1" VerticalAlignment="Center" Style="{StaticResource Text.Secondary}" Text="{Binding License}" />
+                                    <ui:Button
+                                        Grid.Column="2"
+                                        Appearance="Transparent"
+                                        AutomationProperties.Name="{Binding Name}"
+                                        Command="{Binding DataContext.OpenLinkCommand, ElementName=Root}"
+                                        CommandParameter="{Binding}"
+                                        Icon="{ui:SymbolIcon Open24}"
+                                        ToolTip="{Binding Url}" />
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

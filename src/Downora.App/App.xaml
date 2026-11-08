@@ -3,14 +3,28 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    xmlns:vm="clr-namespace:Downora.Presentation.ViewModels;assembly=Downora.Presentation"
+    xmlns:pages="clr-namespace:Downora.App.Views.Pages"
     ShutdownMode="OnMainWindowClose">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <!-- Theme switching (Dark / Light / System) is wired to settings in Phase 2. -->
                 <ui:ThemesDictionary Theme="Dark" />
                 <ui:ControlsDictionary />
+                <!-- ThemeService swaps this entry for Palette.Light.xaml. -->
+                <ResourceDictionary Source="pack://application:,,,/Downora;component/Resources/Theme/Palette.Dark.xaml" />
+                <!-- Templates.xaml merges Styles.xaml, which merges Tokens.xaml. -->
+                <ResourceDictionary Source="pack://application:,,,/Downora;component/Resources/Theme/Templates.xaml" />
             </ResourceDictionary.MergedDictionaries>
+
+            <!-- Each page view model renders with its view. -->
+            <DataTemplate DataType="{x:Type vm:HomeViewModel}"><pages:HomeView /></DataTemplate>
+            <DataTemplate DataType="{x:Type vm:DownloaderViewModel}"><pages:DownloaderView /></DataTemplate>
+            <DataTemplate DataType="{x:Type vm:QueueViewModel}"><pages:QueueView /></DataTemplate>
+            <DataTemplate DataType="{x:Type vm:LibraryViewModel}"><pages:LibraryView /></DataTemplate>
+            <DataTemplate DataType="{x:Type vm:HistoryViewModel}"><pages:HistoryView /></DataTemplate>
+            <DataTemplate DataType="{x:Type vm:SettingsViewModel}"><pages:SettingsView /></DataTemplate>
+            <DataTemplate DataType="{x:Type vm:AboutViewModel}"><pages:AboutView /></DataTemplate>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

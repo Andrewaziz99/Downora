@@ -7,11 +7,13 @@
     <RootNamespace>Downora.App</RootNamespace>
     <AssemblyName>Downora</AssemblyName>
     <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationIcon>Assets\downora.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Downora.Core\Downora.Core.csproj" />
     <ProjectReference Include="..\Downora.Infrastructure\Downora.Infrastructure.csproj" />
+    <ProjectReference Include="..\Downora.Presentation\Downora.Presentation.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -19,6 +21,12 @@
     <PackageReference Include="WPF-UI" />
     <PackageReference Include="Microsoft.Extensions.Hosting" />
     <PackageReference Include="Serilog.Extensions.Hosting" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\downora.ico" />
+    <Resource Include="Assets\downora-256.png" />
+    <None Remove="Assets\downora-icon.svg" />
   </ItemGroup>
 
 </Project>

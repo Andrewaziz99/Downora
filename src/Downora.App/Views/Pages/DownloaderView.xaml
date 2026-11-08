@@ -1,0 +1,20 @@
+<UserControl
+    x:Class="Downora.App.Views.Pages.DownloaderView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    xmlns:l="clr-namespace:Downora.App.Localization"
+    xmlns:controls="clr-namespace:Downora.App.Controls"
+    xmlns:vm="clr-namespace:Downora.Presentation.ViewModels;assembly=Downora.Presentation"
+    mc:Ignorable="d"
+    d:DataContext="{d:DesignInstance Type=vm:DownloaderViewModel}">
+
+    <StackPanel Margin="{StaticResource Padding.Page}">
+        <TextBlock Style="{StaticResource PageHeader}" Text="{l:Loc Nav_Downloader}" />
+        <controls:EmptyState Description="{Binding EmptyBody}" Icon="Link24" Title="{l:Loc Downloader_EmptyTitle}">
+            <ui:Button Command="{Binding ChangeFolderCommand}" Content="{l:Loc Downloader_ChangeFolder}" Icon="{ui:SymbolIcon FolderOpen24}" />
+        </controls:EmptyState>
+    </StackPanel>
+</UserControl>

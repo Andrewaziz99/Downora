@@ -1,0 +1,69 @@
+<UserControl
+    x:Class="Downora.App.Views.Pages.HomeView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    xmlns:l="clr-namespace:Downora.App.Localization"
+    xmlns:controls="clr-namespace:Downora.App.Controls"
+    xmlns:vm="clr-namespace:Downora.Presentation.ViewModels;assembly=Downora.Presentation"
+    mc:Ignorable="d"
+    d:DataContext="{d:DesignInstance Type=vm:HomeViewModel}"
+    d:DesignWidth="1040"
+    d:DesignHeight="760">
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="{StaticResource Padding.Page}">
+            <TextBlock Style="{StaticResource Text.Display}" Text="{Binding Greeting}" />
+            <TextBlock Margin="0,4,0,20" Style="{StaticResource Text.Secondary}" Text="{l:Loc Home_Subtitle}" />
+
+            <TextBlock Margin="0,0,0,12" Style="{StaticResource Text.Error}" Text="{Binding ErrorMessage}" Visibility="{Binding ErrorMessage, Converter={StaticResource HasValueToVisibility}}" />
+
+            <!-- Statistics -->
+            <UniformGrid Columns="4">
+                <controls:StatCard Margin="0,0,12,0" Hint="{Binding TotalDownloadsHint}" Icon="ArrowDownload24" Label="{l:Loc Home_StatTotal}" Value="{Binding TotalDownloads}" />
+                <controls:StatCard Margin="0,0,12,0" Hint="{l:Loc Home_StatDataHint}" Icon="DataUsage24" Label="{l:Loc Home_StatData}" Value="{Binding DataDownloaded}" />
+                <controls:StatCard Margin="0,0,12,0" Hint="{Binding ActiveNowHint}" Icon="Gauge24" Label="{l:Loc Home_StatActive}" Value="{Binding ActiveNow}" />
+                <controls:StatCard Hint="{l:Loc Home_StatSuccessHint}" Icon="ShieldCheckmark24" Label="{l:Loc Home_StatSuccess}" Value="{Binding SuccessRate}" />
+            </UniformGrid>
+
+            <!-- Active downloads -->
+            <Grid Margin="0,28,0,12">
+                <TextBlock Style="{StaticResource Text.TitleMd}" Text="{l:Loc Home_ActiveTitle}" />
+                <ui:Button
+                    HorizontalAlignment="Right"
+                    Appearance="Transparent"
+                    Command="{Binding ViewQueueCommand}"
+                    Content="{l:Loc Home_ViewQueue}"
+                    Foreground="{DynamicResource Brush.AccentText}"
+                    Icon="{ui:SymbolIcon ArrowRight24}" />
+            </Grid>
+            <ItemsControl ItemTemplate="{StaticResource DownloadCard}" ItemsSource="{Binding ActiveDownloads}" />
+            <Border Style="{StaticResource Card}" Visibility="{Binding ActiveDownloads.Count, Converter={StaticResource CountToVisibility}, ConverterParameter=Invert}">
+                <TextBlock Style="{StaticResource Text.Secondary}" Text="{l:Loc Home_ActiveEmpty}" />
+            </Border>
+
+            <!-- Recently completed -->
+            <Grid Margin="0,28,0,4">
+                <TextBlock Style="{StaticResource Text.TitleMd}" Text="{l:Loc Home_RecentTitle}" />
+                <ui:Button
+                    HorizontalAlignment="Right"
+                    Command="{Binding OpenDownloadFolderCommand}"
+                    Content="{l:Loc Home_OpenFolder}"
+                    Icon="{ui:SymbolIcon FolderOpen24}" />
+            </Grid>
+            <TextBlock Margin="0,0,0,12" Style="{StaticResource Text.Caption}" Text="{Binding SavedInText}" />
+            <ItemsControl ItemTemplate="{StaticResource RecentTile}" ItemsSource="{Binding RecentDownloads}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <UniformGrid Columns="4" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
+            <Border Style="{StaticResource Card}" Visibility="{Binding RecentDownloads.Count, Converter={StaticResource CountToVisibility}, ConverterParameter=Invert}">
+                <TextBlock Style="{StaticResource Text.Secondary}" Text="{l:Loc Home_RecentEmpty}" />
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

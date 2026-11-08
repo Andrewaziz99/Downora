@@ -1,19 +1,22 @@
 using System.Windows;
 using System.Windows.Threading;
 using Downora.App.Services;
-using Downora.App.ViewModels;
 using Downora.App.Views;
 using Downora.Core.Interfaces;
 using Downora.Infrastructure;
 using Downora.Infrastructure.Logging;
 using Downora.Infrastructure.Services;
+using Downora.Presentation;
+using Downora.Presentation.Localization;
+using Downora.Presentation.Services;
+using Downora.Presentation.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 
 namespace Downora.App;
 
-/// <summary>Composition root: builds the host, prepares the database, then shows the main window.</summary>
+/// <summary>Composition root: builds the host, prepares the database, applies theme and language, then shows the shell.</summary>
 public partial class App : Application
 {
     private IHost? _host;
@@ -32,8 +35,12 @@ public partial class App : Application
             var builder = Host.CreateApplicationBuilder(e.Args);
             builder.Services.AddSerilog();
             builder.Services.AddDownoraInfrastructure(paths);
+            builder.Services.AddDownoraPresentation();
+            builder.Services.AddSingleton<ThemeService>();
+            builder.Services.AddSingleton<IThemeService>(sp => sp.GetRequiredService<ThemeService>());
+            builder.Services.AddSingleton<IDialogService, DialogService>();
             builder.Services.AddSingleton<IShellService, ShellService>();
-            builder.Services.AddSingleton<MainWindowViewModel>();
+            builder.Services.AddSingleton<IAppInfo, AppInfoProvider>();
             builder.Services.AddSingleton<MainWindow>();
 
             _host = builder.Build();
@@ -41,15 +48,22 @@ public partial class App : Application
 
             var services = _host.Services;
             await services.GetRequiredService<IDatabaseInitializer>().InitializeAsync().ConfigureAwait(true);
-            await services.GetRequiredService<ISettingsService>().LoadAsync().ConfigureAwait(true);
-            var recovered = await services.GetRequiredService<IJobRecoveryService>().RecoverInterruptedJobsAsync().ConfigureAwait(true);
+            var settingsService = services.GetRequiredService<ISettingsService>();
+            await settingsService.LoadAsync().ConfigureAwait(true);
+            await services.GetRequiredService<IJobRecoveryService>().RecoverInterruptedJobsAsync().ConfigureAwait(true);
 
-            var viewModel = services.GetRequiredService<MainWindowViewModel>();
-            viewModel.Load(recovered);
+            var settings = settingsService.Current;
+            services.GetRequiredService<Localizer>().SetLanguage(settings.Language);
 
             var window = services.GetRequiredService<MainWindow>();
+            var theme = services.GetRequiredService<ThemeService>();
+            theme.Attach(window);
+            theme.Apply(settings.Theme);
+
             MainWindow = window;
             window.Show();
+
+            await services.GetRequiredService<ShellViewModel>().StartAsync().ConfigureAwait(true);
         }
 #pragma warning disable CA1031 // Startup must never crash silently: any failure is logged and shown, then the app exits.
         catch (Exception ex)
@@ -99,8 +113,9 @@ public partial class App : Application
     private void OnDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
     {
         Log.Error(e.Exception, "Unhandled UI exception");
+        var localizer = Localizer.Instance;
         MessageBox.Show(
-            $"Something went wrong: {e.Exception.Message}\n\nDetails were saved to the log. You can keep using Downora.",
+            localizer.Format("Error_Generic", e.Exception.Message),
             "Downora",
             MessageBoxButton.OK,
             MessageBoxImage.Warning);

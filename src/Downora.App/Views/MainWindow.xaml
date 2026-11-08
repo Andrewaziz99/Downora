@@ -5,65 +5,188 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
-    xmlns:vm="clr-namespace:Downora.App.ViewModels"
+    xmlns:l="clr-namespace:Downora.App.Localization"
+    xmlns:vm="clr-namespace:Downora.Presentation.ViewModels;assembly=Downora.Presentation"
     mc:Ignorable="d"
-    d:DataContext="{d:DesignInstance Type=vm:MainWindowViewModel}"
-    Title="{Binding Title}"
-    Width="1100"
-    Height="720"
-    MinWidth="900"
-    MinHeight="600"
+    d:DataContext="{d:DesignInstance Type=vm:ShellViewModel}"
+    Title="Downora"
+    Icon="pack://application:,,,/Downora;component/Assets/downora.ico"
+    Width="1280"
+    Height="820"
+    MinWidth="1024"
+    MinHeight="640"
+    Background="{DynamicResource Brush.Canvas}"
+    FontFamily="{StaticResource Font.Ui}"
+    FontSize="{StaticResource FontSize.Body}"
     ExtendsContentIntoTitleBar="True"
-    WindowBackdropType="Mica"
+    WindowBackdropType="None"
     WindowCornerPreference="Round"
     WindowStartupLocation="CenterScreen">
 
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="{StaticResource Width.Sidebar}" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
 
-        <ui:TitleBar Grid.Row="0" Title="{Binding Title}" />
+        <!-- Sidebar -->
+        <Border
+            Grid.Column="0"
+            Background="{DynamicResource Brush.Sidebar}"
+            BorderBrush="{DynamicResource Brush.Border}"
+            BorderThickness="0,0,1,0">
+            <Grid Margin="8,0,8,12">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
 
-        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
-            <StackPanel Margin="40,24" MaxWidth="760" HorizontalAlignment="Left">
-                <ui:TextBlock FontTypography="TitleLarge" Text="Downora" />
-                <ui:TextBlock
-                    Margin="0,4,0,24"
-                    Appearance="Secondary"
-                    FontTypography="Body"
-                    Text="The foundation is running: database, settings and logging are ready." />
+                <!-- Brand -->
+                <StackPanel Grid.Row="0" Margin="8,14,8,18" Orientation="Horizontal">
+                    <Image
+                        Width="28"
+                        Height="28"
+                        Source="pack://application:,,,/Downora;component/Assets/downora-256.png"
+                        RenderOptions.BitmapScalingMode="HighQuality" />
+                    <TextBlock
+                        Margin="10,0,0,0"
+                        VerticalAlignment="Center"
+                        FontFamily="{StaticResource Font.Display}"
+                        FontSize="18"
+                        FontWeight="SemiBold"
+                        Foreground="{DynamicResource Brush.TextPrimary}"
+                        Text="Downora" />
+                </StackPanel>
 
-                <ui:CardControl Margin="0,0,0,8" Icon="{ui:SymbolIcon Database24}">
-                    <ui:CardControl.Header>
-                        <StackPanel>
-                            <ui:TextBlock FontTypography="BodyStrong" Text="Database" />
-                            <ui:TextBlock Appearance="Secondary" Text="{Binding DatabasePath}" TextWrapping="Wrap" />
-                        </StackPanel>
-                    </ui:CardControl.Header>
-                    <ui:Button Command="{Binding OpenDataFolderCommand}" Content="Open data folder" Icon="{ui:SymbolIcon FolderOpen24}" />
-                </ui:CardControl>
+                <!-- Main navigation -->
+                <ItemsControl Grid.Row="1" ItemsSource="{Binding Items}" Focusable="False">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate DataType="{x:Type vm:NavItem}">
+                            <RadioButton
+                                AutomationProperties.Name="{Binding Label}"
+                                Command="{Binding DataContext.NavigateCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                CommandParameter="{Binding}"
+                                IsChecked="{Binding IsSelected, Mode=TwoWay}"
+                                Style="{StaticResource NavButton}">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <ui:SymbolIcon
+                                        FontSize="18"
+                                        Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=RadioButton}}"
+                                        Symbol="{Binding Icon, Converter={StaticResource SymbolConverter}}" />
+                                    <TextBlock
+                                        Grid.Column="1"
+                                        Margin="10,0,0,0"
+                                        VerticalAlignment="Center"
+                                        Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=RadioButton}}"
+                                        Text="{Binding Label}"
+                                        TextTrimming="CharacterEllipsis" />
+                                    <Border
+                                        Grid.Column="2"
+                                        Background="{StaticResource Brush.Accent}"
+                                        Style="{StaticResource CountBadge}"
+                                        Visibility="{Binding Badge, Converter={StaticResource HasValueToVisibility}}">
+                                        <TextBlock
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            FontSize="{StaticResource FontSize.Badge}"
+                                            FontWeight="SemiBold"
+                                            Foreground="#FF003734"
+                                            Text="{Binding Badge}" />
+                                    </Border>
+                                </Grid>
+                            </RadioButton>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
 
-                <ui:CardControl Margin="0,0,0,8" Icon="{ui:SymbolIcon ArrowDownload24}">
-                    <ui:CardControl.Header>
-                        <StackPanel>
-                            <ui:TextBlock FontTypography="BodyStrong" Text="Download folder" />
-                            <ui:TextBlock Appearance="Secondary" Text="{Binding DownloadDirectory}" TextWrapping="Wrap" />
-                        </StackPanel>
-                    </ui:CardControl.Header>
-                    <ui:Button Command="{Binding OpenDownloadFolderCommand}" Content="Open" Icon="{ui:SymbolIcon FolderOpen24}" />
-                </ui:CardControl>
+                <!-- Settings / About -->
+                <ItemsControl Grid.Row="3" Margin="0,0,0,12" ItemsSource="{Binding FooterItems}" Focusable="False">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate DataType="{x:Type vm:NavItem}">
+                            <RadioButton
+                                AutomationProperties.Name="{Binding Label}"
+                                Command="{Binding DataContext.NavigateCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                CommandParameter="{Binding}"
+                                IsChecked="{Binding IsSelected, Mode=TwoWay}"
+                                Style="{StaticResource NavButton}">
+                                <StackPanel Orientation="Horizontal">
+                                    <ui:SymbolIcon
+                                        FontSize="18"
+                                        Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=RadioButton}}"
+                                        Symbol="{Binding Icon, Converter={StaticResource SymbolConverter}}" />
+                                    <TextBlock
+                                        Margin="10,0,0,0"
+                                        VerticalAlignment="Center"
+                                        Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=RadioButton}}"
+                                        Text="{Binding Label}" />
+                                </StackPanel>
+                            </RadioButton>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
 
-                <ui:CardControl Margin="0,0,0,8" Icon="{ui:SymbolIcon ArrowClockwise24}">
-                    <ui:CardControl.Header>
-                        <StackPanel>
-                            <ui:TextBlock FontTypography="BodyStrong" Text="Crash recovery" />
-                            <ui:TextBlock Appearance="Secondary" Text="{Binding RecoveryMessage}" TextWrapping="Wrap" />
-                        </StackPanel>
-                    </ui:CardControl.Header>
-                </ui:CardControl>
-            </StackPanel>
-        </ScrollViewer>
+                <!-- Storage + theme toggle -->
+                <Border Grid.Row="4" Padding="12" Style="{StaticResource Card}">
+                    <StackPanel>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel VerticalAlignment="Center">
+                                <TextBlock Style="{StaticResource Text.BodyStrong}" Text="{Binding StorageTitle}" />
+                                <TextBlock
+                                    Margin="0,2,0,0"
+                                    Style="{StaticResource Text.Caption}"
+                                    Text="{Binding StorageDetail}"
+                                    Visibility="{Binding HasStorage, Converter={StaticResource BoolToVisibility}}" />
+                            </StackPanel>
+                            <ui:Button
+                                Grid.Column="1"
+                                Width="32"
+                                Height="32"
+                                Padding="0"
+                                Appearance="Transparent"
+                                AutomationProperties.Name="{l:Loc Shell_ToggleTheme}"
+                                Command="{Binding ToggleThemeCommand}"
+                                ToolTip="{l:Loc Shell_ToggleTheme}">
+                                <Grid>
+                                    <ui:SymbolIcon FontSize="18" Symbol="WeatherSunny20" Visibility="{Binding IsDarkTheme, Converter={StaticResource BoolToVisibility}}" />
+                                    <ui:SymbolIcon FontSize="18" Symbol="WeatherMoon20" Visibility="{Binding IsDarkTheme, Converter={StaticResource BoolToVisibility}, ConverterParameter=Invert}" />
+                                </Grid>
+                            </ui:Button>
+                        </Grid>
+                        <ProgressBar
+                            Margin="0,10,0,0"
+                            Style="{StaticResource GradientProgress}"
+                            Value="{Binding StorageUsedPercent, Mode=OneWay}"
+                            Visibility="{Binding HasStorage, Converter={StaticResource BoolToVisibility}}" />
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </Border>
+
+        <!-- Title bar + page -->
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <ui:TitleBar Grid.Row="0" Title="" ShowHelp="False" />
+
+            <ContentControl
+                Grid.Row="1"
+                Content="{Binding CurrentPage}"
+                Focusable="False" />
+        </Grid>
     </Grid>
 </ui:FluentWindow>

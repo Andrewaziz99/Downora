@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="App_Name" xml:space="preserve"><value>Downora</value></data>
+  <data name="App_Tagline" xml:space="preserve"><value>Universal media downloader</value></data>
+  <data name="Nav_Home" xml:space="preserve"><value>Home</value></data>
+  <data name="Nav_Downloader" xml:space="preserve"><value>Downloader</value></data>
+  <data name="Nav_Queue" xml:space="preserve"><value>Download Queue</value></data>
+  <data name="Nav_Library" xml:space="preserve"><value>Media Library</value></data>
+  <data name="Nav_History" xml:space="preserve"><value>History</value></data>
+  <data name="Nav_Settings" xml:space="preserve"><value>Settings</value></data>
+  <data name="Nav_About" xml:space="preserve"><value>About</value></data>
+  <data name="Shell_Storage" xml:space="preserve"><value>Storage ({0})</value></data>
+  <data name="Shell_StorageUsed" xml:space="preserve"><value>{0} free of {1}</value></data>
+  <data name="Shell_StorageUnavailable" xml:space="preserve"><value>Disk space unavailable</value></data>
+  <data name="Shell_ToggleTheme" xml:space="preserve"><value>Switch between dark and light</value></data>
+  <data name="Home_GreetingMorning" xml:space="preserve"><value>Good morning</value></data>
+  <data name="Home_GreetingAfternoon" xml:space="preserve"><value>Good afternoon</value></data>
+  <data name="Home_GreetingEvening" xml:space="preserve"><value>Good evening</value></data>
+  <data name="Home_Subtitle" xml:space="preserve"><value>Your downloads at a glance.</value></data>
+  <data name="Home_StatTotal" xml:space="preserve"><value>Total downloads</value></data>
+  <data name="Home_StatTotalHint" xml:space="preserve"><value>+{0} this week</value></data>
+  <data name="Home_StatData" xml:space="preserve"><value>Data downloaded</value></data>
+  <data name="Home_StatDataHint" xml:space="preserve"><value>Across completed downloads</value></data>
+  <data name="Home_StatActive" xml:space="preserve"><value>Active now</value></data>
+  <data name="Home_StatActiveHint" xml:space="preserve"><value>{0} in queue</value></data>
+  <data name="Home_StatSuccess" xml:space="preserve"><value>Success rate</value></data>
+  <data name="Home_StatSuccessHint" xml:space="preserve"><value>Completed vs. failed</value></data>
+  <data name="Home_ActiveTitle" xml:space="preserve"><value>Active downloads</value></data>
+  <data name="Home_ViewQueue" xml:space="preserve"><value>View queue</value></data>
+  <data name="Home_ActiveEmpty" xml:space="preserve"><value>Nothing is downloading right now.</value></data>
+  <data name="Home_RecentTitle" xml:space="preserve"><value>Recently completed</value></data>
+  <data name="Home_RecentEmpty" xml:space="preserve"><value>Completed downloads will appear here.</value></data>
+  <data name="Home_SavedIn" xml:space="preserve"><value>Saved in {0}</value></data>
+  <data name="Home_OpenFolder" xml:space="preserve"><value>Open download folder</value></data>
+  <data name="Downloader_EmptyTitle" xml:space="preserve"><value>No link analyzed yet</value></data>
+  <data name="Downloader_EmptyBody" xml:space="preserve"><value>When you analyze a link, its title, thumbnail and available formats appear here. Downloads are saved to {0}.</value></data>
+  <data name="Downloader_ChangeFolder" xml:space="preserve"><value>Change download folder</value></data>
+  <data name="Status_Waiting" xml:space="preserve"><value>Waiting</value></data>
+  <data name="Status_Extracting" xml:space="preserve"><value>Extracting</value></data>
+  <data name="Status_Downloading" xml:space="preserve"><value>Downloading</value></data>
+  <data name="Status_Processing" xml:space="preserve"><value>Processing</value></data>
+  <data name="Status_Completed" xml:space="preserve"><value>Completed</value></data>
+  <data name="Status_Failed" xml:space="preserve"><value>Failed</value></data>
+  <data name="Status_Cancelled" xml:space="preserve"><value>Cancelled</value></data>
+  <data name="Status_Paused" xml:space="preserve"><value>Paused</value></data>
+  <data name="Queue_FilterAll" xml:space="preserve"><value>All</value></data>
+  <data name="Queue_FilterActive" xml:space="preserve"><value>In progress</value></data>
+  <data name="Queue_EmptyTitle" xml:space="preserve"><value>Your queue is empty</value></data>
+  <data name="Queue_EmptyBody" xml:space="preserve"><value>Downloads you start or queue show up here with live progress.</value></data>
+  <data name="Queue_FilterEmpty" xml:space="preserve"><value>No downloads with this status.</value></data>
+  <data name="Queue_SizeOf" xml:space="preserve"><value>{0} of {1}</value></data>
+  <data name="Library_Search" xml:space="preserve"><value>Search by title or artist</value></data>
+  <data name="Library_All" xml:space="preserve"><value>All</value></data>
+  <data name="Library_Video" xml:space="preserve"><value>Video</value></data>
+  <data name="Library_Audio" xml:space="preserve"><value>Audio</value></data>
+  <data name="Library_SortBy" xml:space="preserve"><value>Sort by</value></data>
+  <data name="Library_SortDate" xml:space="preserve"><value>Date added</value></data>
+  <data name="Library_SortTitle" xml:space="preserve"><value>Title</value></data>
+  <data name="Library_SortDuration" xml:space="preserve"><value>Duration</value></data>
+  <data name="Library_SortSize" xml:space="preserve"><value>Size</value></data>
+  <data name="Library_Open" xml:space="preserve"><value>Open</value></data>
+  <data name="Library_ShowInFolder" xml:space="preserve"><value>Show in folder</value></data>
+  <data name="Library_Missing" xml:space="preserve"><value>File missing</value></data>
+  <data name="Library_EmptyTitle" xml:space="preserve"><value>Your library is empty</value></data>
+  <data name="Library_EmptyBody" xml:space="preserve"><value>Finished downloads are added here automatically.</value></data>
+  <data name="Library_NoResults" xml:space="preserve"><value>No media matches your search.</value></data>
+  <data name="History_Search" xml:space="preserve"><value>Search history</value></data>
+  <data name="History_Clear" xml:space="preserve"><value>Clear history</value></data>
+  <data name="History_ClearConfirmTitle" xml:space="preserve"><value>Clear download history?</value></data>
+  <data name="History_ClearConfirmBody" xml:space="preserve"><value>This removes {0} finished downloads from the list. Files on disk and your media library are not touched.</value></data>
+  <data name="History_EmptyTitle" xml:space="preserve"><value>No download history</value></data>
+  <data name="History_EmptyBody" xml:space="preserve"><value>Completed, failed and cancelled downloads are listed here.</value></data>
+  <data name="History_NoResults" xml:space="preserve"><value>No downloads match your search.</value></data>
+  <data name="History_ShowInFolder" xml:space="preserve"><value>Show in folder</value></data>
+  <data name="Settings_Appearance" xml:space="preserve"><value>Appearance</value></data>
+  <data name="Settings_Theme" xml:space="preserve"><value>App theme</value></data>
+  <data name="Settings_ThemeDesc" xml:space="preserve"><value>Choose dark or light, or follow Windows.</value></data>
+  <data name="Theme_System" xml:space="preserve"><value>Use system setting</value></data>
+  <data name="Theme_Dark" xml:space="preserve"><value>Dark</value></data>
+  <data name="Theme_Light" xml:space="preserve"><value>Light</value></data>
+  <data name="Settings_Language" xml:space="preserve"><value>Language</value></data>
+  <data name="Settings_LanguageDesc" xml:space="preserve"><value>Arabic switches the layout to right-to-left.</value></data>
+  <data name="Language_English" xml:space="preserve"><value>English</value></data>
+  <data name="Language_Arabic" xml:space="preserve"><value>العربية</value></data>
+  <data name="Settings_Downloads" xml:space="preserve"><value>Downloads</value></data>
+  <data name="Settings_Folder" xml:space="preserve"><value>Download folder</value></data>
+  <data name="Settings_FolderDesc" xml:space="preserve"><value>New downloads are saved here.</value></data>
+  <data name="Settings_Browse" xml:space="preserve"><value>Browse…</value></data>
+  <data name="Settings_PickFolderTitle" xml:space="preserve"><value>Choose a download folder</value></data>
+  <data name="Settings_SaveFailed" xml:space="preserve"><value>Couldn't save the setting: {0}</value></data>
+  <data name="Settings_Data" xml:space="preserve"><value>Data</value></data>
+  <data name="Settings_DataFolder" xml:space="preserve"><value>App data</value></data>
+  <data name="Settings_DataFolderDesc" xml:space="preserve"><value>Database, logs and tools are kept here.</value></data>
+  <data name="About_Version" xml:space="preserve"><value>Version {0}</value></data>
+  <data name="About_Description" xml:space="preserve"><value>A native Windows app for downloading and managing video and audio from YouTube, SoundCloud and other supported sites.</value></data>
+  <data name="About_Legal" xml:space="preserve"><value>Download only content you own or are authorized to access. Downora doesn't remove DRM or bypass access controls.</value></data>
+  <data name="About_Source" xml:space="preserve"><value>Source code</value></data>
+  <data name="About_OpenLogs" xml:space="preserve"><value>Open logs folder</value></data>
+  <data name="About_ThirdParty" xml:space="preserve"><value>Third-party software</value></data>
+  <data name="Common_Open" xml:space="preserve"><value>Open</value></data>
+  <data name="Common_Cancel" xml:space="preserve"><value>Cancel</value></data>
+  <data name="Common_Refresh" xml:space="preserve"><value>Refresh</value></data>
+  <data name="Error_Generic" xml:space="preserve"><value>Something went wrong: {0}</value></data>
+</root>

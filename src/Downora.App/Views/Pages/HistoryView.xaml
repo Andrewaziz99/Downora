@@ -1,0 +1,103 @@
+<UserControl
+    x:Class="Downora.App.Views.Pages.HistoryView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    xmlns:l="clr-namespace:Downora.App.Localization"
+    xmlns:controls="clr-namespace:Downora.App.Controls"
+    xmlns:vm="clr-namespace:Downora.Presentation.ViewModels;assembly=Downora.Presentation"
+    x:Name="Root"
+    mc:Ignorable="d"
+    d:DataContext="{d:DesignInstance Type=vm:HistoryViewModel}">
+
+    <Grid Margin="{StaticResource Padding.Page}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Grid>
+            <TextBlock Style="{StaticResource PageHeader}" Text="{l:Loc Nav_History}" />
+            <ui:Button
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top"
+                Command="{Binding ClearHistoryCommand}"
+                Content="{l:Loc History_Clear}"
+                Icon="{ui:SymbolIcon Delete24}" />
+        </Grid>
+
+        <ui:TextBox
+            Grid.Row="1"
+            Width="360"
+            Margin="0,0,0,16"
+            HorizontalAlignment="Left"
+            AutomationProperties.Name="{l:Loc History_Search}"
+            Icon="{ui:SymbolIcon Search24}"
+            PlaceholderText="{l:Loc History_Search}"
+            Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" />
+
+        <TextBlock Grid.Row="2" Margin="0,0,0,12" Style="{StaticResource Text.Error}" Text="{Binding ErrorMessage}" Visibility="{Binding ErrorMessage, Converter={StaticResource HasValueToVisibility}}" />
+
+        <Grid Grid.Row="3">
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <ItemsControl ItemsSource="{Binding Items}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate DataType="{x:Type vm:DownloadItemViewModel}">
+                            <Border Margin="0,0,0,6" Padding="10,8" Style="{StaticResource Card.Hover}">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="110" />
+                                        <ColumnDefinition Width="150" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <Border Width="64" Height="36" Style="{StaticResource Thumbnail}">
+                                        <Grid>
+                                            <ui:SymbolIcon FontSize="16" Foreground="{DynamicResource Brush.TextTertiary}" Symbol="ArrowDownload24" />
+                                            <Image Source="{Binding ThumbnailUrl, Converter={StaticResource ThumbnailConverter}, ConverterParameter=128}" Stretch="UniformToFill" />
+                                        </Grid>
+                                    </Border>
+                                    <StackPanel Grid.Column="1" Margin="12,0" VerticalAlignment="Center">
+                                        <TextBlock Style="{StaticResource Text.BodyStrong}" Text="{Binding Title}" ToolTip="{Binding Title}" />
+                                        <TextBlock Style="{StaticResource Text.Caption}" Text="{Binding ErrorMessage}" Foreground="{DynamicResource Brush.Status.Failed.Fg}" Visibility="{Binding ErrorMessage, Converter={StaticResource HasValueToVisibility}}" />
+                                    </StackPanel>
+                                    <StackPanel Grid.Column="2" Margin="0,0,12,0" VerticalAlignment="Center" Orientation="Horizontal">
+                                        <Border Style="{StaticResource Tag}">
+                                            <TextBlock Style="{StaticResource Tag.Text}" Text="{Binding FileType}" />
+                                        </Border>
+                                        <Border Margin="4,0,0,0" Style="{StaticResource Tag}">
+                                            <TextBlock Style="{StaticResource Tag.Text}" Text="{Binding Quality}" />
+                                        </Border>
+                                    </StackPanel>
+                                    <controls:StatusPill Grid.Column="3" HorizontalAlignment="Left" Status="{Binding Status}" Text="{Binding StatusLabel}" />
+                                    <TextBlock Grid.Column="4" VerticalAlignment="Center" Style="{StaticResource Text.Metric}" Text="{Binding FinishedText}" />
+                                    <ui:Button
+                                        Grid.Column="5"
+                                        AutomationProperties.Name="{l:Loc History_ShowInFolder}"
+                                        Appearance="Transparent"
+                                        Command="{Binding DataContext.ShowInFolderCommand, ElementName=Root}"
+                                        CommandParameter="{Binding}"
+                                        Icon="{ui:SymbolIcon FolderOpen24}"
+                                        ToolTip="{l:Loc History_ShowInFolder}" />
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+            <controls:EmptyState
+                VerticalAlignment="Top"
+                Description="{l:Loc History_EmptyBody}"
+                Icon="History24"
+                Title="{l:Loc History_EmptyTitle}"
+                Visibility="{Binding IsHistoryEmpty, Converter={StaticResource BoolToVisibility}}" />
+            <TextBlock VerticalAlignment="Top" Style="{StaticResource Text.Secondary}" Text="{l:Loc History_NoResults}" Visibility="{Binding HasNoResults, Converter={StaticResource BoolToVisibility}}" />
+        </Grid>
+    </Grid>
+</UserControl>

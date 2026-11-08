@@ -31,6 +31,9 @@ public static class DependencyInjection
         services.AddSingleton<IDatabaseInitializer, DatabaseInitializer>();
         services.AddSingleton<ISettingsService, SettingsService>();
         services.AddSingleton<IJobRecoveryService, JobRecoveryService>();
+        services.AddSingleton<IDownloadJobQueries, DownloadJobQueries>();
+        services.AddSingleton<IMediaLibraryService, MediaLibraryService>();
+        services.AddSingleton<IDiskSpaceService, DiskSpaceService>();
 
         return services;
     }
