@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_dashboard" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Segoe+UI+Variable,+Segoe+UI,+-apple-system,+system-ui:wght@100..900&display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{"colors":{"surface-dim":"#131315","surface-bright":"#39393b","tertiary-fixed":"#f0dbff","secondary":"#b0c6ff","on-error":"#690005","surface-variant":"#353437","secondary-fixed":"#d9e2ff","on-secondary-fixed":"#001944","on-primary-container":"#004a46","error":"#ffb4ab","primary-fixed-dim":"#40dcd1","on-surface":"#e4e2e4","secondary-container":"#0068ec","background":"#131315","outline":"#859491","primary-fixed":"#65f8ed","surface-container-low":"#1b1b1d","on-tertiary-container":"#6100a7","on-secondary":"#002d6e","surface-tint":"#40dcd1","surface-container-highest":"#353437","surface-container":"#1f1f21","tertiary-container":"#cc97ff","on-secondary-fixed-variant":"#00429a","inverse-primary":"#006a64","tertiary-fixed-dim":"#ddb7ff","surface-container-high":"#2a2a2c","secondary-fixed-dim":"#b0c6ff","inverse-on-surface":"#303032","inverse-surface":"#e4e2e4","on-primary-fixed":"#00201e","surface-container-lowest":"#0e0e10","on-secondary-container":"#f2f3ff","tertiary":"#dfbbff","primary-container":"#00c2b8","on-tertiary-fixed":"#2c0051","primary":"#43ded4","surface":"#131315","error-container":"#93000a","on-primary":"#003734","on-tertiary-fixed-variant":"#6900b3","on-tertiary":"#490080","on-background":"#e4e2e4","outline-variant":"#3c4948","on-primary-fixed-variant":"#00504b","on-error-container":"#ffdad6","on-surface-variant":"#bbcac7"},"borderRadius":{"DEFAULT":"0.25rem","lg":"0.5rem","xl":"0.75rem","full":"9999px"},"spacing":{"space-xs":"0.25rem","space-lg":"1.25rem","space-base":"1rem","margin-window":"0.75rem","gutter-compact":"0.5rem","space-sm":"0.5rem","space-md":"0.75rem","space-xl":"1.5rem","gutter":"1rem","space-2xs":"0.125rem","space-2xl":"2rem","margin":"1.5rem"},"fontFamily":{"caption-strong":["\"Segoe UI Variable, Segoe UI, -apple-system, system-ui\""],"mono-metric":["\"JetBrains Mono, Segoe UI Mono, Consolas, monospace\""],"body-strong":["\"Segoe UI Variable, Segoe UI, -apple-system, system-ui\""],"title-md":["\"Segoe UI Variable, Segoe UI, -apple-system, system-ui\""],"display":["\"Segoe UI Variable, Segoe UI, -apple-system, system-ui\""],"body-lg":["\"Segoe UI Variable, Segoe UI, -apple-system, system-ui\""],"body-md":["\"Segoe UI Variable, Segoe UI, -apple-system, system-ui\""],"badge-label":["\"Segoe UI Variable, Segoe UI, -apple-system, system-ui\""],"caption":["\"Segoe UI Variable, Segoe UI, -apple-system, system-ui\""],"title-lg":["\"Segoe UI Variable, Segoe UI, -apple-system, system-ui\""]},"fontSize":{"caption-strong":["12px",{"lineHeight":"16px","letterSpacing":"0.01em","fontWeight":"600"}],"mono-metric":["12px",{"lineHeight":"16px","letterSpacing":"0em","fontWeight":"500"}],"body-strong":["13px",{"lineHeight":"18px","letterSpacing":"0em","fontWeight":"600"}],"title-md":["16px",{"lineHeight":"22px","letterSpacing":"-0.005em","fontWeight":"600"}],"display":["28px",{"lineHeight":"36px","letterSpacing":"-0.015em","fontWeight":"600"}],"body-lg":["14px",{"lineHeight":"20px","letterSpacing":"0em","fontWeight":"400"}],"body-md":["13px",{"lineHeight":"18px","letterSpacing":"0em","fontWeight":"400"}],"badge-label":["11px",{"lineHeight":"14px","letterSpacing":"0.02em","fontWeight":"600"}],"caption":["12px",{"lineHeight":"16px","letterSpacing":"0.01em","fontWeight":"400"}],"title-lg":["20px",{"lineHeight":"26px","letterSpacing":"-0.01em","fontWeight":"600"}]}}}}</script></head><body class="bg-background font-body-md text-on-surface antialiased select-none"><header class="fixed top-0 left-0 right-0 h-9 z-50 bg-surface-container-lowest/80 backdrop-blur-xl flex items-center justify-between select-none shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="flex items-center gap-space-sm pl-space-md h-full"><img alt="Downora App Logo" class="h-4 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/ALJJyrCdvw-fH-NDBpBrGdlAu7CpBcJMlYoyIAPSsf6yFDXB1vYjUZ7uU5ZzfTr-rzgqecbKsfFLfHMEND3x27-n6_csoGCEXeEPL9UvKYBsJaeU6y9ReuDrbjyi-CSBKjkP2l0U1oWjtx7Fv9u3eVBnmYvNsRrvzf4DIWjbsw-BHDRs_DXl27E2l7_YWlWdzzw7iwTZk_tAOkKZJEacS-3AvVFbTzjuRgKwKDl0-MPctu49dg"/><span class="font-caption-strong text-caption-strong tracking-wide text-on-surface">Downora</span><span class="font-caption text-caption text-on-surface-variant flex items-center gap-space-xs"><span class="w-1 h-1 rounded-full bg-outline-variant"></span>High Performance Media Engine</span></div><div class="flex-1 h-full mx-space-xl flex items-center justify-center"><div class="w-80 h-6 bg-surface-container-low/60 rounded flex items-center px-space-sm gap-space-xs"><span class="material-symbols-outlined text-outline text-[14px]">search</span><span class="font-caption text-caption text-outline">Search downloads, streams or protocols (Ctrl+K)</span></div></div><div class="flex items-center h-full"><div class="flex items-center pr-space-md gap-space-sm"><div class="w-5 h-5 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[12px]">person</span></div></div><div class="flex items-center h-full"><button aria-label="Minimize" class="w-[46px] h-9 flex items-center justify-center text-on-surface-variant hover:bg-surface-bright/40 hover:text-on-surface transition-colors"><span class="material-symbols-outlined text-[14px]">remove</span></button><button aria-label="Maximize" class="w-[46px] h-9 flex items-center justify-center text-on-surface-variant hover:bg-surface-bright/40 hover:text-on-surface transition-colors"><span class="material-symbols-outlined text-[12px]">crop_square</span></button><button aria-label="Close" class="w-[46px] h-9 flex items-center justify-center text-on-surface-variant hover:bg-on-error hover:text-on-background transition-colors"><span class="material-symbols-outlined text-[14px]">close</span></button></div></div></header><aside class="fixed left-0 top-9 bottom-0 w-60 bg-surface-container-low/95 backdrop-blur-2xl z-40 flex flex-col justify-between p-space-sm shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="flex flex-col gap-space-md"><div class="flex items-center justify-between px-space-sm py-space-xs"><div class="flex items-center gap-space-sm"><img alt="Downora App Logo" class="h-6 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/ALJJyrCdvw-fH-NDBpBrGdlAu7CpBcJMlYoyIAPSsf6yFDXB1vYjUZ7uU5ZzfTr-rzgqecbKsfFLfHMEND3x27-n6_csoGCEXeEPL9UvKYBsJaeU6y9ReuDrbjyi-CSBKjkP2l0U1oWjtx7Fv9u3eVBnmYvNsRrvzf4DIWjbsw-BHDRs_DXl27E2l7_YWlWdzzw7iwTZk_tAOkKZJEacS-3AvVFbTzjuRgKwKDl0-MPctu49dg"/><span class="font-title-md text-title-md tracking-tight text-on-surface">Downora</span></div><span class="px-space-xs py-0.5 rounded-full bg-surface-container-high text-primary font-badge-label text-badge-label">v2.4 Pro</span></div><nav class="flex flex-col gap-space-2xs" data-active-classes="bg-surface-container-high text-on-surface font-body-strong"><a aria-current="page" class="group relative flex items-center gap-space-sm px-space-md h-9 rounded transition-colors bg-surface-container-high text-on-surface font-body-strong" data-path="home" href="#"><span class="material-symbols-outlined text-[18px]">home</span><span class="font-body-md text-body-md">Home</span></a><a class="group relative flex items-center gap-space-sm px-space-md h-9 rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" data-path="downloader" href="#"><span class="material-symbols-outlined text-[18px]">cloud_download</span><span class="font-body-md text-body-md">Downloader</span></a><a class="group relative flex items-center justify-between px-space-md h-9 rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" data-path="download-queue" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[18px]">layers</span><span class="font-body-md text-body-md">Download Queue</span></div><span class="px-1.5 py-0.5 rounded-full bg-primary-container text-on-primary-container font-badge-label text-badge-label">3</span></a><a class="group relative flex items-center gap-space-sm px-space-md h-9 rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" data-path="media-library" href="#"><span class="material-symbols-outlined text-[18px]">movie</span><span class="font-body-md text-body-md">Media Library</span></a><a class="group relative flex items-center gap-space-sm px-space-md h-9 rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" data-path="history" href="#"><span class="material-symbols-outlined text-[18px]">history</span><span class="font-body-md text-body-md">History</span></a><a class="group relative flex items-center gap-space-sm px-space-md h-9 rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" data-path="settings" href="#"><span class="material-symbols-outlined text-[18px]">settings</span><span class="font-body-md text-body-md">Settings</span></a><a class="group relative flex items-center gap-space-sm px-space-md h-9 rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" data-path="about" href="#"><span class="material-symbols-outlined text-[18px]">info</span><span class="font-body-md text-body-md">About</span></a></nav></div><div class="flex flex-col gap-space-sm px-space-sm pb-space-xs"><div class="bg-surface-container/70 rounded p-space-sm flex flex-col gap-space-xs"><div class="flex items-center justify-between"><span class="font-caption-strong text-caption-strong text-on-surface">SSD Storage (D:)</span><span class="font-mono-metric text-mono-metric text-outline">13%</span></div><div class="w-full h-1 bg-surface-variant rounded-full overflow-hidden"><div class="h-full w-[13%] bg-primary rounded-full"></div></div><div class="flex items-center justify-between"><span class="font-caption text-caption text-on-surface-variant">68.4 GB used</span><span class="font-caption text-caption text-outline">512 GB</span></div></div><div class="flex items-center justify-between pt-space-xs"><div class="flex items-center gap-space-xs"><span class="w-2 h-2 rounded-full bg-primary"></span><span class="font-caption text-caption text-on-surface-variant">Online • 120 Mbps</span></div><div class="flex items-center bg-surface-container-high rounded-full p-0.5"><button class="w-5 h-5 rounded-full bg-primary flex items-center justify-center text-on-primary"><span class="material-symbols-outlined text-[12px]">dark_mode</span></button><button class="w-5 h-5 rounded-full flex items-center justify-center text-outline hover:text-on-surface"><span class="material-symbols-outlined text-[12px]">light_mode</span></button></div></div></div></aside><div class="pl-60"><main class="relative pt-9 w-full min-h-screen bg-background"><div class="flex flex-col w-full p-space-base gap-space-lg max-w-[1440px] mx-auto">
+<!-- Top Welcome & Ambient Telemetry Bar -->
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-space-md">
+<div class="flex flex-col">
+<div class="flex items-center gap-space-sm">
+<h1 class="font-title-lg text-title-lg text-on-surface tracking-tight">Good evening, Alex</h1>
+<span class="px-space-xs py-0.5 rounded-full bg-primary/10 text-primary font-badge-label text-badge-label flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
+          Engine Core Ready
+        </span>
+</div>
+<p class="font-caption text-caption text-on-surface-variant mt-0.5">
+        Ready to capture high-bitrate media. yt-dlp 2024.12.02 & FFmpeg 7.1 build active with hardware acceleration (NVENC).
+      </p>
+</div>
+<!-- Quick Actions -->
+<div class="flex items-center gap-space-sm">
+<button class="px-3 h-8 rounded bg-surface-container hover:bg-surface-bright text-on-surface font-body-strong text-body-strong transition-all flex items-center gap-1.5 shadow-sm">
+<span class="material-symbols-outlined text-[16px] text-outline">tune</span>
+<span>Quick Settings</span>
+</button>
+<button class="px-3 h-8 rounded bg-surface-container-high hover:bg-surface-bright text-on-surface font-body-strong text-body-strong transition-all flex items-center gap-1.5 shadow-sm">
+<span class="material-symbols-outlined text-[16px] text-primary">playlist_add</span>
+<span>Import Batch URL List</span>
+</button>
+</div>
+</div>
+<!-- Hero URL Analysis Card (Mica Layered Panel) -->
+<div class="relative rounded-xl bg-surface-container-high/90 backdrop-blur-xl p-space-lg shadow-xl overflow-hidden group">
+<!-- Atmospheric subtle ambient glow behind the input -->
+<div class="absolute -top-24 -right-16 w-80 h-80 rounded-full bg-gradient-to-br from-primary/15 via-secondary-container/10 to-transparent blur-3xl pointer-events-none"></div>
+<div class="absolute -bottom-20 -left-10 w-72 h-72 rounded-full bg-gradient-to-tr from-secondary/10 via-primary/5 to-transparent blur-2xl pointer-events-none"></div>
+<div class="relative flex flex-col gap-space-md z-10">
+<div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-space-sm">
+<!-- Input Compound Field -->
+<div class="flex-1 relative flex items-center bg-surface-container-lowest/80 rounded-lg p-1.5 focus-within:bg-surface-container-lowest transition-all shadow-inner">
+<div class="flex items-center pl-2 pr-1 text-primary">
+<span class="material-symbols-outlined text-[20px]">link</span>
+</div>
+<input class="flex-1 bg-transparent px-2 py-1 text-on-surface placeholder:text-outline font-body-md text-body-md focus:outline-none" id="url-input-field" placeholder="Paste a YouTube, SoundCloud, Vimeo or direct media link…" type="text" value="https://youtube.com/watch?v=kYv9bH8a-4c"/>
+<!-- Paste Clip Button -->
+<button class="flex items-center gap-1.5 px-2.5 py-1 rounded bg-surface-container hover:bg-surface-bright text-on-surface-variant hover:text-on-surface transition-colors shadow-sm ml-1" onclick="navigator.clipboard.readText().then(text => { if(text) document.getElementById('url-input-field').value = text; })" title="Paste from clipboard">
+<span class="material-symbols-outlined text-[14px]">content_paste</span>
+<span class="font-caption-strong text-caption-strong">Paste</span>
+<span class="font-mono-metric text-[10px] px-1 py-0.2 rounded bg-surface-variant text-outline">Ctrl+V</span>
+</button>
+</div>
+<!-- Primary Gradient Analyze Button -->
+<button class="h-11 px-6 rounded-lg bg-gradient-to-r from-primary-container via-primary to-secondary-container text-on-primary font-body-strong text-body-strong flex items-center justify-center gap-2 shadow-lg hover:brightness-110 active:scale-[0.985] transition-all">
+<span class="material-symbols-outlined text-[18px]">bolt</span>
+<span>Analyze Stream</span>
+</button>
+</div>
+<!-- Supported Platforms Micro Badges -->
+<div class="flex flex-wrap items-center gap-1.5 pt-1">
+<span class="font-caption text-caption text-outline mr-1.5 flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px]">verified</span> Supported:
+        </span>
+<div class="flex items-center gap-1 px-2 py-0.5 rounded bg-surface-container text-on-surface-variant font-caption text-[11px] hover:text-on-surface transition-colors cursor-default">
+<span class="w-1.5 h-1.5 rounded-full bg-error"></span> YouTube 4K/8K
+        </div>
+<div class="flex items-center gap-1 px-2 py-0.5 rounded bg-surface-container text-on-surface-variant font-caption text-[11px] hover:text-on-surface transition-colors cursor-default">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span> SoundCloud Lossless
+        </div>
+<div class="flex items-center gap-1 px-2 py-0.5 rounded bg-surface-container text-on-surface-variant font-caption text-[11px] hover:text-on-surface transition-colors cursor-default">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span> Vimeo Pro
+        </div>
+<div class="flex items-center gap-1 px-2 py-0.5 rounded bg-surface-container text-on-surface-variant font-caption text-[11px] hover:text-on-surface transition-colors cursor-default">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span> TikTok HD
+        </div>
+<div class="flex items-center gap-1 px-2 py-0.5 rounded bg-surface-container text-on-surface-variant font-caption text-[11px] hover:text-on-surface transition-colors cursor-default">
+<span class="w-1.5 h-1.5 rounded-full bg-outline"></span> Twitter / X
+        </div>
+<div class="flex items-center gap-1 px-2 py-0.5 rounded bg-surface-container text-on-surface-variant font-caption text-[11px] hover:text-on-surface transition-colors cursor-default">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary-fixed-dim"></span> Twitch VODs
+        </div>
+<div class="flex items-center gap-1 px-2 py-0.5 rounded bg-surface-container text-on-surface-variant font-caption text-[11px] hover:text-on-surface transition-colors cursor-default">
+<span class="w-1.5 h-1.5 rounded-full bg-primary-fixed"></span> HLS / m3u8 & DASH Direct
+        </div>
+</div>
+</div>
+</div>
+<!-- Stat Cards Row (4 Columns Grid) -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-space-md">
+<!-- Stat 1 -->
+<div class="rounded-xl bg-surface-container p-space-md shadow-md flex items-center justify-between hover:bg-surface-container-high transition-colors">
+<div class="flex flex-col">
+<span class="font-caption text-caption text-outline">Total downloads</span>
+<span class="font-display text-display text-on-surface tracking-tight mt-0.5">1,284</span>
+<span class="font-caption text-caption text-primary flex items-center gap-0.5 mt-1">
+<span class="material-symbols-outlined text-[14px]">trending_up</span>
+          +18 this week
+        </span>
+</div>
+<div class="w-10 h-10 rounded-lg bg-surface-container-high flex items-center justify-center text-primary shadow-sm">
+<span class="material-symbols-outlined text-[22px]">download</span>
+</div>
+</div>
+<!-- Stat 2 -->
+<div class="rounded-xl bg-surface-container p-space-md shadow-md flex items-center justify-between hover:bg-surface-container-high transition-colors">
+<div class="flex flex-col">
+<span class="font-caption text-caption text-outline">Data downloaded</span>
+<span class="font-display text-display text-on-surface tracking-tight mt-0.5">412.8 <span class="font-title-md text-title-md text-on-surface-variant">GB</span></span>
+<span class="font-caption text-caption text-on-surface-variant mt-1">Bandwidth saved: 42 GB</span>
+</div>
+<div class="w-10 h-10 rounded-lg bg-surface-container-high flex items-center justify-center text-secondary shadow-sm">
+<span class="material-symbols-outlined text-[22px]">cloud_sync</span>
+</div>
+</div>
+<!-- Stat 3 (Active Pulse) -->
+<div class="rounded-xl bg-surface-container p-space-md shadow-md flex items-center justify-between hover:bg-surface-container-high transition-colors">
+<div class="flex flex-col">
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-primary animate-ping"></span>
+<span class="font-caption text-caption text-outline">Active now</span>
+</div>
+<span class="font-display text-display text-on-surface tracking-tight mt-0.5">3 <span class="font-title-md text-title-md text-on-surface-variant">tasks</span></span>
+<span class="font-mono-metric text-mono-metric text-primary-fixed mt-1">24.6 MB/s total</span>
+</div>
+<div class="w-10 h-10 rounded-lg bg-primary-container/20 flex items-center justify-center text-primary shadow-sm">
+<span class="material-symbols-outlined text-[22px]">speed</span>
+</div>
+</div>
+<!-- Stat 4 -->
+<div class="rounded-xl bg-surface-container p-space-md shadow-md flex items-center justify-between hover:bg-surface-container-high transition-colors">
+<div class="flex flex-col">
+<span class="font-caption text-caption text-outline">Success rate</span>
+<span class="font-display text-display text-on-surface tracking-tight mt-0.5">99.4%</span>
+<span class="font-caption text-caption text-on-surface-variant mt-1">0 checksum errors</span>
+</div>
+<div class="w-10 h-10 rounded-lg bg-surface-container-high flex items-center justify-center text-primary-fixed-dim shadow-sm">
+<span class="material-symbols-outlined text-[22px]">verified_user</span>
+</div>
+</div>
+</div>
+<!-- Active Downloads Queue Panel -->
+<div class="flex flex-col gap-space-sm">
+<div class="flex items-center justify-between px-1">
+<div class="flex items-center gap-2">
+<h2 class="font-title-md text-title-md text-on-surface">Active Downloads</h2>
+<span class="px-2 py-0.5 rounded-full bg-primary-container/20 text-primary font-badge-label text-badge-label">3 in flight</span>
+</div>
+<a class="font-caption-strong text-caption-strong text-primary hover:text-primary-fixed flex items-center gap-1 transition-colors" href="#">
+<span>View all in Queue</span>
+<span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+</a>
+</div>
+<div class="flex flex-col gap-2">
+<!-- Active Row 1 -->
+<div class="rounded-lg bg-surface-container-high hover:bg-surface-variant p-space-sm flex flex-col md:flex-row items-stretch md:items-center justify-between gap-space-md transition-all shadow-md group">
+<div class="flex items-center gap-space-md flex-1 min-w-0">
+<div class="relative w-14 h-14 rounded-md overflow-hidden bg-surface-container-lowest flex-shrink-0 shadow-inner">
+<img class="w-full h-full object-cover" data-alt="Futuristic neon cyberpunk city game cinematic screenshot Phantom Liberty expansion with dark rainy high-contrast reflections, sharp lighting and vivid cyan and amber tones" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBiIw16jX3ghT21dcszCQfPkOEZ5yV04h86C451h_lJk3DnIGB2KR3ruhddXmQAby_5cTvLqT28l7xG_nneX9Yxyrf43W96cGeFMTvP9z2I6hRfD_gKGqCN4lELl83Z9y8O16q2Zb_61QR2So4GRNnTImKX5uiNeHO4JnLOAlZsC4BnET0iNutIV7ZZhtaZ10i-mDLv8kDqM9Lr0X9HwhFyhpPq0483mhrSD50djtHK"/>
+<div class="absolute bottom-1 right-1 px-1 py-0.2 rounded bg-surface-container-lowest/90 text-on-surface font-mono-metric text-[9px]">4K</div>
+</div>
+<div class="flex flex-col flex-1 min-w-0 gap-1">
+<div class="flex items-center gap-2">
+<span class="font-body-strong text-body-strong text-on-surface truncate">Cyberpunk 2077 Phantom Liberty 4K Documentary</span>
+<span class="px-1.5 py-0.5 rounded bg-surface-container text-primary font-badge-label text-badge-label flex-shrink-0">4K 60fps MP4</span>
+</div>
+<!-- Progress Bar -->
+<div class="w-full h-1.5 rounded-full bg-surface-container-lowest overflow-hidden">
+<div class="h-full bg-gradient-to-r from-primary-container via-primary to-secondary-container rounded-full transition-all duration-300" style="width: 68%;"></div>
+</div>
+<div class="flex items-center justify-between font-caption text-caption text-on-surface-variant">
+<span class="font-mono-metric text-mono-metric">1.4 GB / 2.1 GB</span>
+<div class="flex items-center gap-3">
+<span class="font-mono-metric text-mono-metric text-primary">14.2 MB/s</span>
+<span class="text-outline">ETA: 45s</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Row 1 Controls -->
+<div class="flex items-center justify-end gap-1.5 pl-2">
+<button class="w-8 h-8 rounded bg-surface-container hover:bg-surface-bright text-on-surface flex items-center justify-center transition-colors" title="Pause Download">
+<span class="material-symbols-outlined text-[16px]">pause</span>
+</button>
+<button class="w-8 h-8 rounded bg-surface-container hover:bg-on-error/20 hover:text-error text-outline transition-colors" title="Cancel Download">
+<span class="material-symbols-outlined text-[16px]">close</span>
+</button>
+</div>
+</div>
+<!-- Active Row 2 -->
+<div class="rounded-lg bg-surface-container-high hover:bg-surface-variant p-space-sm flex flex-col md:flex-row items-stretch md:items-center justify-between gap-space-md transition-all shadow-md group">
+<div class="flex items-center gap-space-md flex-1 min-w-0">
+<div class="relative w-14 h-14 rounded-md overflow-hidden bg-surface-container-lowest flex-shrink-0 shadow-inner">
+<img class="w-full h-full object-cover" data-alt="Dramatic cinematic album artwork featuring atomic nuclear glow and silhouette of physicist Ludwig Goransson score with deep dark moody tones and warm incandescent ember contrast" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCEhfjLG9QWvNs0VZ7zsinOLVROh0tdKIcUE6vVOXiynrXQHozT2P4hQ_MB0unUNy_wVO6zrY7RRPVMcRIrFhP5HwodJ83555Yzskwkw-XOrv_O7f5W6HVUhstsUI8KARVn-fNEViYvBEqKGFwlbz_MKfVdqfJX7FGv7wajF7xx5qBvKNo7kIA8roa2Ys-MqG5xaZ8YXe1FuAItgg2HFSkQXeZPxiZ815GzzvHxQ4AB"/>
+<div class="absolute bottom-1 right-1 px-1 py-0.2 rounded bg-surface-container-lowest/90 text-tertiary font-mono-metric text-[9px]">AUDIO</div>
+</div>
+<div class="flex flex-col flex-1 min-w-0 gap-1">
+<div class="flex items-center gap-2">
+<span class="font-body-strong text-body-strong text-on-surface truncate">Ludwig Göransson - Oppenheimer OST Full Album</span>
+<span class="px-1.5 py-0.5 rounded bg-surface-container text-tertiary font-badge-label text-badge-label flex-shrink-0">FLAC 24-bit 96kHz</span>
+</div>
+<!-- Progress Bar -->
+<div class="w-full h-1.5 rounded-full bg-surface-container-lowest overflow-hidden">
+<div class="h-full bg-gradient-to-r from-tertiary-container via-primary to-secondary-container rounded-full transition-all duration-300" style="width: 42%;"></div>
+</div>
+<div class="flex items-center justify-between font-caption text-caption text-on-surface-variant">
+<span class="font-mono-metric text-mono-metric">380 MB / 910 MB</span>
+<div class="flex items-center gap-3">
+<span class="font-mono-metric text-mono-metric text-primary">8.4 MB/s</span>
+<span class="text-outline">ETA: 1m 02s</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Row 2 Controls -->
+<div class="flex items-center justify-end gap-1.5 pl-2">
+<button class="w-8 h-8 rounded bg-surface-container hover:bg-surface-bright text-on-surface flex items-center justify-center transition-colors" title="Pause Download">
+<span class="material-symbols-outlined text-[16px]">pause</span>
+</button>
+<button class="w-8 h-8 rounded bg-surface-container hover:bg-on-error/20 hover:text-error text-outline transition-colors" title="Cancel Download">
+<span class="material-symbols-outlined text-[16px]">close</span>
+</button>
+</div>
+</div>
+<!-- Active Row 3 -->
+<div class="rounded-lg bg-surface-container-high hover:bg-surface-variant p-space-sm flex flex-col md:flex-row items-stretch md:items-center justify-between gap-space-md transition-all shadow-md group">
+<div class="flex items-center gap-space-md flex-1 min-w-0">
+<div class="relative w-14 h-14 rounded-md overflow-hidden bg-surface-container-lowest flex-shrink-0 shadow-inner">
+<img class="w-full h-full object-cover" data-alt="Keynote technology developer conference presentation stage screen graphic with modern glowing glass typography and dark studio lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDk5V2TITh17xBNkrpXAyEFJ1uXDTOeQwWnaE4iTi9UozxRch4-DfYbWOPhckma7qsYl5DGjHJcBYbxDETOF7RTpvwIvmKDUF-nGIAzEWP8NOu8lVKuo5u0kfogd3NwK-rF1-UD8iZHQsfixDc1wzEaoDQwIb6aMOl5hVUBBQlXMvcRN6iatvlC1ieQ3pLxExlr1W5bXQxHBV-0Vfh_ITyTko6h8X8pjgpGfjDjyDrz"/>
+<div class="absolute bottom-1 right-1 px-1 py-0.2 rounded bg-surface-container-lowest/90 text-on-surface font-mono-metric text-[9px]">1080p</div>
+</div>
+<div class="flex flex-col flex-1 min-w-0 gap-1">
+<div class="flex items-center gap-2">
+<span class="font-body-strong text-body-strong text-on-surface truncate">WWDC 2024 Keynote Stream Archives</span>
+<span class="px-1.5 py-0.5 rounded bg-surface-container text-secondary font-badge-label text-badge-label flex-shrink-0">1080p MP4</span>
+</div>
+<!-- Progress Bar -->
+<div class="w-full h-1.5 rounded-full bg-surface-container-lowest overflow-hidden">
+<div class="h-full bg-gradient-to-r from-primary via-primary-fixed to-secondary rounded-full transition-all duration-300" style="width: 89%;"></div>
+</div>
+<div class="flex items-center justify-between font-caption text-caption text-on-surface-variant">
+<span class="font-mono-metric text-mono-metric">3.8 GB / 4.2 GB</span>
+<div class="flex items-center gap-3">
+<span class="font-mono-metric text-mono-metric text-primary">18.9 MB/s</span>
+<span class="text-outline">ETA: 18s</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Row 3 Controls -->
+<div class="flex items-center justify-end gap-1.5 pl-2">
+<button class="w-8 h-8 rounded bg-surface-container hover:bg-surface-bright text-on-surface flex items-center justify-center transition-colors" title="Pause Download">
+<span class="material-symbols-outlined text-[16px]">pause</span>
+</button>
+<button class="w-8 h-8 rounded bg-surface-container hover:bg-on-error/20 hover:text-error text-outline transition-colors" title="Cancel Download">
+<span class="material-symbols-outlined text-[16px]">close</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Recently Completed Horizontal Strip -->
+<div class="flex flex-col gap-space-sm pt-2">
+<div class="flex items-center justify-between px-1">
+<div class="flex items-center gap-2">
+<h2 class="font-title-md text-title-md text-on-surface">Recently Completed</h2>
+<span class="font-caption text-caption text-outline">Stored in D:\Media\Downora</span>
+</div>
+<button class="px-3 h-7 rounded bg-surface-container hover:bg-surface-bright text-on-surface font-caption-strong text-caption-strong transition-all flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[15px] text-primary">folder_open</span>
+<span>Open Destination Folder</span>
+</button>
+</div>
+<!-- Horizontal Media Cards -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-space-md">
+<!-- Media Card 1 -->
+<div class="rounded-xl bg-surface-container hover:bg-surface-container-high transition-all shadow-md overflow-hidden flex flex-col group cursor-pointer">
+<div class="relative w-full h-36 bg-surface-container-lowest overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" data-alt="Retro 80s synthwave sports car driving at night into a chrome neon horizon with glowing magenta gridlines and cool cyan headlights" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBOEQgpdH2TjBaWIBlI5GmUL7nvoZLbuiVrlEiPC-UOdoM52UO6Z4O-ppsEGTURIdY9BzxBWT5cDcx0Q0AsA4gAaQcF5D0qjhQbN82BSm8plsjYVa7Ikknr_xb_IhoLdDVSBWrzrmIlrMyklx6rSJiiesLW1uJdltcPff5MC_5sMo68DxB-A_WYsMTh0jnjwEryYdV6ppOpzApeu6PyB-4WtOLGRvF-WQEu5hZ9B1HL"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container via-transparent to-transparent"></div>
+<div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-surface-dim/40 backdrop-blur-xs">
+<div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-on-primary shadow-lg">
+<span class="material-symbols-outlined text-[20px]">play_arrow</span>
+</div>
+</div>
+<span class="absolute top-2 right-2 px-1.5 py-0.5 rounded bg-surface-container-lowest/90 text-on-surface font-caption text-[10px]">MP4</span>
+</div>
+<div class="p-space-sm flex flex-col gap-1">
+<span class="font-body-strong text-body-strong text-on-surface truncate" title="Kavinsky - Nightcall (Remastered)">Kavinsky - Nightcall (Remastered)</span>
+<div class="flex items-center justify-between text-outline font-caption text-caption">
+<span>MP4 1080p · 84 MB</span>
+<span class="text-primary-fixed">12m ago</span>
+</div>
+</div>
+</div>
+<!-- Media Card 2 -->
+<div class="rounded-xl bg-surface-container hover:bg-surface-container-high transition-all shadow-md overflow-hidden flex flex-col group cursor-pointer">
+<div class="relative w-full h-36 bg-surface-container-lowest overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" data-alt="Professional broadcast studio microphone in dark moody acoustic room with subtle red studio on-air indicator light and depth of field" src="https://lh3.googleusercontent.com/aida-public/AB6AXuARqYiKcGXYqTfpIcZeg-3hJ1dvy7m44mq38E_Z9IWB3V2WscJjxhCY6khxqyDz5CD-c3vV7jNvrViF9lRF2J6pBW8lrPpDcMSyuki82gSZTSywe3ugsE6286SmbtKkEKn4aQ_y2yaQOO7AdpbfWCBpK1jMWbR1ZGxld6JWPZH9QkLQQnQpdB_wRAQpIauZz1995cGijDorMKNWuq_fsa5YDgGnB0H0l3Ncz25hOt4Z"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container via-transparent to-transparent"></div>
+<div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-surface-dim/40 backdrop-blur-xs">
+<div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-on-primary shadow-lg">
+<span class="material-symbols-outlined text-[20px]">play_arrow</span>
+</div>
+</div>
+<span class="absolute top-2 right-2 px-1.5 py-0.5 rounded bg-surface-container-lowest/90 text-tertiary font-caption text-[10px]">MP3</span>
+</div>
+<div class="p-space-sm flex flex-col gap-1">
+<span class="font-body-strong text-body-strong text-on-surface truncate" title="The Joe Rogan Experience #2140">The Joe Rogan Experience #2140</span>
+<div class="flex items-center justify-between text-outline font-caption text-caption">
+<span>MP3 320k · 198 MB</span>
+<span>1h ago</span>
+</div>
+</div>
+</div>
+<!-- Media Card 3 -->
+<div class="rounded-xl bg-surface-container hover:bg-surface-container-high transition-all shadow-md overflow-hidden flex flex-col group cursor-pointer">
+<div class="relative w-full h-36 bg-surface-container-lowest overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" data-alt="High precision disassembled modular laptop motherboard with copper heat pipes and microchips laid out on clean anti-static workspace with studio lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA8Wo3x7GG6ZUV4eA2eD7NHOauHlYhDbo7EOsXNsEOC1sDailhCpoKcRV-3dLqaHiKMf0rtvXNmDalxQNd0ZHXQ5wmcnBkCutNzU6mF5gJPdw3Nrm2OEdVdhr5X4rH2esxxj08ioUeCmMMj3nMWdSNF86UCk7qGlw-ve5_t6jtpcvpwNQnrRxvAORcfkqfgU0DpogFLKF5bvsgMngC52QVydVPVh55enyCMNqNpvJ8k"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container via-transparent to-transparent"></div>
+<div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-surface-dim/40 backdrop-blur-xs">
+<div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-on-primary shadow-lg">
+<span class="material-symbols-outlined text-[20px]">play_arrow</span>
+</div>
+</div>
+<span class="absolute top-2 right-2 px-1.5 py-0.5 rounded bg-surface-container-lowest/90 text-secondary font-caption text-[10px]">MKV</span>
+</div>
+<div class="p-space-sm flex flex-col gap-1">
+<span class="font-body-strong text-body-strong text-on-surface truncate" title="Framework 16 Deep Dive Teardown">Framework 16 Deep Dive Teardown</span>
+<div class="flex items-center justify-between text-outline font-caption text-caption">
+<span>MKV 4K · 2.4 GB</span>
+<span>3h ago</span>
+</div>
+</div>
+</div>
+<!-- Media Card 4 -->
+<div class="rounded-xl bg-surface-container hover:bg-surface-container-high transition-all shadow-md overflow-hidden flex flex-col group cursor-pointer">
+<div class="relative w-full h-36 bg-surface-container-lowest overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" data-alt="Modern dark software development screen code editor showing high performance Rust programming language code glowing with colorful syntax highlighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD9vpgjCXD5VIUOYYEq6RnFlaOxkUdVar6zqXRQWTLX-HOSfQXME2lj3PxCJ0LaGMWNy3e_42-kaEGJLE4t7a-mvpUL0V1xeAUtLU2z5Zk4Im3vEvojavd4I-VHCMuuejLAHSctsLzNpt8Wm3xqYC0Ib0Fz0cOQiiVWGdXF0aN4-dWUqJctwwzhhDfbnAnMATLtvjSNASwC_X4haq4vGXzdj7uFXTYM9gS-fpV9UEdV"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container via-transparent to-transparent"></div>
+<div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-surface-dim/40 backdrop-blur-xs">
+<div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-on-primary shadow-lg">
+<span class="material-symbols-outlined text-[20px]">play_arrow</span>
+</div>
+</div>
+<span class="absolute top-2 right-2 px-1.5 py-0.5 rounded bg-surface-container-lowest/90 text-on-surface font-caption text-[10px]">MP4</span>
+</div>
+<div class="p-space-sm flex flex-col gap-1">
+<span class="font-body-strong text-body-strong text-on-surface truncate" title="Rust in 100 Seconds - Fireship">Rust in 100 Seconds - Fireship</span>
+<div class="flex items-center justify-between text-outline font-caption text-caption">
+<span>MP4 1080p · 32 MB</span>
+<span>Yesterday</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Windows 11 Native Acrylic Toast Flyout Notification -->
+<div class="fixed bottom-6 right-6 z-50 w-96 rounded-xl bg-surface-container-highest/95 backdrop-blur-2xl p-space-md shadow-2xl flex flex-col gap-3 transition-all duration-300" id="w11-toast">
+<div class="flex items-start justify-between gap-2">
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded bg-primary-container flex items-center justify-center text-on-primary-container">
+<span class="material-symbols-outlined text-[16px]">check_circle</span>
+</div>
+<div class="flex flex-col">
+<span class="font-caption-strong text-caption-strong text-on-surface">Download Completed</span>
+<span class="font-caption text-[11px] text-outline">Downora Engine · Just now</span>
+</div>
+</div>
+<button class="text-outline hover:text-on-surface transition-colors" onclick="document.getElementById('w11-toast').style.display='none'">
+<span class="material-symbols-outlined text-[16px]">close</span>
+</button>
+</div>
+<div class="flex gap-space-sm items-center">
+<div class="w-12 h-12 rounded bg-surface-container-lowest overflow-hidden flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="Compact thumbnail of retro synthwave sports car with neon magenta and cyan street reflection" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDXTQCpxAZbC5_Tgj4GvDjtbkWFNy-D4xj8ChcUdB_ixU0rIBJeg8GlYU4NFVFHXYlfIPYBNd-OfpMe9ETpFvmSbXsOrGkjDr-b5Oxuhh_VT_iphjfUh4FplX9ZL59-fX1d3tzbSqacd2l2Bz5vygymK62BjD7K83WHunkLhDZsuVy-R4dLOU43JBwZUOgX_ot-EtX9RseVhzlqJv7wwaXhi-s5IuaqKm9YnkfuTIET"/>
+</div>
+<div class="flex flex-col min-w-0 flex-1">
+<span class="font-body-strong text-body-strong text-on-surface truncate">Kavinsky - Nightcall (Remastered)</span>
+<span class="font-caption text-caption text-on-surface-variant">84 MB saved to Videos/Downora</span>
+</div>
+</div>
+<!-- WinUI Toast Actions -->
+<div class="grid grid-cols-2 gap-2 pt-1">
+<button class="h-8 rounded bg-primary hover:bg-primary-fixed text-on-primary font-caption-strong text-caption-strong transition-all flex items-center justify-center gap-1.5 shadow-sm">
+<span class="material-symbols-outlined text-[15px]">play_arrow</span>
+<span>Play</span>
+</button>
+<button class="h-8 rounded bg-surface-container hover:bg-surface-bright text-on-surface font-caption-strong text-caption-strong transition-all flex items-center justify-center gap-1.5 shadow-sm">
+<span class="material-symbols-outlined text-[15px]">folder</span>
+<span>Open Folder</span>
+</button>
+</div>
+</div>
+</div></main></div><div class="fixed bottom-space-lg right-space-lg z-50 pointer-events-none flex flex-col gap-space-sm"><div class="pointer-events-auto bg-surface-container-high/90 backdrop-blur-xl rounded-lg p-space-md shadow-2xl flex items-center gap-space-md max-w-sm"><div class="w-8 h-8 rounded bg-primary-container/20 flex items-center justify-center text-primary"><span class="material-symbols-outlined text-[20px]">download_done</span></div><div class="flex flex-col flex-1"><span class="font-body-strong text-body-strong text-on-surface">Downora Engine</span><span class="font-caption text-caption text-on-surface-variant">Ready to capture media links from clipboard</span></div><button class="text-outline hover:text-on-surface transition-colors"><span class="material-symbols-outlined text-[16px]">close</span></button></div></div></body></html>

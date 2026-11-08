@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_dashboard" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Segoe+UI+Variable,+Segoe+UI,+-apple-system,+system-ui:wght@100..900&display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{"colors":{"surface-dim":"#131315","surface-bright":"#39393b","tertiary-fixed":"#f0dbff","secondary":"#b0c6ff","on-error":"#690005","surface-variant":"#353437","secondary-fixed":"#d9e2ff","on-secondary-fixed":"#001944","on-primary-container":"#004a46","error":"#ffb4ab","primary-fixed-dim":"#40dcd1","on-surface":"#e4e2e4","secondary-container":"#0068ec","background":"#131315","outline":"#859491","primary-fixed":"#65f8ed","surface-container-low":"#1b1b1d","on-tertiary-container":"#6100a7","on-secondary":"#002d6e","surface-tint":"#40dcd1","surface-container-highest":"#353437","surface-container":"#1f1f21","tertiary-container":"#cc97ff","on-secondary-fixed-variant":"#00429a","inverse-primary":"#006a64","tertiary-fixed-dim":"#ddb7ff","surface-container-high":"#2a2a2c","secondary-fixed-dim":"#b0c6ff","inverse-on-surface":"#303032","inverse-surface":"#e4e2e4","on-primary-fixed":"#00201e","surface-container-lowest":"#0e0e10","on-secondary-container":"#f2f3ff","tertiary":"#dfbbff","primary-container":"#00c2b8","on-tertiary-fixed":"#2c0051","primary":"#43ded4","surface":"#131315","error-container":"#93000a","on-primary":"#003734","on-tertiary-fixed-variant":"#6900b3","on-tertiary":"#490080","on-background":"#e4e2e4","outline-variant":"#3c4948","on-primary-fixed-variant":"#00504b","on-error-container":"#ffdad6","on-surface-variant":"#bbcac7"},"borderRadius":{"DEFAULT":"0.25rem","lg":"0.5rem","xl":"0.75rem","full":"9999px"},"spacing":{"space-xs":"0.25rem","space-lg":"1.25rem","space-base":"1rem","margin-window":"0.75rem","gutter-compact":"0.5rem","space-sm":"0.5rem","space-md":"0.75rem","space-xl":"1.5rem","gutter":"1rem","space-2xs":"0.125rem","space-2xl":"2rem","margin":"1.5rem"},"fontFamily":{"caption-strong":["\"Segoe UI Variable, Segoe UI, -apple-system, system-ui\""],"mono-metric":["\"JetBrains Mono, Segoe UI Mono, Consolas, monospace\""],"body-strong":["\"Segoe UI Variable, Segoe UI, -apple-system, system-ui\""],"title-md":["\"Segoe UI Variable, Segoe UI, -apple-system, system-ui\""],"display":["\"Segoe UI Variable, Segoe UI, -apple-system, system-ui\""],"body-lg":["\"Segoe UI Variable, Segoe UI, -apple-system, system-ui\""],"body-md":["\"Segoe UI Variable, Segoe UI, -apple-system, system-ui\""],"badge-label":["\"Segoe UI Variable, Segoe UI, -apple-system, system-ui\""],"caption":["\"Segoe UI Variable, Segoe UI, -apple-system, system-ui\""],"title-lg":["\"Segoe UI Variable, Segoe UI, -apple-system, system-ui\""]},"fontSize":{"caption-strong":["12px",{"lineHeight":"16px","letterSpacing":"0.01em","fontWeight":"600"}],"mono-metric":["12px",{"lineHeight":"16px","letterSpacing":"0em","fontWeight":"500"}],"body-strong":["13px",{"lineHeight":"18px","letterSpacing":"0em","fontWeight":"600"}],"title-md":["16px",{"lineHeight":"22px","letterSpacing":"-0.005em","fontWeight":"600"}],"display":["28px",{"lineHeight":"36px","letterSpacing":"-0.015em","fontWeight":"600"}],"body-lg":["14px",{"lineHeight":"20px","letterSpacing":"0em","fontWeight":"400"}],"body-md":["13px",{"lineHeight":"18px","letterSpacing":"0em","fontWeight":"400"}],"badge-label":["11px",{"lineHeight":"14px","letterSpacing":"0.02em","fontWeight":"600"}],"caption":["12px",{"lineHeight":"16px","letterSpacing":"0.01em","fontWeight":"400"}],"title-lg":["20px",{"lineHeight":"26px","letterSpacing":"-0.01em","fontWeight":"600"}]}}}}</script></head><body class="bg-background font-body-md text-on-surface antialiased select-none"><header class="fixed top-0 left-0 right-0 h-9 z-50 bg-surface-container-lowest/80 backdrop-blur-xl flex items-center justify-between select-none shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="flex items-center gap-space-sm pl-space-md h-full"><img alt="Downora App Logo" class="h-4 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/ALJJyrCdvw-fH-NDBpBrGdlAu7CpBcJMlYoyIAPSsf6yFDXB1vYjUZ7uU5ZzfTr-rzgqecbKsfFLfHMEND3x27-n6_csoGCEXeEPL9UvKYBsJaeU6y9ReuDrbjyi-CSBKjkP2l0U1oWjtx7Fv9u3eVBnmYvNsRrvzf4DIWjbsw-BHDRs_DXl27E2l7_YWlWdzzw7iwTZk_tAOkKZJEacS-3AvVFbTzjuRgKwKDl0-MPctu49dg"/><span class="font-caption-strong text-caption-strong tracking-wide text-on-surface">Downora</span><span class="font-caption text-caption text-on-surface-variant flex items-center gap-space-xs"><span class="w-1 h-1 rounded-full bg-outline-variant"></span>High Performance Media Engine</span></div><div class="flex-1 h-full mx-space-xl flex items-center justify-center"><div class="w-80 h-6 bg-surface-container-low/60 rounded flex items-center px-space-sm gap-space-xs"><span class="material-symbols-outlined text-outline text-[14px]">search</span><span class="font-caption text-caption text-outline">Search downloads, streams or protocols (Ctrl+K)</span></div></div><div class="flex items-center h-full"><div class="flex items-center pr-space-md gap-space-sm"><div class="w-5 h-5 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[12px]">person</span></div></div><div class="flex items-center h-full"><button aria-label="Minimize" class="w-[46px] h-9 flex items-center justify-center text-on-surface-variant hover:bg-surface-bright/40 hover:text-on-surface transition-colors"><span class="material-symbols-outlined text-[14px]">remove</span></button><button aria-label="Maximize" class="w-[46px] h-9 flex items-center justify-center text-on-surface-variant hover:bg-surface-bright/40 hover:text-on-surface transition-colors"><span class="material-symbols-outlined text-[12px]">crop_square</span></button><button aria-label="Close" class="w-[46px] h-9 flex items-center justify-center text-on-surface-variant hover:bg-on-error hover:text-on-background transition-colors"><span class="material-symbols-outlined text-[14px]">close</span></button></div></div></header><aside class="fixed left-0 top-9 bottom-0 w-60 bg-surface-container-low/95 backdrop-blur-2xl z-40 flex flex-col justify-between p-space-sm shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="flex flex-col gap-space-md"><div class="flex items-center justify-between px-space-sm py-space-xs"><div class="flex items-center gap-space-sm"><img alt="Downora App Logo" class="h-6 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/ALJJyrCdvw-fH-NDBpBrGdlAu7CpBcJMlYoyIAPSsf6yFDXB1vYjUZ7uU5ZzfTr-rzgqecbKsfFLfHMEND3x27-n6_csoGCEXeEPL9UvKYBsJaeU6y9ReuDrbjyi-CSBKjkP2l0U1oWjtx7Fv9u3eVBnmYvNsRrvzf4DIWjbsw-BHDRs_DXl27E2l7_YWlWdzzw7iwTZk_tAOkKZJEacS-3AvVFbTzjuRgKwKDl0-MPctu49dg"/><span class="font-title-md text-title-md tracking-tight text-on-surface">Downora</span></div><span class="px-space-xs py-0.5 rounded-full bg-surface-container-high text-primary font-badge-label text-badge-label">v2.4 Pro</span></div><nav class="flex flex-col gap-space-2xs" data-active-classes="bg-surface-container-high text-on-surface font-body-strong"><a class="group relative flex items-center gap-space-sm px-space-md h-9 rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" data-path="home" href="#"><span class="material-symbols-outlined text-[18px]">home</span><span class="font-body-md text-body-md">Home</span></a><a aria-current="page" class="group relative flex items-center gap-space-sm px-space-md h-9 rounded transition-colors bg-surface-container-high text-on-surface font-body-strong" data-path="downloader" href="#"><span class="material-symbols-outlined text-[18px]">cloud_download</span><span class="font-body-md text-body-md">Downloader</span></a><a class="group relative flex items-center justify-between px-space-md h-9 rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" data-path="download-queue" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[18px]">layers</span><span class="font-body-md text-body-md">Download Queue</span></div><span class="px-1.5 py-0.5 rounded-full bg-primary-container text-on-primary-container font-badge-label text-badge-label">3</span></a><a class="group relative flex items-center gap-space-sm px-space-md h-9 rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" data-path="media-library" href="#"><span class="material-symbols-outlined text-[18px]">movie</span><span class="font-body-md text-body-md">Media Library</span></a><a class="group relative flex items-center gap-space-sm px-space-md h-9 rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" data-path="history" href="#"><span class="material-symbols-outlined text-[18px]">history</span><span class="font-body-md text-body-md">History</span></a><a class="group relative flex items-center gap-space-sm px-space-md h-9 rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" data-path="settings" href="#"><span class="material-symbols-outlined text-[18px]">settings</span><span class="font-body-md text-body-md">Settings</span></a><a class="group relative flex items-center gap-space-sm px-space-md h-9 rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" data-path="about" href="#"><span class="material-symbols-outlined text-[18px]">info</span><span class="font-body-md text-body-md">About</span></a></nav></div><div class="flex flex-col gap-space-sm px-space-sm pb-space-xs"><div class="bg-surface-container/70 rounded p-space-sm flex flex-col gap-space-xs"><div class="flex items-center justify-between"><span class="font-caption-strong text-caption-strong text-on-surface">SSD Storage (D:)</span><span class="font-mono-metric text-mono-metric text-outline">13%</span></div><div class="w-full h-1 bg-surface-variant rounded-full overflow-hidden"><div class="h-full w-[13%] bg-primary rounded-full"></div></div><div class="flex items-center justify-between"><span class="font-caption text-caption text-on-surface-variant">68.4 GB used</span><span class="font-caption text-caption text-outline">512 GB</span></div></div><div class="flex items-center justify-between pt-space-xs"><div class="flex items-center gap-space-xs"><span class="w-2 h-2 rounded-full bg-primary"></span><span class="font-caption text-caption text-on-surface-variant">Online • 120 Mbps</span></div><div class="flex items-center bg-surface-container-high rounded-full p-0.5"><button class="w-5 h-5 rounded-full bg-primary flex items-center justify-center text-on-primary"><span class="material-symbols-outlined text-[12px]">dark_mode</span></button><button class="w-5 h-5 rounded-full flex items-center justify-center text-outline hover:text-on-surface"><span class="material-symbols-outlined text-[12px]">light_mode</span></button></div></div></div></aside><div class="pl-60"><main class="relative pt-9 w-full min-h-screen bg-background"><div class="flex flex-col w-full">
+<div class="p-space-base flex flex-col gap-space-md max-w-[1400px] mx-auto w-full pb-24">
+<!-- Playlist Header Card (Fluent Layer 1 Mica Elevated) -->
+<div class="relative overflow-hidden rounded-xl bg-surface-container-high/90 backdrop-blur-2xl p-space-lg shadow-xl">
+<!-- Glow Refraction Spotlights -->
+<div class="absolute -top-24 -right-16 w-96 h-96 bg-primary/10 rounded-full blur-3xl pointer-events-none"></div>
+<div class="absolute -bottom-20 left-1/3 w-80 h-80 bg-secondary-container/15 rounded-full blur-3xl pointer-events-none"></div>
+<div class="relative z-10 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-space-lg">
+<!-- Artwork Mosaic & Meta Information -->
+<div class="flex flex-col sm:flex-row items-start sm:items-center gap-space-lg min-w-0 flex-1">
+<!-- Album Collage Mosaic -->
+<div class="relative w-36 h-36 sm:w-40 sm:h-40 rounded-lg overflow-hidden shrink-0 shadow-2xl bg-surface-container-lowest group">
+<div class="grid grid-cols-2 grid-rows-2 w-full h-full gap-0.5 bg-surface-container-lowest">
+<img class="w-full h-full object-cover" data-alt="Cyberpunk neon city skyline at dusk with glowing cyan and magenta reflections, retro synthwave album artwork detail, 80s aesthetic" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDk-CxNPYHCng1Sq2l9RDfvFNIn-tBRWMyUobrqR97sriSAs7kMUbNceOQPW9Bm2hrfkI2qvJK5OfuruR1U-VRPQmYeYg4L0bSXsxJNuHOjGj_Nrhm4Iznys70c1q8Vx1aCyQlgRO3VUsTIed2ybVWpFEg8FjAQDAqvKTLNGeBAscf2awsfSxNjGNnzW1SXvYohCEYs_jNBajAiWjkKTX7XKRozBWgbJq4ipQMDMnOo"/>
+<img class="w-full h-full object-cover" data-alt="Stylized wireframe sports car driving towards a glowing retro grid horizon with giant digital sun, synthwave art" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC94cQJG6cwj8J8odc_4jzyK_FjxXxhZwU9hvsFIPGvo-4fZceNOQhGSXu8kdbqlQhFd26KeSNgX-1hMFH_qLrI2FCsFPkkoYfHoe4M4H4Qf7IaX25KWdXoSiv5Zc4q76b0Kf5qxX8yjudSYGvJTilQAkEDWZxMBoRAxqMKqi9kBAT4O4z3JeIoKc4tlU_kjyxpCV9u0BDg2IhMYt4tVtk7mvdw2Lwn-C3NHOh28jpC"/>
+<img class="w-full h-full object-cover" data-alt="Futuristic neon helmet visor reflecting digital code streams, dark slate background, electro music aesthetic" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA9LRlq502GHltOo4P7ZnCct5lAqqtMNdd_xpaEsCxA_xpplrMSoAC3V5_n6Yom_JwMzxycobjUkF4ni7FFPMshr3w3-DNPbRoNzo283iBNSF9dWuForAA771PiX73AvFYYsO4c5hKjheUPeZ6Rv0Kqjf5rlatDpcB1r-s2mqpmPF5fLB8p1T8dLrFZm44p4k6WOLfHuDJaloeHTHFQYFNtQKEfXLvbZ0x6pveVOkAz"/>
+<img class="w-full h-full object-cover" data-alt="Abstract glowing turquoise geometric polygons and audio waveforms suspended in cosmic dark ambient space" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAFIOMKEFN0ob-PSmgwuhLVhMDoBIl2QonKePpG8E8oWphlHQ0wsZom5vhttbG4kWISJKXVBdDoqPJmBjY5Lg0FJAUB8VimOxvgMBwZQf1ClCXnw17VFd6JdBCpEgCDAc1VlLDo1q2crauGqrzCiIMbI6Sw1lNsvdD-lo-5xah0I-b264pqgmMfYi6GaF20hExx_1DNmobIqoio3WUOPbqMs96NRV5obbsXmoxc1AXa"/>
+</div>
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container-lowest/90 via-transparent to-transparent flex items-end p-space-xs">
+<span class="px-space-xs py-0.5 rounded bg-surface-container-highest/90 backdrop-blur-md text-primary font-badge-label text-badge-label flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px]">playlist_play</span> LIST
+              </span>
+</div>
+</div>
+<!-- Metadata & Headings -->
+<div class="flex flex-col gap-space-xs min-w-0">
+<div class="flex items-center gap-space-sm flex-wrap">
+<span class="px-space-sm py-0.5 rounded-full bg-error-container/40 text-error font-badge-label text-badge-label flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px]">smart_display</span> YouTube Playlist
+              </span>
+<span class="px-space-sm py-0.5 rounded-full bg-primary/10 text-primary font-badge-label text-badge-label flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px]">bolt</span> Ultra Stream Link Parsed
+              </span>
+<span class="font-mono-metric text-mono-metric text-on-surface-variant">PL_syn9482_live_2024</span>
+</div>
+<h1 class="font-display text-display text-on-surface tracking-tight truncate leading-snug">
+              Synthwave & Retrowave Cyberpunk Essentials 2024
+            </h1>
+<div class="flex items-center gap-space-sm text-on-surface-variant flex-wrap">
+<div class="flex items-center gap-space-xs">
+<div class="w-5 h-5 rounded-full bg-secondary-container flex items-center justify-center text-on-secondary-container font-caption-strong text-[10px]">EG</div>
+<span class="font-body-strong text-body-strong text-on-surface">Electronic Gems</span>
+<span class="material-symbols-outlined text-primary text-[15px]" style="font-variation-settings: 'FILL' 1;">verified</span>
+</div>
+<span class="text-outline">·</span>
+<span class="font-caption text-caption text-on-surface-variant">42 Media Items</span>
+<span class="text-outline">·</span>
+<span class="font-caption text-caption text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">schedule</span> 3h 12m Total
+              </span>
+<span class="text-outline">·</span>
+<span class="font-caption text-caption text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">database</span> ~4.80 GB Size
+              </span>
+</div>
+<!-- Visual Bar of Playlist Status -->
+<div class="mt-space-xs flex items-center gap-space-md max-w-md">
+<div class="flex-1 h-1.5 bg-surface-variant rounded-full overflow-hidden flex">
+<div class="h-full bg-gradient-to-r from-primary-container to-secondary-container w-[43%] rounded-l-full" title="18 Selected"></div>
+<div class="h-full bg-surface-bright w-[52%]" title="22 Unselected"></div>
+<div class="h-full bg-error-container w-[5%] rounded-r-full" title="2 Unavailable"></div>
+</div>
+<span class="font-mono-metric text-mono-metric text-primary whitespace-nowrap">18 / 42 Selected</span>
+</div>
+</div>
+</div>
+<!-- Quick Top Actions -->
+<div class="flex flex-row lg:flex-col items-stretch justify-end gap-space-xs shrink-0 w-full lg:w-auto">
+<button class="flex items-center justify-center gap-space-xs h-8 px-space-md rounded bg-gradient-to-r from-primary-container to-secondary-container text-on-primary font-body-strong text-body-strong shadow-md hover:brightness-110 active:scale-95 transition-all">
+<span class="material-symbols-outlined text-[17px]">download_for_offline</span>
+<span>Download All (42)</span>
+</button>
+<div class="flex items-center gap-space-xs">
+<button class="flex-1 lg:flex-none flex items-center justify-center gap-1 h-7 px-space-sm rounded bg-surface-variant/80 hover:bg-surface-bright text-on-surface font-caption-strong text-caption-strong transition-colors">
+<span class="material-symbols-outlined text-[15px]">swap_vert</span> Reverse
+            </button>
+<button class="flex-1 lg:flex-none flex items-center justify-center gap-1 h-7 px-space-sm rounded bg-surface-variant/80 hover:bg-surface-bright text-on-surface font-caption-strong text-caption-strong transition-colors">
+<span class="material-symbols-outlined text-[15px]">queue_music</span> Export M3U8
+            </button>
+<button class="w-7 h-7 flex items-center justify-center rounded bg-surface-variant/80 hover:bg-surface-bright text-on-surface-variant hover:text-on-surface transition-colors" title="Reload Playlist Metadata">
+<span class="material-symbols-outlined text-[15px]">refresh</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Batch Selection Toolbar (WinUI 3 Ribbon Bar) -->
+<div class="rounded-lg bg-surface-container/95 p-space-sm shadow-md flex flex-wrap items-center justify-between gap-space-md">
+<!-- Selection Toggles & Bulk Actions -->
+<div class="flex items-center gap-space-sm flex-wrap">
+<label class="flex items-center gap-space-xs px-space-sm py-1 rounded hover:bg-surface-bright/40 cursor-pointer select-none transition-colors">
+<input checked="" class="w-4 h-4 rounded bg-surface-container-high accent-primary border-none cursor-pointer" id="selectAllCheckbox" type="checkbox"/>
+<span class="font-body-strong text-body-strong text-on-surface" id="selectionCountText">Select All (18 selected)</span>
+</label>
+<span class="w-px h-4 bg-outline-variant"></span>
+<button class="px-space-sm py-1 rounded bg-transparent hover:bg-surface-bright/40 text-on-surface-variant hover:text-on-surface font-caption-strong text-caption-strong transition-colors flex items-center gap-1" onclick="toggleDeselectAll()">
+<span class="material-symbols-outlined text-[14px]">check_box_outline_blank</span> Deselect
+        </button>
+<button class="px-space-sm py-1 rounded bg-transparent hover:bg-surface-bright/40 text-on-surface-variant hover:text-on-surface font-caption-strong text-caption-strong transition-colors flex items-center gap-1" onclick="invertSelection()">
+<span class="material-symbols-outlined text-[14px]">flip</span> Invert
+        </button>
+<button class="px-space-sm py-1 rounded bg-transparent hover:bg-surface-bright/40 text-on-surface-variant hover:text-on-surface font-caption-strong text-caption-strong transition-colors flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">filter_alt</span> Filter by Duration
+        </button>
+</div>
+<!-- Quality, Format & Audio Batch Overrides -->
+<div class="flex items-center gap-space-sm flex-wrap">
+<!-- Quality Preset -->
+<div class="flex items-center gap-1.5 bg-surface-container-high rounded px-space-sm py-1">
+<span class="material-symbols-outlined text-outline text-[16px]">hd</span>
+<span class="font-caption text-caption text-on-surface-variant hidden sm:inline">Quality:</span>
+<select class="bg-transparent text-on-surface font-body-strong text-body-strong outline-none cursor-pointer pr-1">
+<option class="bg-surface-container-high text-on-surface" selected="">Best 1080p60 (Default for batch)</option>
+<option class="bg-surface-container-high text-on-surface">Ultra 4K / 2160p60</option>
+<option class="bg-surface-container-high text-on-surface">Crisp 1440p QHD</option>
+<option class="bg-surface-container-high text-on-surface">Standard 720p HD</option>
+</select>
+</div>
+<!-- Format Preset -->
+<div class="flex items-center gap-1.5 bg-surface-container-high rounded px-space-sm py-1">
+<span class="material-symbols-outlined text-outline text-[16px]">video_file</span>
+<select class="bg-transparent text-on-surface font-body-strong text-body-strong outline-none cursor-pointer">
+<option class="bg-surface-container-high text-on-surface" selected="">MP4 Video</option>
+<option class="bg-surface-container-high text-on-surface">MKV Container</option>
+<option class="bg-surface-container-high text-on-surface">WEBM VP9</option>
+</select>
+</div>
+<!-- Audio Extract Preset Checkbox -->
+<label class="flex items-center gap-1.5 bg-surface-container-high px-space-sm py-1 rounded cursor-pointer hover:bg-surface-bright/50 transition-colors">
+<input checked="" class="w-3.5 h-3.5 rounded bg-surface-container accent-primary border-none cursor-pointer" type="checkbox"/>
+<span class="material-symbols-outlined text-tertiary text-[15px]">graphic_eq</span>
+<span class="font-caption-strong text-caption-strong text-on-surface">Extract MP3 320k</span>
+</label>
+<!-- Direct Trigger Button -->
+<button class="flex items-center gap-space-xs h-8 px-space-md rounded bg-gradient-to-r from-primary-container to-secondary-container text-on-primary font-body-strong text-body-strong shadow-md hover:brightness-110 active:scale-95 transition-all">
+<span class="material-symbols-outlined text-[17px]">download</span>
+<span>Download 18 Selected (2.14 GB)</span>
+</button>
+</div>
+</div>
+<!-- Itemized Playlist Card Table (Fluent Layer 1 Collection) -->
+<div class="rounded-xl bg-surface-container-low shadow-xl overflow-hidden flex flex-col">
+<!-- Table Header Row -->
+<div class="grid grid-cols-[40px_36px_84px_1fr_90px_140px_110px_150px_90px] items-center px-space-md py-space-xs bg-surface-container-highest/60 text-outline font-caption-strong text-caption-strong uppercase tracking-wider select-none">
+<div class="flex items-center justify-center">
+<span class="material-symbols-outlined text-[16px]">check_box</span>
+</div>
+<div class="text-center">#</div>
+<div>Preview</div>
+<div>Title & Metadata</div>
+<div class="text-right">Duration</div>
+<div>Quality Override</div>
+<div class="text-right">Est. Size</div>
+<div class="text-center">Status</div>
+<div class="text-center">Action</div>
+</div>
+<!-- Scrollable Queue Rows -->
+<div class="flex flex-col divide-y-0" id="playlistTableBody">
+<!-- Row 1: The Midnight -->
+<div class="queue-row grid grid-cols-[40px_36px_84px_1fr_90px_140px_110px_150px_90px] items-center px-space-md py-space-sm bg-surface-container-high/40 hover:bg-surface-container-high transition-colors group">
+<div class="flex items-center justify-center">
+<input checked="" class="item-checkbox w-4 h-4 rounded bg-surface-container accent-primary border-none cursor-pointer" type="checkbox"/>
+</div>
+<div class="font-mono-metric text-mono-metric text-outline text-center">01</div>
+<div class="relative w-16 h-10 rounded overflow-hidden bg-surface-container-lowest shrink-0 shadow-sm">
+<img class="w-full h-full object-cover" data-alt="Neon silhouette sunset of palm trees with sports car aesthetic, synthwave retro cover, cyan and magenta glow" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDnBdb-4HPh2N8CgB_coNnegbwFvwh2psLk6nZNzqBM8qbbHQmjsY3s4CrFPLHoGv1XW0Sjm7GvnPhYm-7D8x6uNwWMqMGWpqa9H8LIfXJFUTaG-s7T4JWHyDWTcP4HXI6pQYjgmlqRuwKxX7DVMzvqDZJsFeeIulkfsq59WSSo7gh5PB5AhYEQdbP9MXjom2pgnG3vO0xtdV1R8b2Uhr73vraSptMmF7zeWP5vhLOf"/>
+<button class="absolute inset-0 bg-surface-container-lowest/50 opacity-0 group-hover:opacity-100 flex items-center justify-center text-primary transition-opacity" title="Quick Preview">
+<span class="material-symbols-outlined text-[18px]">play_arrow</span>
+</button>
+</div>
+<div class="min-w-0 pr-space-md">
+<p class="font-body-strong text-body-strong text-on-surface truncate">The Midnight - Days of Thunder</p>
+<p class="font-caption text-caption text-on-surface-variant truncate">Days of Thunder (Official Album Release) · 1080p60 AVC</p>
+</div>
+<div class="font-mono-metric text-mono-metric text-on-surface-variant text-right">04:38</div>
+<div class="px-space-xs">
+<select class="w-full bg-surface-container/90 text-on-surface font-caption-strong text-caption-strong rounded px-space-xs py-1 outline-none">
+<option selected="">1080p MP4</option>
+<option>4K MKV</option>
+<option>Audio Only (MP3)</option>
+</select>
+</div>
+<div class="font-mono-metric text-mono-metric text-on-surface text-right">88.4 MB</div>
+<div class="flex items-center justify-center">
+<span class="px-space-sm py-0.5 rounded-full bg-primary/15 text-primary font-badge-label text-badge-label flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span> Ready to Queue
+            </span>
+</div>
+<div class="flex items-center justify-center gap-1">
+<button class="w-7 h-7 rounded hover:bg-surface-bright flex items-center justify-center text-on-surface-variant hover:text-on-surface transition-colors" title="Play Snippet">
+<span class="material-symbols-outlined text-[16px]">play_circle</span>
+</button>
+<button class="w-7 h-7 rounded hover:bg-surface-bright flex items-center justify-center text-on-surface-variant hover:text-on-surface transition-colors" title="Download Individually">
+<span class="material-symbols-outlined text-[16px]">arrow_downward</span>
+</button>
+</div>
+</div>
+<!-- Row 2: GUNSHIP -->
+<div class="queue-row grid grid-cols-[40px_36px_84px_1fr_90px_140px_110px_150px_90px] items-center px-space-md py-space-sm bg-surface-container/60 hover:bg-surface-container-high transition-colors group">
+<div class="flex items-center justify-center">
+<input checked="" class="item-checkbox w-4 h-4 rounded bg-surface-container accent-primary border-none cursor-pointer" type="checkbox"/>
+</div>
+<div class="font-mono-metric text-mono-metric text-outline text-center">02</div>
+<div class="relative w-16 h-10 rounded overflow-hidden bg-surface-container-lowest shrink-0 shadow-sm">
+<img class="w-full h-full object-cover" data-alt="Dark claymation action figures in cyberpunk neon corridor with dystopian retro lighting, gunship tech noir scene" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBrREde-r-3y2AYIoD6mp06dSNIpnnUGaq3SYPPOfkDH-3Jlgb5p7-9NPgQ1atgpZWdsjTGrMNSBOjCQVStv9aiIs9Jkjr3z26-hx_TEHS4CHl2IBySGIGti3Mxl7ndhArs26T9-uNh3HeTREevWMT3F--tPrEeBWuuEoK56TD62ozXiDhB3z11AYeys0NrglpPyisUcS6e233BvhHYZX-47fOitQWtzUSFICIw0AXg"/>
+<button class="absolute inset-0 bg-surface-container-lowest/50 opacity-0 group-hover:opacity-100 flex items-center justify-center text-primary transition-opacity">
+<span class="material-symbols-outlined text-[18px]">play_arrow</span>
+</button>
+</div>
+<div class="min-w-0 pr-space-md">
+<p class="font-body-strong text-body-strong text-on-surface truncate">GUNSHIP - Tech Noir (Official Video)</p>
+<p class="font-caption text-caption text-on-surface-variant truncate">GUNSHIP Music · Featuring John Carpenter narration</p>
+</div>
+<div class="font-mono-metric text-mono-metric text-on-surface-variant text-right">05:12</div>
+<div class="px-space-xs">
+<select class="w-full bg-surface-container/90 text-on-surface font-caption-strong text-caption-strong rounded px-space-xs py-1 outline-none">
+<option selected="">1080p MP4</option>
+<option>1440p MKV</option>
+<option>Audio Only (MP3)</option>
+</select>
+</div>
+<div class="font-mono-metric text-mono-metric text-on-surface text-right">104.2 MB</div>
+<div class="flex items-center justify-center">
+<span class="px-space-sm py-0.5 rounded-full bg-primary/15 text-primary font-badge-label text-badge-label flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span> Ready to Queue
+            </span>
+</div>
+<div class="flex items-center justify-center gap-1">
+<button class="w-7 h-7 rounded hover:bg-surface-bright flex items-center justify-center text-on-surface-variant hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined text-[16px]">play_circle</span>
+</button>
+<button class="w-7 h-7 rounded hover:bg-surface-bright flex items-center justify-center text-on-surface-variant hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined text-[16px]">arrow_downward</span>
+</button>
+</div>
+</div>
+<!-- Row 3: Carpenter Brut -->
+<div class="queue-row grid grid-cols-[40px_36px_84px_1fr_90px_140px_110px_150px_90px] items-center px-space-md py-space-sm bg-surface-container-high/40 hover:bg-surface-container-high transition-colors group">
+<div class="flex items-center justify-center">
+<input checked="" class="item-checkbox w-4 h-4 rounded bg-surface-container accent-primary border-none cursor-pointer" type="checkbox"/>
+</div>
+<div class="font-mono-metric text-mono-metric text-outline text-center">03</div>
+<div class="relative w-16 h-10 rounded overflow-hidden bg-surface-container-lowest shrink-0 shadow-sm">
+<img class="w-full h-full object-cover" data-alt="High speed retro muscle car fleeing futuristic police interceptors through neon thunderstorm, vivid blood orange and teal tones" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB3sC77B21pyOT0jSeroyG62xMfuqMLDEBqjEpo5HvhJDEHCAaw4ejU-Fx6c5L53nXhBh44s0LjIj8l_ueQgm-5cXKaQtk3uPP-aWZ1RzHvnSaw54lsOZ1RT8VAAZIiNjivDVWeZw5A2RxSCFhutUr1BspFvVtrDgfJyAXVGZc5RADcRpyr15A7nvyYFg2idr0zOEs0aJQPTrrRBJ59DgDXyJbTr2itzx-ybtmo22om"/>
+<button class="absolute inset-0 bg-surface-container-lowest/50 opacity-0 group-hover:opacity-100 flex items-center justify-center text-primary transition-opacity">
+<span class="material-symbols-outlined text-[18px]">play_arrow</span>
+</button>
+</div>
+<div class="min-w-0 pr-space-md">
+<p class="font-body-strong text-body-strong text-on-surface truncate">Carpenter Brut - Turbo Killer</p>
+<p class="font-caption text-caption text-on-surface-variant truncate">Directed by Seth Ickerman · No Quarter Prod</p>
+</div>
+<div class="font-mono-metric text-mono-metric text-on-surface-variant text-right">04:06</div>
+<div class="px-space-xs">
+<select class="w-full bg-surface-container/90 text-on-surface font-caption-strong text-caption-strong rounded px-space-xs py-1 outline-none">
+<option selected="">1080p MP4</option>
+<option>4K MKV</option>
+<option>Audio Only (MP3)</option>
+</select>
+</div>
+<div class="font-mono-metric text-mono-metric text-on-surface text-right">92.0 MB</div>
+<div class="flex items-center justify-center">
+<span class="px-space-sm py-0.5 rounded-full bg-primary/15 text-primary font-badge-label text-badge-label flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span> Ready to Queue
+            </span>
+</div>
+<div class="flex items-center justify-center gap-1">
+<button class="w-7 h-7 rounded hover:bg-surface-bright flex items-center justify-center text-on-surface-variant hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined text-[16px]">play_circle</span>
+</button>
+<button class="w-7 h-7 rounded hover:bg-surface-bright flex items-center justify-center text-on-surface-variant hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined text-[16px]">arrow_downward</span>
+</button>
+</div>
+</div>
+<!-- Row 4: Kavinsky -->
+<div class="queue-row grid grid-cols-[40px_36px_84px_1fr_90px_140px_110px_150px_90px] items-center px-space-md py-space-sm bg-surface-container/60 hover:bg-surface-container-high transition-colors group">
+<div class="flex items-center justify-center">
+<input checked="" class="item-checkbox w-4 h-4 rounded bg-surface-container accent-primary border-none cursor-pointer" type="checkbox"/>
+</div>
+<div class="font-mono-metric text-mono-metric text-outline text-center">04</div>
+<div class="relative w-16 h-10 rounded overflow-hidden bg-surface-container-lowest shrink-0 shadow-sm">
+<img class="w-full h-full object-cover" data-alt="Red vintage Ferrari Testarossa parked under glowing neon streetlights along a misty coastal highway, dark moody cinematic lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCOyU5s57WOoIhO4DGcpKRIEUv9QdZXMaGZzYgFf_4YrLUPmAZmHjmlQxh9bF2Z1fIXU8L1fgPfnGcz0W9qgb8WwsKSaCGuO7KF_xF8kOWA4-wRoE8E1vM5G6ZzVx5_gWT6coCj8rlArJWYS2rULkrb4Jup5LI48J-_MvEe7PvtCHhzrWPz9sQ7Z8fhNb4qux0cEJUuzuHhIFPeVOKhAUhCAjci7gWs6uwTzU7vPssa"/>
+<button class="absolute inset-0 bg-surface-container-lowest/50 opacity-0 group-hover:opacity-100 flex items-center justify-center text-primary transition-opacity">
+<span class="material-symbols-outlined text-[18px]">play_arrow</span>
+</button>
+</div>
+<div class="min-w-0 pr-space-md">
+<p class="font-body-strong text-body-strong text-on-surface truncate">Kavinsky - Pacific Coast Highway</p>
+<p class="font-caption text-caption text-on-surface-variant truncate">Record Makers · OutRun Soundtrack Edition</p>
+</div>
+<div class="font-mono-metric text-mono-metric text-on-surface-variant text-right">03:55</div>
+<div class="px-space-xs">
+<select class="w-full bg-surface-container/90 text-on-surface font-caption-strong text-caption-strong rounded px-space-xs py-1 outline-none">
+<option selected="">1080p MP4</option>
+<option>Audio Only (FLAC)</option>
+<option>Audio Only (MP3)</option>
+</select>
+</div>
+<div class="font-mono-metric text-mono-metric text-on-surface text-right">76.3 MB</div>
+<div class="flex items-center justify-center">
+<span class="px-space-sm py-0.5 rounded-full bg-primary/15 text-primary font-badge-label text-badge-label flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span> Ready to Queue
+            </span>
+</div>
+<div class="flex items-center justify-center gap-1">
+<button class="w-7 h-7 rounded hover:bg-surface-bright flex items-center justify-center text-on-surface-variant hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined text-[16px]">play_circle</span>
+</button>
+<button class="w-7 h-7 rounded hover:bg-surface-bright flex items-center justify-center text-on-surface-variant hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined text-[16px]">arrow_downward</span>
+</button>
+</div>
+</div>
+<!-- Row 5: Timecop1983 (Skipped / Unchecked) -->
+<div class="queue-row grid grid-cols-[40px_36px_84px_1fr_90px_140px_110px_150px_90px] items-center px-space-md py-space-sm bg-surface-container-high/20 opacity-70 hover:opacity-100 hover:bg-surface-container-high transition-all group">
+<div class="flex items-center justify-center">
+<input class="item-checkbox w-4 h-4 rounded bg-surface-container accent-primary border-none cursor-pointer" type="checkbox"/>
+</div>
+<div class="font-mono-metric text-mono-metric text-outline text-center">05</div>
+<div class="relative w-16 h-10 rounded overflow-hidden bg-surface-container-lowest shrink-0 shadow-sm">
+<img class="w-full h-full object-cover" data-alt="Dreamy pastel purple and blue gradient sky with floating clouds and retro 1980s typography, calm nostalgia synthwave" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDXuo5UgN_RJ1YECGcJWvbVwQXjbkqX_SSCy1xaKrybnDfX9cGogczCvxZ83TeKRWMoPovWJRFJvwcAkcl6U-j7AAyKWAyJ8f_B2laK8xo97m8Yil2Ot45ZMbMY9SW6VGiAJ6hlqbz-00gh5kAlXuTxxq0sPleppovt8k4R9_Vgr7-xa6wcwEO0PW6vJfRbf90qCoKbxa81tuktWNBsQsASz0BAmLpeHcEhttiAPMTs"/>
+<button class="absolute inset-0 bg-surface-container-lowest/50 opacity-0 group-hover:opacity-100 flex items-center justify-center text-primary transition-opacity">
+<span class="material-symbols-outlined text-[18px]">play_arrow</span>
+</button>
+</div>
+<div class="min-w-0 pr-space-md">
+<p class="font-body-strong text-body-strong text-on-surface truncate">Timecop1983 - Dreams</p>
+<p class="font-caption text-caption text-on-surface-variant truncate">Journeys LP · Feat. Dana Jean Phoenix</p>
+</div>
+<div class="font-mono-metric text-mono-metric text-on-surface-variant text-right">05:40</div>
+<div class="px-space-xs">
+<select class="w-full bg-surface-container/90 text-on-surface-variant font-caption-strong text-caption-strong rounded px-space-xs py-1 outline-none">
+<option selected="">1080p MP4</option>
+<option>720p MP4</option>
+</select>
+</div>
+<div class="font-mono-metric text-mono-metric text-outline text-right">110.5 MB</div>
+<div class="flex items-center justify-center">
+<span class="px-space-sm py-0.5 rounded-full bg-surface-bright/50 text-on-surface-variant font-badge-label text-badge-label flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-outline"></span> Skipped
+            </span>
+</div>
+<div class="flex items-center justify-center gap-1">
+<button class="w-7 h-7 rounded hover:bg-surface-bright flex items-center justify-center text-on-surface-variant hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined text-[16px]">play_circle</span>
+</button>
+<button class="w-7 h-7 rounded hover:bg-surface-bright flex items-center justify-center text-on-surface-variant hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined text-[16px]">arrow_downward</span>
+</button>
+</div>
+</div>
+<!-- Row 6: Trevor Something -->
+<div class="queue-row grid grid-cols-[40px_36px_84px_1fr_90px_140px_110px_150px_90px] items-center px-space-md py-space-sm bg-surface-container/60 hover:bg-surface-container-high transition-colors group">
+<div class="flex items-center justify-center">
+<input checked="" class="item-checkbox w-4 h-4 rounded bg-surface-container accent-primary border-none cursor-pointer" type="checkbox"/>
+</div>
+<div class="font-mono-metric text-mono-metric text-outline text-center">06</div>
+<div class="relative w-16 h-10 rounded overflow-hidden bg-surface-container-lowest shrink-0 shadow-sm">
+<img class="w-full h-full object-cover" data-alt="Monochrome dark aesthetic with neon glitch scanlines, silhouette figure in urban fog, dark wave retro vibes" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB1d8yQBYTvpYKzj213lnw5jDSbr43diwTLI7qcywFji_kWdFUZvauxdcWxhk7mzRmdv1s3HLbaKio2MIU1g9tGF4XHvIixjEEaMGqfwLnLncAFtxnVU_ZBlwVmfWC9vjfVRppVr_dH7yWwvEYrOGVoGfkz03o0Q2bLqDeXvGBigROTShp_xnwl4BGeN7HRv9KvHszbBKCj74BUERiIjOwBzGPxrrkG5JzRPKayEQWp"/>
+<button class="absolute inset-0 bg-surface-container-lowest/50 opacity-0 group-hover:opacity-100 flex items-center justify-center text-primary transition-opacity">
+<span class="material-symbols-outlined text-[18px]">play_arrow</span>
+</button>
+</div>
+<div class="min-w-0 pr-space-md">
+<p class="font-body-strong text-body-strong text-on-surface truncate">Trevor Something - Into the Dark</p>
+<p class="font-caption text-caption text-on-surface-variant truncate">Trevor Something Does Not Exist</p>
+</div>
+<div class="font-mono-metric text-mono-metric text-on-surface-variant text-right">04:22</div>
+<div class="px-space-xs">
+<select class="w-full bg-surface-container/90 text-on-surface font-caption-strong text-caption-strong rounded px-space-xs py-1 outline-none">
+<option selected="">1080p MP4</option>
+<option>Audio Only (MP3)</option>
+</select>
+</div>
+<div class="font-mono-metric text-mono-metric text-on-surface text-right">85.0 MB</div>
+<div class="flex items-center justify-center">
+<span class="px-space-sm py-0.5 rounded-full bg-primary/15 text-primary font-badge-label text-badge-label flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span> Ready to Queue
+            </span>
+</div>
+<div class="flex items-center justify-center gap-1">
+<button class="w-7 h-7 rounded hover:bg-surface-bright flex items-center justify-center text-on-surface-variant hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined text-[16px]">play_circle</span>
+</button>
+<button class="w-7 h-7 rounded hover:bg-surface-bright flex items-center justify-center text-on-surface-variant hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined text-[16px]">arrow_downward</span>
+</button>
+</div>
+</div>
+<!-- Row 7: Private Video (Unavailable) -->
+<div class="queue-row grid grid-cols-[40px_36px_84px_1fr_90px_140px_110px_150px_90px] items-center px-space-md py-space-sm bg-surface-container-lowest/70 opacity-40 select-none">
+<div class="flex items-center justify-center">
+<input class="w-4 h-4 rounded bg-surface-variant cursor-not-allowed" disabled="" type="checkbox"/>
+</div>
+<div class="font-mono-metric text-mono-metric text-outline text-center">07</div>
+<div class="w-16 h-10 rounded bg-surface-container-highest flex items-center justify-center text-outline">
+<span class="material-symbols-outlined text-[20px]">lock</span>
+</div>
+<div class="min-w-0 pr-space-md">
+<p class="font-body-strong text-body-strong text-outline line-through truncate">[Private Video - Unavailable]</p>
+<p class="font-caption text-caption text-outline truncate">Video ID deleted or set to private by YouTube uploader</p>
+</div>
+<div class="font-mono-metric text-mono-metric text-outline text-right">--:--</div>
+<div class="px-space-xs">
+<div class="w-full bg-surface-variant/40 text-outline font-caption text-caption rounded px-space-xs py-1 text-center">N/A</div>
+</div>
+<div class="font-mono-metric text-mono-metric text-outline text-right">--</div>
+<div class="flex items-center justify-center">
+<span class="px-space-sm py-0.5 rounded-full bg-error-container/20 text-error font-badge-label text-badge-label flex items-center gap-1">
+<span class="material-symbols-outlined text-[12px]">block</span> Private
+            </span>
+</div>
+<div class="flex items-center justify-center gap-1">
+<button class="w-7 h-7 flex items-center justify-center text-outline cursor-not-allowed" disabled="">
+<span class="material-symbols-outlined text-[16px]">visibility_off</span>
+</button>
+</div>
+</div>
+<!-- Row 8: Scandroid -->
+<div class="queue-row grid grid-cols-[40px_36px_84px_1fr_90px_140px_110px_150px_90px] items-center px-space-md py-space-sm bg-surface-container-high/40 hover:bg-surface-container-high transition-colors group">
+<div class="flex items-center justify-center">
+<input checked="" class="item-checkbox w-4 h-4 rounded bg-surface-container accent-primary border-none cursor-pointer" type="checkbox"/>
+</div>
+<div class="font-mono-metric text-mono-metric text-outline text-center">08</div>
+<div class="relative w-16 h-10 rounded overflow-hidden bg-surface-container-lowest shrink-0 shadow-sm">
+<img class="w-full h-full object-cover" data-alt="Cybernetic skull with glowing blue optic visors surrounded by high tech circuit matrices, dark electro industrial cyberpunk style" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA1h44W6ya327mDH5r9fpPyiIlCafCTt8MMscoiP1MsqMb1nRdfWFhNBgIUI614eCihTzqWpF0bRGYpM9d-uzm34syM7-EWesLNOS3zR8o7LptN5An4kRxM2VprWVTwEAcdvS8kKSlyv-4xnZQMg5Gu5iCcr9PmCsqK7g6dzbrCxJdpzOSV8ZChsqRJNZuvzzCE6qJRTuMKJZ0QIU018wbjzydJHiaQ2aALqQHfIiZY"/>
+<button class="absolute inset-0 bg-surface-container-lowest/50 opacity-0 group-hover:opacity-100 flex items-center justify-center text-primary transition-opacity">
+<span class="material-symbols-outlined text-[18px]">play_arrow</span>
+</button>
+</div>
+<div class="min-w-0 pr-space-md">
+<p class="font-body-strong text-body-strong text-on-surface truncate">Scandroid - Neo-Tokyo (Dance With The Dead Remix)</p>
+<p class="font-caption text-caption text-on-surface-variant truncate">FiXT Music · Remixed by Dance With The Dead</p>
+</div>
+<div class="font-mono-metric text-mono-metric text-on-surface-variant text-right">05:52</div>
+<div class="px-space-xs">
+<select class="w-full bg-surface-container/90 text-on-surface font-caption-strong text-caption-strong rounded px-space-xs py-1 outline-none">
+<option selected="">1080p MP4</option>
+<option>1440p MKV</option>
+<option>Audio Only (MP3)</option>
+</select>
+</div>
+<div class="font-mono-metric text-mono-metric text-on-surface text-right">118.6 MB</div>
+<div class="flex items-center justify-center">
+<span class="px-space-sm py-0.5 rounded-full bg-primary/15 text-primary font-badge-label text-badge-label flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span> Ready to Queue
+            </span>
+</div>
+<div class="flex items-center justify-center gap-1">
+<button class="w-7 h-7 rounded hover:bg-surface-bright flex items-center justify-center text-on-surface-variant hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined text-[16px]">play_circle</span>
+</button>
+<button class="w-7 h-7 rounded hover:bg-surface-bright flex items-center justify-center text-on-surface-variant hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined text-[16px]">arrow_downward</span>
+</button>
+</div>
+</div>
+</div>
+<!-- More Tracks Indicator Footer inside list -->
+<div class="px-space-md py-space-sm bg-surface-container-highest/30 flex items-center justify-between text-on-surface-variant">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-[16px]">more_horiz</span>
+<span class="font-caption text-caption">Showing 8 loaded stream buffers · 34 more tracks ready on demand</span>
+</div>
+<button class="font-caption-strong text-caption-strong text-primary hover:underline flex items-center gap-1">
+<span>Load remaining 34 items</span>
+<span class="material-symbols-outlined text-[14px]">expand_more</span>
+</button>
+</div>
+</div>
+<!-- Batch Telemetry Sparkline Card (Visual Richness / Fluent Mica Tile) -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-space-md">
+<div class="bg-surface-container/80 rounded-lg p-space-md flex flex-col justify-between shadow-sm">
+<div class="flex items-center justify-between mb-space-xs">
+<span class="font-caption-strong text-caption-strong text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-primary text-[16px]">speed</span> Engine Bandwidth Allocation
+          </span>
+<span class="font-mono-metric text-mono-metric text-primary">Uncapped</span>
+</div>
+<p class="font-display text-title-lg text-on-surface">120.4 <span class="font-body-md text-body-md text-on-surface-variant">MB/s theoretical peak</span></p>
+<div class="mt-2 h-7 w-full flex items-end gap-1">
+<!-- Inline Minimal SVG Bar Sparkline -->
+<svg class="w-full h-full" preserveaspectratio="none" viewbox="0 0 100 24">
+<polyline class="text-primary" fill="none" points="0,18 10,14 20,16 30,8 40,11 50,5 60,9 70,3 80,7 90,2 100,6" stroke="currentColor" stroke-width="2"></polyline>
+</svg>
+</div>
+</div>
+<div class="bg-surface-container/80 rounded-lg p-space-md flex flex-col justify-between shadow-sm">
+<div class="flex items-center justify-between mb-space-xs">
+<span class="font-caption-strong text-caption-strong text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-secondary text-[16px]">memory</span> Multi-Thread Slicing
+          </span>
+<span class="font-badge-label text-badge-label px-1.5 py-0.5 bg-secondary-container/20 text-secondary rounded">16 Connections</span>
+</div>
+<p class="font-display text-title-lg text-on-surface">Aria2 + FFmpeg <span class="font-body-md text-body-md text-on-surface-variant">Active</span></p>
+<div class="mt-2 flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-primary animate-ping"></span>
+<span class="font-caption text-caption text-on-surface-variant">Lossless Remuxing (Copy Video + Encode MP3)</span>
+</div>
+</div>
+<div class="bg-surface-container/80 rounded-lg p-space-md flex flex-col justify-between shadow-sm">
+<div class="flex items-center justify-between mb-space-xs">
+<span class="font-caption-strong text-caption-strong text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-tertiary text-[16px]">folder_special</span> Storage Projection
+          </span>
+<span class="font-mono-metric text-mono-metric text-tertiary">443.6 GB Free</span>
+</div>
+<p class="font-display text-title-lg text-on-surface">2.14 GB <span class="font-body-md text-body-md text-on-surface-variant">Required for 18 Tracks</span></p>
+<div class="mt-2 w-full h-1.5 bg-surface-variant rounded-full overflow-hidden flex">
+<div class="h-full bg-primary w-[2%]"></div>
+<div class="h-full bg-secondary-container w-[13%]"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom Floating Summary Bar (WinUI 3 Docked Command Surface - Layer 2 Acrylic) -->
+<div class="fixed bottom-0 left-60 right-0 z-40 bg-surface-container-high/95 backdrop-blur-2xl p-space-md shadow-2xl flex flex-col md:flex-row items-center justify-between gap-space-md">
+<!-- Target Path & Chosen Count -->
+<div class="flex flex-col sm:flex-row items-start sm:items-center gap-space-lg min-w-0 flex-1">
+<div class="flex items-center gap-space-sm">
+<div class="w-9 h-9 rounded-lg bg-primary-container/20 flex items-center justify-center text-primary shrink-0 shadow-inner">
+<span class="material-symbols-outlined text-[20px]">library_add_check</span>
+</div>
+<div>
+<div class="flex items-center gap-space-xs">
+<span class="font-body-strong text-body-strong text-on-surface" id="summaryCounter">18 tracks chosen</span>
+<span class="text-outline">out of 42</span>
+</div>
+<div class="flex items-center gap-1 text-on-surface-variant">
+<span class="material-symbols-outlined text-[13px] text-outline">folder</span>
+<span class="font-mono-metric text-[11px] truncate max-w-xs md:max-w-md text-outline" title="D:\Media\Downloads\Playlists\Synthwave">D:\Media\Downloads\Playlists\Synthwave</span>
+<button class="text-primary hover:underline font-caption-strong text-caption-strong ml-1">Change</button>
+</div>
+</div>
+</div>
+<!-- Toggles -->
+<div class="flex items-center gap-space-md flex-wrap">
+<label class="flex items-center gap-space-xs cursor-pointer select-none">
+<input checked="" class="w-4 h-4 rounded bg-surface-container accent-primary border-none cursor-pointer" type="checkbox"/>
+<span class="font-caption-strong text-caption-strong text-on-surface">Prefix track numbers (01, 02...)</span>
+</label>
+<label class="flex items-center gap-space-xs cursor-pointer select-none">
+<input checked="" class="w-4 h-4 rounded bg-surface-container accent-primary border-none cursor-pointer" type="checkbox"/>
+<span class="font-caption-strong text-caption-strong text-on-surface">Save folder.jpg album cover</span>
+</label>
+</div>
+</div>
+<!-- Final Execution Buttons -->
+<div class="flex items-center gap-space-sm shrink-0 w-full sm:w-auto justify-end">
+<button class="h-9 px-space-md rounded bg-surface-variant hover:bg-surface-bright text-on-surface font-body-strong text-body-strong transition-colors flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px]">close</span>
+<span>Cancel Batch</span>
+</button>
+<button class="h-9 px-space-lg rounded bg-gradient-to-r from-primary-container to-secondary-container text-on-primary font-body-strong text-body-strong shadow-lg hover:brightness-110 active:scale-95 transition-all flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">start</span>
+<span>Start Batch Download (18 items)</span>
+</button>
+</div>
+</div>
+<script>
+    function updateCounterDisplay() {
+      const checkboxes = document.querySelectorAll('.item-checkbox');
+      let checkedCount = 0;
+      checkboxes.forEach(cb => {
+        if (cb.checked) checkedCount++;
+      });
+      const counterText = document.getElementById('selectionCountText');
+      const summaryText = document.getElementById('summaryCounter');
+      if (counterText) counterText.textContent = `Select All (${checkedCount} selected)`;
+      if (summaryText) summaryText.textContent = `${checkedCount} tracks chosen`;
+    }
+
+    function toggleDeselectAll() {
+      const checkboxes = document.querySelectorAll('.item-checkbox');
+      checkboxes.forEach(cb => {
+        cb.checked = false;
+      });
+      const master = document.getElementById('selectAllCheckbox');
+      if (master) master.checked = false;
+      updateCounterDisplay();
+    }
+
+    function invertSelection() {
+      const checkboxes = document.querySelectorAll('.item-checkbox');
+      checkboxes.forEach(cb => {
+        cb.checked = !cb.checked;
+      });
+      updateCounterDisplay();
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const master = document.getElementById('selectAllCheckbox');
+      if (master) {
+        master.addEventListener('change', (e) => {
+          const checkboxes = document.querySelectorAll('.item-checkbox');
+          checkboxes.forEach(cb => cb.checked = e.target.checked);
+          updateCounterDisplay();
+        });
+      }
+
+      document.querySelectorAll('.item-checkbox').forEach(cb => {
+        cb.addEventListener('change', updateCounterDisplay);
+      });
+    });
+  </script>
+</div></main></div><div class="fixed bottom-space-lg right-space-lg z-50 pointer-events-none flex flex-col gap-space-sm"><div class="pointer-events-auto bg-surface-container-high/90 backdrop-blur-xl rounded-lg p-space-md shadow-2xl flex items-center gap-space-md max-w-sm"><div class="w-8 h-8 rounded bg-primary-container/20 flex items-center justify-center text-primary"><span class="material-symbols-outlined text-[20px]">download_done</span></div><div class="flex flex-col flex-1"><span class="font-body-strong text-body-strong text-on-surface">Downora Engine</span><span class="font-caption text-caption text-on-surface-variant">Ready to capture media links from clipboard</span></div><button class="text-outline hover:text-on-surface transition-colors"><span class="material-symbols-outlined text-[16px]">close</span></button></div></div></body></html>

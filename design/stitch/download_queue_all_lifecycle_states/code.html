@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_dashboard" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Segoe+UI+Variable,+Segoe+UI,+-apple-system,+system-ui:wght@100..900&display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{"colors":{"surface-dim":"#131315","surface-bright":"#39393b","tertiary-fixed":"#f0dbff","secondary":"#b0c6ff","on-error":"#690005","surface-variant":"#353437","secondary-fixed":"#d9e2ff","on-secondary-fixed":"#001944","on-primary-container":"#004a46","error":"#ffb4ab","primary-fixed-dim":"#40dcd1","on-surface":"#e4e2e4","secondary-container":"#0068ec","background":"#131315","outline":"#859491","primary-fixed":"#65f8ed","surface-container-low":"#1b1b1d","on-tertiary-container":"#6100a7","on-secondary":"#002d6e","surface-tint":"#40dcd1","surface-container-highest":"#353437","surface-container":"#1f1f21","tertiary-container":"#cc97ff","on-secondary-fixed-variant":"#00429a","inverse-primary":"#006a64","tertiary-fixed-dim":"#ddb7ff","surface-container-high":"#2a2a2c","secondary-fixed-dim":"#b0c6ff","inverse-on-surface":"#303032","inverse-surface":"#e4e2e4","on-primary-fixed":"#00201e","surface-container-lowest":"#0e0e10","on-secondary-container":"#f2f3ff","tertiary":"#dfbbff","primary-container":"#00c2b8","on-tertiary-fixed":"#2c0051","primary":"#43ded4","surface":"#131315","error-container":"#93000a","on-primary":"#003734","on-tertiary-fixed-variant":"#6900b3","on-tertiary":"#490080","on-background":"#e4e2e4","outline-variant":"#3c4948","on-primary-fixed-variant":"#00504b","on-error-container":"#ffdad6","on-surface-variant":"#bbcac7"},"borderRadius":{"DEFAULT":"0.25rem","lg":"0.5rem","xl":"0.75rem","full":"9999px"},"spacing":{"space-xs":"0.25rem","space-lg":"1.25rem","space-base":"1rem","margin-window":"0.75rem","gutter-compact":"0.5rem","space-sm":"0.5rem","space-md":"0.75rem","space-xl":"1.5rem","gutter":"1rem","space-2xs":"0.125rem","space-2xl":"2rem","margin":"1.5rem"},"fontFamily":{"caption-strong":["\"Segoe UI Variable, Segoe UI, -apple-system, system-ui\""],"mono-metric":["\"JetBrains Mono, Segoe UI Mono, Consolas, monospace\""],"body-strong":["\"Segoe UI Variable, Segoe UI, -apple-system, system-ui\""],"title-md":["\"Segoe UI Variable, Segoe UI, -apple-system, system-ui\""],"display":["\"Segoe UI Variable, Segoe UI, -apple-system, system-ui\""],"body-lg":["\"Segoe UI Variable, Segoe UI, -apple-system, system-ui\""],"body-md":["\"Segoe UI Variable, Segoe UI, -apple-system, system-ui\""],"badge-label":["\"Segoe UI Variable, Segoe UI, -apple-system, system-ui\""],"caption":["\"Segoe UI Variable, Segoe UI, -apple-system, system-ui\""],"title-lg":["\"Segoe UI Variable, Segoe UI, -apple-system, system-ui\""]},"fontSize":{"caption-strong":["12px",{"lineHeight":"16px","letterSpacing":"0.01em","fontWeight":"600"}],"mono-metric":["12px",{"lineHeight":"16px","letterSpacing":"0em","fontWeight":"500"}],"body-strong":["13px",{"lineHeight":"18px","letterSpacing":"0em","fontWeight":"600"}],"title-md":["16px",{"lineHeight":"22px","letterSpacing":"-0.005em","fontWeight":"600"}],"display":["28px",{"lineHeight":"36px","letterSpacing":"-0.015em","fontWeight":"600"}],"body-lg":["14px",{"lineHeight":"20px","letterSpacing":"0em","fontWeight":"400"}],"body-md":["13px",{"lineHeight":"18px","letterSpacing":"0em","fontWeight":"400"}],"badge-label":["11px",{"lineHeight":"14px","letterSpacing":"0.02em","fontWeight":"600"}],"caption":["12px",{"lineHeight":"16px","letterSpacing":"0.01em","fontWeight":"400"}],"title-lg":["20px",{"lineHeight":"26px","letterSpacing":"-0.01em","fontWeight":"600"}]}}}}</script></head><body class="bg-background font-body-md text-on-surface antialiased select-none"><header class="fixed top-0 left-0 right-0 h-9 z-50 bg-surface-container-lowest/80 backdrop-blur-xl flex items-center justify-between select-none shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="flex items-center gap-space-sm pl-space-md h-full"><img alt="Downora App Logo" class="h-4 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/ALJJyrCdvw-fH-NDBpBrGdlAu7CpBcJMlYoyIAPSsf6yFDXB1vYjUZ7uU5ZzfTr-rzgqecbKsfFLfHMEND3x27-n6_csoGCEXeEPL9UvKYBsJaeU6y9ReuDrbjyi-CSBKjkP2l0U1oWjtx7Fv9u3eVBnmYvNsRrvzf4DIWjbsw-BHDRs_DXl27E2l7_YWlWdzzw7iwTZk_tAOkKZJEacS-3AvVFbTzjuRgKwKDl0-MPctu49dg"/><span class="font-caption-strong text-caption-strong tracking-wide text-on-surface">Downora</span><span class="font-caption text-caption text-on-surface-variant flex items-center gap-space-xs"><span class="w-1 h-1 rounded-full bg-outline-variant"></span>High Performance Media Engine</span></div><div class="flex-1 h-full mx-space-xl flex items-center justify-center"><div class="w-80 h-6 bg-surface-container-low/60 rounded flex items-center px-space-sm gap-space-xs"><span class="material-symbols-outlined text-outline text-[14px]">search</span><span class="font-caption text-caption text-outline">Search downloads, streams or protocols (Ctrl+K)</span></div></div><div class="flex items-center h-full"><div class="flex items-center pr-space-md gap-space-sm"><div class="w-5 h-5 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[12px]">person</span></div></div><div class="flex items-center h-full"><button aria-label="Minimize" class="w-[46px] h-9 flex items-center justify-center text-on-surface-variant hover:bg-surface-bright/40 hover:text-on-surface transition-colors"><span class="material-symbols-outlined text-[14px]">remove</span></button><button aria-label="Maximize" class="w-[46px] h-9 flex items-center justify-center text-on-surface-variant hover:bg-surface-bright/40 hover:text-on-surface transition-colors"><span class="material-symbols-outlined text-[12px]">crop_square</span></button><button aria-label="Close" class="w-[46px] h-9 flex items-center justify-center text-on-surface-variant hover:bg-on-error hover:text-on-background transition-colors"><span class="material-symbols-outlined text-[14px]">close</span></button></div></div></header><aside class="fixed left-0 top-9 bottom-0 w-60 bg-surface-container-low/95 backdrop-blur-2xl z-40 flex flex-col justify-between p-space-sm shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="flex flex-col gap-space-md"><div class="flex items-center justify-between px-space-sm py-space-xs"><div class="flex items-center gap-space-sm"><img alt="Downora App Logo" class="h-6 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/ALJJyrCdvw-fH-NDBpBrGdlAu7CpBcJMlYoyIAPSsf6yFDXB1vYjUZ7uU5ZzfTr-rzgqecbKsfFLfHMEND3x27-n6_csoGCEXeEPL9UvKYBsJaeU6y9ReuDrbjyi-CSBKjkP2l0U1oWjtx7Fv9u3eVBnmYvNsRrvzf4DIWjbsw-BHDRs_DXl27E2l7_YWlWdzzw7iwTZk_tAOkKZJEacS-3AvVFbTzjuRgKwKDl0-MPctu49dg"/><span class="font-title-md text-title-md tracking-tight text-on-surface">Downora</span></div><span class="px-space-xs py-0.5 rounded-full bg-surface-container-high text-primary font-badge-label text-badge-label">v2.4 Pro</span></div><nav class="flex flex-col gap-space-2xs" data-active-classes="bg-surface-container-high text-on-surface font-body-strong"><a class="group relative flex items-center gap-space-sm px-space-md h-9 rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" data-path="home" href="#"><span class="material-symbols-outlined text-[18px]">home</span><span class="font-body-md text-body-md">Home</span></a><a class="group relative flex items-center gap-space-sm px-space-md h-9 rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" data-path="downloader" href="#"><span class="material-symbols-outlined text-[18px]">cloud_download</span><span class="font-body-md text-body-md">Downloader</span></a><a aria-current="page" class="group relative flex items-center justify-between px-space-md h-9 rounded transition-colors bg-surface-container-high text-on-surface font-body-strong" data-path="download-queue" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[18px]">layers</span><span class="font-body-md text-body-md">Download Queue</span></div><span class="px-1.5 py-0.5 rounded-full bg-primary-container text-on-primary-container font-badge-label text-badge-label">3</span></a><a class="group relative flex items-center gap-space-sm px-space-md h-9 rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" data-path="media-library" href="#"><span class="material-symbols-outlined text-[18px]">movie</span><span class="font-body-md text-body-md">Media Library</span></a><a class="group relative flex items-center gap-space-sm px-space-md h-9 rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" data-path="history" href="#"><span class="material-symbols-outlined text-[18px]">history</span><span class="font-body-md text-body-md">History</span></a><a class="group relative flex items-center gap-space-sm px-space-md h-9 rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" data-path="settings" href="#"><span class="material-symbols-outlined text-[18px]">settings</span><span class="font-body-md text-body-md">Settings</span></a><a class="group relative flex items-center gap-space-sm px-space-md h-9 rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" data-path="about" href="#"><span class="material-symbols-outlined text-[18px]">info</span><span class="font-body-md text-body-md">About</span></a></nav></div><div class="flex flex-col gap-space-sm px-space-sm pb-space-xs"><div class="bg-surface-container/70 rounded p-space-sm flex flex-col gap-space-xs"><div class="flex items-center justify-between"><span class="font-caption-strong text-caption-strong text-on-surface">SSD Storage (D:)</span><span class="font-mono-metric text-mono-metric text-outline">13%</span></div><div class="w-full h-1 bg-surface-variant rounded-full overflow-hidden"><div class="h-full w-[13%] bg-primary rounded-full"></div></div><div class="flex items-center justify-between"><span class="font-caption text-caption text-on-surface-variant">68.4 GB used</span><span class="font-caption text-caption text-outline">512 GB</span></div></div><div class="flex items-center justify-between pt-space-xs"><div class="flex items-center gap-space-xs"><span class="w-2 h-2 rounded-full bg-primary"></span><span class="font-caption text-caption text-on-surface-variant">Online • 120 Mbps</span></div><div class="flex items-center bg-surface-container-high rounded-full p-0.5"><button class="w-5 h-5 rounded-full bg-primary flex items-center justify-center text-on-primary"><span class="material-symbols-outlined text-[12px]">dark_mode</span></button><button class="w-5 h-5 rounded-full flex items-center justify-center text-outline hover:text-on-surface"><span class="material-symbols-outlined text-[12px]">light_mode</span></button></div></div></div></aside><div class="pl-60"><main class="relative pt-9 w-full min-h-screen bg-background"><div class="flex flex-col w-full">
+<div class="flex flex-col gap-space-lg p-space-base max-w-[1440px] mx-auto w-full">
+<!-- Top Command & Filter Surface -->
+<div class="bg-surface-container-high/90 backdrop-blur-xl rounded-lg p-space-md shadow-md flex flex-col xl:flex-row items-start xl:items-center justify-between gap-space-md">
+<!-- Filter Segmented Tabs -->
+<div class="flex items-center gap-space-2xs flex-wrap">
+<button class="queue-tab active flex items-center gap-space-xs px-space-md h-8 rounded bg-surface-bright text-on-surface font-body-strong text-body-strong transition-all">
+<span>All</span>
+<span class="px-1.5 py-0.5 rounded-full bg-surface-container-highest text-on-surface font-badge-label text-badge-label">8</span>
+</button>
+<button class="queue-tab flex items-center gap-space-xs px-space-md h-8 rounded hover:bg-surface-container text-on-surface-variant hover:text-on-surface font-body-md text-body-md transition-all">
+<span>Downloading</span>
+<span class="px-1.5 py-0.5 rounded-full bg-primary-container/20 text-primary font-badge-label text-badge-label">2</span>
+</button>
+<button class="queue-tab flex items-center gap-space-xs px-space-md h-8 rounded hover:bg-surface-container text-on-surface-variant hover:text-on-surface font-body-md text-body-md transition-all">
+<span>Waiting</span>
+<span class="px-1.5 py-0.5 rounded-full bg-surface-container-highest text-outline font-badge-label text-badge-label">2</span>
+</button>
+<button class="queue-tab flex items-center gap-space-xs px-space-md h-8 rounded hover:bg-surface-container text-on-surface-variant hover:text-on-surface font-body-md text-body-md transition-all">
+<span>Paused</span>
+<span class="px-1.5 py-0.5 rounded-full bg-surface-variant text-on-surface-variant font-badge-label text-badge-label">1</span>
+</button>
+<button class="queue-tab flex items-center gap-space-xs px-space-md h-8 rounded hover:bg-surface-container text-on-surface-variant hover:text-on-surface font-body-md text-body-md transition-all">
+<span>Completed</span>
+<span class="px-1.5 py-0.5 rounded-full bg-primary/20 text-primary-fixed-dim font-badge-label text-badge-label">1</span>
+</button>
+<button class="queue-tab flex items-center gap-space-xs px-space-md h-8 rounded hover:bg-surface-container text-on-surface-variant hover:text-on-surface font-body-md text-body-md transition-all">
+<span>Failed</span>
+<span class="px-1.5 py-0.5 rounded-full bg-error-container text-error font-badge-label text-badge-label">1</span>
+</button>
+<button class="queue-tab flex items-center gap-space-xs px-space-md h-8 rounded hover:bg-surface-container text-on-surface-variant hover:text-on-surface font-body-md text-body-md transition-all">
+<span>Processing</span>
+<span class="px-1.5 py-0.5 rounded-full bg-tertiary-container/20 text-tertiary-fixed font-badge-label text-badge-label">1</span>
+</button>
+</div>
+<!-- Global Actions & Stepper -->
+<div class="flex items-center gap-space-sm flex-wrap self-end xl:self-auto">
+<div class="flex items-center gap-space-xs bg-surface-container-low px-space-sm py-1 rounded">
+<button class="h-7 px-space-sm rounded bg-surface-container hover:bg-surface-bright flex items-center gap-space-xs text-on-surface font-caption-strong text-caption-strong transition-all" id="pause-all-btn">
+<span class="material-symbols-outlined text-[16px] text-primary">pause_circle</span>
+<span>Pause all</span>
+</button>
+<button class="h-7 px-space-sm rounded bg-surface-container hover:bg-surface-bright flex items-center gap-space-xs text-on-surface font-caption-strong text-caption-strong transition-all" id="resume-all-btn">
+<span class="material-symbols-outlined text-[16px] text-primary">play_circle</span>
+<span>Resume all</span>
+</button>
+<button class="h-7 px-space-sm rounded bg-surface-container hover:bg-surface-bright flex items-center gap-space-xs text-outline hover:text-error transition-all">
+<span class="material-symbols-outlined text-[16px]">delete_sweep</span>
+<span class="font-caption-strong text-caption-strong">Clear completed</span>
+</button>
+</div>
+<!-- Concurrency Stepper with Tooltip -->
+<div class="relative group flex items-center gap-space-xs bg-surface-container-low px-space-md h-9 rounded shadow-sm">
+<span class="font-caption text-caption text-on-surface-variant whitespace-nowrap">Max concurrent:</span>
+<div class="flex items-center gap-1 bg-surface-container px-1 py-0.5 rounded">
+<button class="w-5 h-5 rounded hover:bg-surface-bright flex items-center justify-center text-on-surface" id="step-dec">
+<span class="material-symbols-outlined text-[14px]">remove</span>
+</button>
+<span class="w-5 text-center font-mono-metric text-mono-metric text-primary font-semibold" id="concurrent-count">3</span>
+<button class="w-5 h-5 rounded hover:bg-surface-bright flex items-center justify-center text-on-surface" id="step-inc">
+<span class="material-symbols-outlined text-[14px]">add</span>
+</button>
+</div>
+<!-- Flyout Tooltip -->
+<div class="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 hidden group-hover:flex flex-col items-center pointer-events-none z-30">
+<div class="bg-surface-container-highest/95 backdrop-blur-md px-space-sm py-1 rounded shadow-xl text-on-surface font-caption text-caption whitespace-nowrap">
+              Limits concurrent bandwidth hogging
+            </div>
+<div class="w-2 h-2 bg-surface-container-highest rotate-45 -mt-1"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Download Queue Stream Container -->
+<div class="flex flex-col gap-space-sm">
+<!-- Card 1: DOWNLOADING -->
+<div class="group bg-surface-container-high rounded-lg p-space-md shadow-sm hover:bg-surface-variant/90 transition-all flex flex-col md:flex-row items-start md:items-center gap-space-md">
+<div class="relative w-28 h-16 rounded overflow-hidden flex-shrink-0 bg-surface-container-lowest">
+<img class="w-full h-full object-cover" data-alt="Cinematic shot of neon rainy cyber cityscape with towering atmospheric waves and dystopian lighting reflecting cyan and orange flares in ultra-detailed 4K HDR quality" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDQYKdM8Zsr46O0_Xnw0rZCf_8_9z4bwv6xKCY8yWYyT2rqhxf36Z42196ER1UeNdhMP4phBUSNZP43hgKsW1OyxejD5y7g7HOtu2s9pUM7wgRWD8JtHGqFfvMWyXlhP_xPtsVUYdsPByfHuPeX8tonIO5ml6fSQuVVfmiarTBbYg5Rigjf7XjjpwdbBB3LlU_yU0p39tcqAUd60jbsTDh4kImNbhhCBhQfmV4vEAVv"/>
+<span class="absolute bottom-1 right-1 px-1 rounded bg-surface-container-lowest/80 text-on-surface font-mono-metric text-[10px]">2160p</span>
+</div>
+<div class="flex-1 min-w-0 w-full flex flex-col gap-space-xs">
+<div class="flex items-center justify-between gap-space-sm">
+<div class="flex items-center gap-space-sm min-w-0">
+<h2 class="font-body-strong text-body-strong text-on-surface truncate">Blade Runner 2049 - Sea Wall Sequence in 4K HDR</h2>
+<span class="px-1.5 py-0.2 rounded bg-surface-container-highest text-secondary font-badge-label text-badge-label">MP4</span>
+<span class="px-1.5 py-0.2 rounded bg-surface-container-highest text-outline font-badge-label text-badge-label">2160p 4K</span>
+</div>
+<div class="flex items-center gap-space-xs px-2.5 py-0.5 rounded-full bg-primary-container/20 text-primary font-badge-label text-badge-label">
+<span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
+<span>Downloading</span>
+</div>
+</div>
+<!-- Progress Bar -->
+<div class="w-full h-1.5 bg-surface-container-lowest rounded-full overflow-hidden">
+<div class="h-full bg-gradient-to-r from-primary-container via-primary to-secondary-container rounded-full w-[35%] transition-all"></div>
+</div>
+<div class="flex items-center justify-between font-caption text-caption text-on-surface-variant">
+<div class="flex items-center gap-space-md font-mono-metric text-mono-metric">
+<span class="text-on-surface">840 MB of 2.4 GB (35%)</span>
+<span class="text-primary font-semibold">18.4 MB/s</span>
+<span class="text-outline">ETA: 1m 24s</span>
+</div>
+<span class="text-outline font-caption">Chunk 14/40</span>
+</div>
+</div>
+<div class="flex items-center gap-space-xs self-end md:self-center flex-shrink-0">
+<button class="w-8 h-8 rounded bg-surface-container hover:bg-surface-bright flex items-center justify-center text-on-surface transition-colors" title="Pause">
+<span class="material-symbols-outlined text-[18px]">pause</span>
+</button>
+<button class="w-8 h-8 rounded bg-surface-container hover:bg-surface-bright flex items-center justify-center text-outline hover:text-error transition-colors" title="Cancel">
+<span class="material-symbols-outlined text-[18px]">close</span>
+</button>
+<button class="w-8 h-8 rounded bg-surface-container hover:bg-surface-bright flex items-center justify-center text-outline hover:text-on-surface transition-colors" title="Open Folder">
+<span class="material-symbols-outlined text-[18px]">folder_open</span>
+</button>
+<button class="w-8 h-8 rounded bg-surface-container hover:bg-surface-bright flex items-center justify-center text-outline hover:text-on-surface transition-colors" title="More actions">
+<span class="material-symbols-outlined text-[18px]">more_vert</span>
+</button>
+</div>
+</div>
+<!-- Card 2: PROCESSING / MERGING -->
+<div class="group bg-surface-container-high rounded-lg p-space-md shadow-sm hover:bg-surface-variant/90 transition-all flex flex-col md:flex-row items-start md:items-center gap-space-md">
+<div class="relative w-28 h-16 rounded overflow-hidden flex-shrink-0 bg-surface-container-lowest">
+<img class="w-full h-full object-cover" data-alt="Grand symphonic live concert stage in Prague bathed in deep amber and gold spotlighting, massive orchestral performance with dramatic shadows and cinematic atmosphere" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD6qZH9-z434GI0sy_97siTxBsJyHZulIba2JMqk1_ZMQ9eEV0JPaUFRx3x9rRtszmagRpBzX2fTVI89xIIvOssa93XCGUTcv4ufHSC8I17xUYPvmGGNZtdxAhoc8av7BW8HPAjKoiG-6IztRGDzd_LxL2kCXnoJ5QzfsBsor9o49BIB5qCcWduagXrk9a9CE7fDp0dIY7hqaY8GjaXgNOFtRtvaqAiA9D6qUUV832V"/>
+<span class="absolute bottom-1 right-1 px-1 rounded bg-surface-container-lowest/80 text-on-surface font-mono-metric text-[10px]">1080p</span>
+</div>
+<div class="flex-1 min-w-0 w-full flex flex-col gap-space-xs">
+<div class="flex items-center justify-between gap-space-sm">
+<div class="flex items-center gap-space-sm min-w-0">
+<h2 class="font-body-strong text-body-strong text-on-surface truncate">Hans Zimmer - Inception Time Live in Prague 2024</h2>
+<span class="px-1.5 py-0.2 rounded bg-surface-container-highest text-secondary font-badge-label text-badge-label">MKV</span>
+<span class="px-1.5 py-0.2 rounded bg-surface-container-highest text-outline font-badge-label text-badge-label">1080p60</span>
+</div>
+<div class="flex items-center gap-space-xs px-2.5 py-0.5 rounded-full bg-amber-500/15 text-amber-300 font-badge-label text-badge-label">
+<span class="material-symbols-outlined text-[14px] animate-spin">settings</span>
+<span>Processing: Merging with FFmpeg…</span>
+</div>
+</div>
+<!-- Pulsing Striped Bar -->
+<div class="w-full h-1.5 bg-surface-container-lowest rounded-full overflow-hidden">
+<div class="h-full bg-gradient-to-r from-amber-500 to-amber-300 rounded-full w-[92%] animate-pulse"></div>
+</div>
+<div class="flex items-center justify-between font-caption text-caption text-on-surface-variant">
+<div class="flex items-center gap-space-md font-mono-metric text-mono-metric">
+<span class="text-on-surface">1.8 GB / 1.8 GB (100% downloaded)</span>
+<span class="text-amber-300">Muxing audio & video streams…</span>
+</div>
+<span class="text-outline font-mono-metric text-mono-metric">FFmpeg Thread 4/8</span>
+</div>
+</div>
+<div class="flex items-center gap-space-xs self-end md:self-center flex-shrink-0">
+<button class="w-8 h-8 rounded bg-surface-container hover:bg-surface-bright flex items-center justify-center text-outline hover:text-error transition-colors" title="Cancel">
+<span class="material-symbols-outlined text-[18px]">close</span>
+</button>
+<button class="w-8 h-8 rounded bg-surface-container hover:bg-surface-bright flex items-center justify-center text-outline hover:text-on-surface transition-colors" title="More actions">
+<span class="material-symbols-outlined text-[18px]">more_vert</span>
+</button>
+</div>
+</div>
+<!-- Card 3: EXTRACTING -->
+<div class="group bg-surface-container-high rounded-lg p-space-md shadow-sm hover:bg-surface-variant/90 transition-all flex flex-col md:flex-row items-start md:items-center gap-space-md">
+<div class="relative w-28 h-16 rounded overflow-hidden flex-shrink-0 bg-surface-container-lowest">
+<img class="w-full h-full object-cover" data-alt="Bioluminescent deep sea jellyfish glowing with iridescent violet and cyan light floating in pitch-black abyss underwater nature documentary style" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBjEE01yCekc2ffXyvVLBMxLqu_fgGYYkrjTRVPglb2wzq6ohg_CmcS-rgC6fPz0IUkyDIQL2BXtao2STBiTzntm9RYdRGjDa1EsrWOdbT5dJ-RGS0x5ZQy-dVbZkkMIr3d69CkKC5R4k47eg4L5D8VSjh8JmoJFQf_N0_KUY5ANbfPRE_zDVAog45gPgq0SbulpqlHY-UU0fky0dDzoMfFkUrHT6JaFlS7KArMYYX6"/>
+<span class="absolute bottom-1 right-1 px-1 rounded bg-surface-container-lowest/80 text-on-surface font-mono-metric text-[10px]">8K</span>
+</div>
+<div class="flex-1 min-w-0 w-full flex flex-col gap-space-xs">
+<div class="flex items-center justify-between gap-space-sm">
+<div class="flex items-center gap-space-sm min-w-0">
+<h2 class="font-body-strong text-body-strong text-on-surface truncate">BBC Earth - Deep Ocean Bioluminescence in Ultra HD</h2>
+<span class="px-1.5 py-0.2 rounded bg-surface-container-highest text-secondary font-badge-label text-badge-label">MP4</span>
+<span class="px-1.5 py-0.2 rounded bg-surface-container-highest text-outline font-badge-label text-badge-label">4K UHD</span>
+</div>
+<div class="flex items-center gap-space-xs px-2.5 py-0.5 rounded-full bg-tertiary-container/20 text-tertiary-fixed font-badge-label text-badge-label">
+<span class="material-symbols-outlined text-[14px]">auto_fix_high</span>
+<span>Extracting</span>
+</div>
+</div>
+<!-- Shimmer Purple Bar -->
+<div class="relative w-full h-1.5 bg-surface-container-lowest rounded-full overflow-hidden">
+<div class="absolute inset-0 bg-gradient-to-r from-transparent via-tertiary to-transparent animate-pulse"></div>
+</div>
+<div class="flex items-center justify-between font-caption text-caption text-on-surface-variant">
+<div class="flex items-center gap-space-md font-mono-metric text-mono-metric">
+<span class="text-tertiary">Fetching stream fragments & decrypting HLS manifest…</span>
+</div>
+<span class="text-outline font-caption">m3u8 parsing</span>
+</div>
+</div>
+<div class="flex items-center gap-space-xs self-end md:self-center flex-shrink-0">
+<button class="w-8 h-8 rounded bg-surface-container hover:bg-surface-bright flex items-center justify-center text-outline hover:text-error transition-colors" title="Cancel">
+<span class="material-symbols-outlined text-[18px]">close</span>
+</button>
+<button class="w-8 h-8 rounded bg-surface-container hover:bg-surface-bright flex items-center justify-center text-outline hover:text-on-surface transition-colors" title="More actions">
+<span class="material-symbols-outlined text-[18px]">more_vert</span>
+</button>
+</div>
+</div>
+<!-- Card 4: WAITING -->
+<div class="group bg-surface-container-high rounded-lg p-space-md shadow-sm hover:bg-surface-variant/90 transition-all flex flex-col md:flex-row items-start md:items-center gap-space-md">
+<div class="relative w-28 h-16 rounded overflow-hidden flex-shrink-0 bg-surface-container-lowest">
+<img class="w-full h-full object-cover" data-alt="Chalkboard covered in complex mathematics equations with dramatic studio spotlight and a glowing lightbulb representing scientific inquiry Veritasium aesthetic" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDchA2gIwAmPDGzogRiVMNI5P8DvNR4jYQ0iNew2oEqYXU4Sl4FMmLjHKR8XB-8VgvERCDW7RgXvAkDCsDDJkbZpjslQpBmZpUSD3aOPCYTgHYnYwnn8sLZTDI69uzDtlWeK8lnGrY2UnJcd0cdhAFMHdDEgMLhD7Y3EoH309X7pPYtqOhEJ8xpsEYI4la8h216-J_Q1Nw7ha2E-vijUFNRda-7hONDh7A6Xj_Xc-eg"/>
+<span class="absolute bottom-1 right-1 px-1 rounded bg-surface-container-lowest/80 text-on-surface font-mono-metric text-[10px]">1440p</span>
+</div>
+<div class="flex-1 min-w-0 w-full flex flex-col gap-space-xs">
+<div class="flex items-center justify-between gap-space-sm">
+<div class="flex items-center gap-space-sm min-w-0">
+<h2 class="font-body-strong text-body-strong text-on-surface truncate">Veritasium - The Simplest Math Problem No One Can Solve</h2>
+<span class="px-1.5 py-0.2 rounded bg-surface-container-highest text-secondary font-badge-label text-badge-label">MP4</span>
+<span class="px-1.5 py-0.2 rounded bg-surface-container-highest text-outline font-badge-label text-badge-label">1440p</span>
+</div>
+<div class="flex items-center gap-space-xs px-2.5 py-0.5 rounded-full bg-surface-container-highest text-outline font-badge-label text-badge-label">
+<span class="material-symbols-outlined text-[14px]">hourglass_empty</span>
+<span>Waiting in Queue</span>
+</div>
+</div>
+<!-- Empty Gray Bar -->
+<div class="w-full h-1.5 bg-surface-container-lowest rounded-full"></div>
+<div class="flex items-center justify-between font-caption text-caption text-on-surface-variant">
+<div class="flex items-center gap-space-md font-mono-metric text-mono-metric">
+<span class="text-outline">Position #1 in queue</span>
+<span class="text-outline">Est. size: 420 MB</span>
+</div>
+<span class="text-outline font-caption">Queued</span>
+</div>
+</div>
+<div class="flex items-center gap-space-xs self-end md:self-center flex-shrink-0">
+<button class="w-8 h-8 rounded bg-surface-container hover:bg-surface-bright flex items-center justify-center text-on-surface transition-colors" title="Move to Top">
+<span class="material-symbols-outlined text-[18px]">vertical_align_top</span>
+</button>
+<button class="w-8 h-8 rounded bg-surface-container hover:bg-surface-bright flex items-center justify-center text-outline hover:text-error transition-colors" title="Cancel">
+<span class="material-symbols-outlined text-[18px]">close</span>
+</button>
+<button class="w-8 h-8 rounded bg-surface-container hover:bg-surface-bright flex items-center justify-center text-outline hover:text-on-surface transition-colors" title="More actions">
+<span class="material-symbols-outlined text-[18px]">more_vert</span>
+</button>
+</div>
+</div>
+<!-- Card 5: PAUSED -->
+<div class="group bg-surface-container-high rounded-lg p-space-md shadow-sm hover:bg-surface-variant/90 transition-all flex flex-col md:flex-row items-start md:items-center gap-space-md">
+<div class="relative w-28 h-16 rounded overflow-hidden flex-shrink-0 bg-surface-container-lowest">
+<img class="w-full h-full object-cover" data-alt="High-end dark studio podcast setup with high-tech microphone, acoustic foam panels, dramatic dim rim lighting and sleek technical equipment" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBZ6l_Xn0qn9EgUECztm7QooF-S-g91s-_TEcfjNhvW-FQ9H0_PQBG_7n4FDp3Q_d-4kRYyczle2TXeAcoWQqaSPmCxdDmYa73kkT3ZqpBZ4UCZeVYgLRAy3UgOIG1OJbQhkgGizIm-TT8SnzgCTLbIOnQVpTTuUSsdaGZnSIMLcq1EqfNduePDPIc98h3Xaw-0a7cpyToD2Qlj2R0sVsZK1V5rgwDQm85tIIBkB_Ws"/>
+<span class="absolute bottom-1 right-1 px-1 rounded bg-surface-container-lowest/80 text-on-surface font-mono-metric text-[10px]">MP3</span>
+</div>
+<div class="flex-1 min-w-0 w-full flex flex-col gap-space-xs">
+<div class="flex items-center justify-between gap-space-sm">
+<div class="flex items-center gap-space-sm min-w-0">
+<h2 class="font-body-strong text-body-strong text-on-surface truncate">Lex Fridman Podcast #430 - Sam Altman: OpenAI & AGI</h2>
+<span class="px-1.5 py-0.2 rounded bg-surface-container-highest text-secondary font-badge-label text-badge-label">MP3</span>
+<span class="px-1.5 py-0.2 rounded bg-surface-container-highest text-outline font-badge-label text-badge-label">320 kbps</span>
+</div>
+<div class="flex items-center gap-space-xs px-2.5 py-0.5 rounded-full bg-surface-variant text-on-surface-variant font-badge-label text-badge-label">
+<span class="material-symbols-outlined text-[14px]">pause</span>
+<span>Paused</span>
+</div>
+</div>
+<!-- Static Slate 50% Bar -->
+<div class="w-full h-1.5 bg-surface-container-lowest rounded-full overflow-hidden">
+<div class="h-full bg-outline rounded-full w-[50%]"></div>
+</div>
+<div class="flex items-center justify-between font-caption text-caption text-on-surface-variant">
+<div class="flex items-center gap-space-md font-mono-metric text-mono-metric">
+<span class="text-outline">145 MB of 290 MB (50%)</span>
+<span class="text-outline">Paused by user</span>
+</div>
+<span class="text-outline font-caption">Saved chunks</span>
+</div>
+</div>
+<div class="flex items-center gap-space-xs self-end md:self-center flex-shrink-0">
+<button class="w-8 h-8 rounded bg-primary-container text-on-primary-container hover:bg-primary hover:text-on-primary flex items-center justify-center transition-colors" title="Resume">
+<span class="material-symbols-outlined text-[18px]">play_arrow</span>
+</button>
+<button class="w-8 h-8 rounded bg-surface-container hover:bg-surface-bright flex items-center justify-center text-outline hover:text-error transition-colors" title="Cancel">
+<span class="material-symbols-outlined text-[18px]">close</span>
+</button>
+<button class="w-8 h-8 rounded bg-surface-container hover:bg-surface-bright flex items-center justify-center text-outline hover:text-on-surface transition-colors" title="More actions">
+<span class="material-symbols-outlined text-[18px]">more_vert</span>
+</button>
+</div>
+</div>
+<!-- Card 6: COMPLETED -->
+<div class="group bg-surface-container-high rounded-lg p-space-md shadow-sm hover:bg-surface-variant/90 transition-all flex flex-col md:flex-row items-start md:items-center gap-space-md">
+<div class="relative w-28 h-16 rounded overflow-hidden flex-shrink-0 bg-surface-container-lowest">
+<img class="w-full h-full object-cover" data-alt="Majestic gothic cathedral pipe organ interior with dramatic sun rays cutting through stained glass, grand architectural scale and deep cosmic mystery vibe" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBGvoLC-d_Ap6JZiGxMW_SeZ6OwZLjHRnA1yBcBiYEHfOU5cX63z8iA5W-uVr8b5U82AMN0nVXvOT-YAwK_Pauk4tEivPmtT7TiSXtwEKlHDQ-0PAwypQRIRnGtyJZaHhAnXK8TfxAT91Zl7fREr9c-gFQfVvnEjffr5NcczWm_2rn44ITkAMdXQZUQe7vDSP_e63rdPP6Xcn_6wQiAsTrPgRall5AzxROSC0QYw0h-"/>
+<span class="absolute bottom-1 right-1 px-1 rounded bg-surface-container-lowest/80 text-on-surface font-mono-metric text-[10px]">FLAC</span>
+</div>
+<div class="flex-1 min-w-0 w-full flex flex-col gap-space-xs">
+<div class="flex items-center justify-between gap-space-sm">
+<div class="flex items-center gap-space-sm min-w-0">
+<h2 class="font-body-strong text-body-strong text-on-surface truncate">Interstellar Main Theme - Organ Version (Patrik Pietschmann)</h2>
+<span class="px-1.5 py-0.2 rounded bg-surface-container-highest text-secondary font-badge-label text-badge-label">FLAC</span>
+<span class="px-1.5 py-0.2 rounded bg-surface-container-highest text-outline font-badge-label text-badge-label">Lossless</span>
+</div>
+<div class="flex items-center gap-space-xs px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 font-badge-label text-badge-label">
+<span class="material-symbols-outlined text-[14px]">check_circle</span>
+<span>Completed</span>
+</div>
+</div>
+<!-- Solid Emerald 100% Bar -->
+<div class="w-full h-1.5 bg-surface-container-lowest rounded-full overflow-hidden">
+<div class="h-full bg-emerald-400 rounded-full w-full"></div>
+</div>
+<div class="flex items-center justify-between font-caption text-caption text-on-surface-variant">
+<div class="flex items-center gap-space-md font-mono-metric text-mono-metric">
+<span class="text-on-surface">68 MB of 68 MB</span>
+<span class="text-emerald-400 font-medium">Downloaded in 12s (5.6 MB/s)</span>
+</div>
+<span class="text-outline font-caption">Verified SHA-256</span>
+</div>
+</div>
+<div class="flex items-center gap-space-xs self-end md:self-center flex-shrink-0">
+<button class="h-8 px-space-sm rounded bg-surface-container hover:bg-surface-bright flex items-center gap-space-xs text-on-surface font-caption-strong text-caption-strong transition-colors">
+<span class="material-symbols-outlined text-[16px]">play_circle</span>
+<span>Open File</span>
+</button>
+<button class="w-8 h-8 rounded bg-surface-container hover:bg-surface-bright flex items-center justify-center text-outline hover:text-on-surface transition-colors" title="Open Folder">
+<span class="material-symbols-outlined text-[18px]">folder_open</span>
+</button>
+<button class="w-8 h-8 rounded bg-surface-container hover:bg-surface-bright flex items-center justify-center text-outline hover:text-error transition-colors" title="Delete">
+<span class="material-symbols-outlined text-[18px]">delete</span>
+</button>
+</div>
+</div>
+<!-- Card 7: FAILED -->
+<div class="group bg-surface-container-high rounded-lg p-space-md shadow-sm hover:bg-surface-variant/90 transition-all flex flex-col md:flex-row items-start md:items-center gap-space-md">
+<div class="relative w-28 h-16 rounded overflow-hidden flex-shrink-0 bg-surface-container-lowest">
+<img class="w-full h-full object-cover" data-alt="High energy esports arena arena stage with massive holographic banners, glowing red lasers, gaming battle stations and packed tournament crowd" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB8rVtH7X6rjgKiFZxVBjl2uNAcVpaKxzOcu7He1YtMwvMh8MLXAgDsGFiv3pwf9YJeoafuwNOE2tr3zrjxraFM8C2IWtr4ZYFPHk3Xx3x6ovu1FkRzq02ZS4v0FnY_grckVyal4DyvS3pob4qVaIrDLWbK757_toJKMNUyr4kuPoJYX1Z951AIiYNRXFJpFsaRdQsDUsloImn5sCOK6OmzwFkDrYjZr9PiV8aywQOc"/>
+<span class="absolute bottom-1 right-1 px-1 rounded bg-surface-container-lowest/80 text-on-surface font-mono-metric text-[10px]">TS</span>
+</div>
+<div class="flex-1 min-w-0 w-full flex flex-col gap-space-xs">
+<div class="flex items-center justify-between gap-space-sm">
+<div class="flex items-center gap-space-sm min-w-0">
+<h2 class="font-body-strong text-body-strong text-on-surface truncate">Twitch Rivals Apex Legends Championship - Day 2 VOD</h2>
+<span class="px-1.5 py-0.2 rounded bg-surface-container-highest text-secondary font-badge-label text-badge-label">TS</span>
+<span class="px-1.5 py-0.2 rounded bg-surface-container-highest text-outline font-badge-label text-badge-label">1080p60</span>
+</div>
+<div class="flex items-center gap-space-xs px-2.5 py-0.5 rounded-full bg-error-container text-error font-badge-label text-badge-label">
+<span class="material-symbols-outlined text-[14px]">error</span>
+<span>Failed: HTTP 403 Forbidden</span>
+</div>
+</div>
+<!-- Red Bar Outline/Fill -->
+<div class="w-full h-1.5 bg-surface-container-lowest rounded-full overflow-hidden">
+<div class="h-full bg-error rounded-full w-[24%]"></div>
+</div>
+<div class="flex items-center justify-between font-caption text-caption text-on-surface-variant">
+<div class="flex items-center gap-space-md font-mono-metric text-mono-metric">
+<span class="text-error">Failed at 1.1 GB of 6.4 GB</span>
+<span class="text-outline">Token expired or private stream</span>
+</div>
+<span class="text-error font-mono-metric text-mono-metric">Code 403</span>
+</div>
+</div>
+<div class="flex items-center gap-space-xs self-end md:self-center flex-shrink-0">
+<button class="h-8 px-space-sm rounded bg-surface-container hover:bg-surface-bright flex items-center gap-space-xs text-primary font-caption-strong text-caption-strong transition-colors">
+<span class="material-symbols-outlined text-[16px]">refresh</span>
+<span>Retry with token</span>
+</button>
+<button class="w-8 h-8 rounded bg-surface-container hover:bg-surface-bright flex items-center justify-center text-outline hover:text-on-surface transition-colors" title="View Log">
+<span class="material-symbols-outlined text-[18px]">terminal</span>
+</button>
+<button class="w-8 h-8 rounded bg-surface-container hover:bg-surface-bright flex items-center justify-center text-outline hover:text-error transition-colors" title="Remove">
+<span class="material-symbols-outlined text-[18px]">close</span>
+</button>
+</div>
+</div>
+<!-- Card 8: CANCELLED -->
+<div class="group bg-surface-container-high/60 rounded-lg p-space-md shadow-sm hover:bg-surface-variant/80 transition-all flex flex-col md:flex-row items-start md:items-center gap-space-md opacity-80">
+<div class="relative w-28 h-16 rounded overflow-hidden flex-shrink-0 bg-surface-container-lowest">
+<img class="w-full h-full object-cover" data-alt="Minimalist dark wooden workspace desk setup with a space black laptop open showing code analytics, mechanical keyboard, soft atmospheric desk lamp" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDYiaGb7aCjguAJKiWq4xHc1jMPPp6xOzSykObvaoiBFUa2SbquGUeexkiti3QWrU0_WMiFHRo6_B1nZrxRHI8P-8C7J8tJRfhGb3owv-Ea8N-ocKcyy9Q4nIJyaRLkde-FWGwFWSDKLSIUMVNKGS9cvTJYrMM4lNMPzDIOc93HwZm6LLuq9K85ZV9dYhk14OLmiH6LvaIt2Pkwy5UaFqTJTf3p1TNr9KWIibaqBEKh"/>
+<span class="absolute bottom-1 right-1 px-1 rounded bg-surface-container-lowest/80 text-on-surface font-mono-metric text-[10px]">1080p</span>
+</div>
+<div class="flex-1 min-w-0 w-full flex flex-col gap-space-xs">
+<div class="flex items-center justify-between gap-space-sm">
+<div class="flex items-center gap-space-sm min-w-0">
+<h2 class="font-body-strong text-body-strong text-on-surface-variant truncate">M3 Max MacBook Pro 16 Long-Term Review</h2>
+<span class="px-1.5 py-0.2 rounded bg-surface-container-highest text-secondary font-badge-label text-badge-label">MP4</span>
+<span class="px-1.5 py-0.2 rounded bg-surface-container-highest text-outline font-badge-label text-badge-label">1080p</span>
+</div>
+<div class="flex items-center gap-space-xs px-2.5 py-0.5 rounded-full bg-surface-variant text-outline font-badge-label text-badge-label">
+<span class="material-symbols-outlined text-[14px]">block</span>
+<span>Cancelled</span>
+</div>
+</div>
+<!-- Muted Canceled Track -->
+<div class="w-full h-1.5 bg-surface-container-lowest rounded-full"></div>
+<div class="flex items-center justify-between font-caption text-caption text-on-surface-variant">
+<span class="text-outline font-mono-metric text-mono-metric">Download aborted by user</span>
+<span class="text-outline font-caption">Purged from cache</span>
+</div>
+</div>
+<div class="flex items-center gap-space-xs self-end md:self-center flex-shrink-0">
+<button class="h-8 px-space-sm rounded bg-surface-container hover:bg-surface-bright flex items-center gap-space-xs text-on-surface font-caption-strong text-caption-strong transition-colors">
+<span class="material-symbols-outlined text-[16px]">replay</span>
+<span>Restart Download</span>
+</button>
+<button class="w-8 h-8 rounded bg-surface-container hover:bg-surface-bright flex items-center justify-center text-outline hover:text-error transition-colors" title="Remove">
+<span class="material-symbols-outlined text-[18px]">close</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Bottom Telemetry Status Bar -->
+<div class="bg-surface-container-high/95 backdrop-blur-xl rounded-lg p-space-md shadow-lg flex flex-col md:flex-row items-start md:items-center justify-between gap-space-md">
+<!-- Key Operational Metrics -->
+<div class="flex items-center gap-space-xl flex-wrap">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-primary text-[20px]">speed</span>
+<div class="flex flex-col">
+<span class="font-caption text-caption text-on-surface-variant">Total Down</span>
+<span class="font-mono-metric text-mono-metric text-primary font-bold">18.4 MB/s</span>
+</div>
+</div>
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-secondary text-[20px]">timelapse</span>
+<div class="flex flex-col">
+<span class="font-caption text-caption text-on-surface-variant">Remaining</span>
+<span class="font-mono-metric text-mono-metric text-on-surface font-semibold">1.56 GB</span>
+</div>
+</div>
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-tertiary-fixed text-[20px]">save</span>
+<div class="flex flex-col">
+<span class="font-caption text-caption text-on-surface-variant">Disk Write</span>
+<span class="font-mono-metric text-mono-metric text-on-surface font-semibold">22 MB/s</span>
+</div>
+</div>
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-outline text-[20px]">lan</span>
+<div class="flex flex-col">
+<span class="font-caption text-caption text-on-surface-variant">Network Adapter</span>
+<span class="font-mono-metric text-mono-metric text-outline">Ethernet 1Gbps</span>
+</div>
+</div>
+</div>
+<!-- Quick Session Indicator -->
+<div class="flex items-center gap-space-md self-end md:self-auto">
+<div class="flex items-center gap-space-xs text-outline font-caption text-caption">
+<span class="w-2 h-2 rounded-full bg-primary animate-ping"></span>
+<span>Engine Active</span>
+</div>
+<div class="h-4 w-px bg-surface-variant"></div>
+<span class="font-mono-metric text-mono-metric text-on-surface-variant">8 Items Total</span>
+</div>
+</div>
+</div>
+</div>
+<script>
+  // Filter tabs click handling
+  document.querySelectorAll('.queue-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.queue-tab').forEach(t => {
+        t.classList.remove('bg-surface-bright', 'text-on-surface', 'font-body-strong');
+        t.classList.add('text-on-surface-variant', 'font-body-md');
+      });
+      tab.classList.add('bg-surface-bright', 'text-on-surface', 'font-body-strong');
+      tab.classList.remove('text-on-surface-variant', 'font-body-md');
+    });
+  });
+
+  // Concurrency stepper control
+  const counterEl = document.getElementById('concurrent-count');
+  const stepInc = document.getElementById('step-inc');
+  const stepDec = document.getElementById('step-dec');
+
+  if (counterEl && stepInc && stepDec) {
+    stepInc.addEventListener('click', () => {
+      let val = parseInt(counterEl.innerText, 10);
+      if (val < 10) counterEl.innerText = val + 1;
+    });
+    stepDec.addEventListener('click', () => {
+      let val = parseInt(counterEl.innerText, 10);
+      if (val > 1) counterEl.innerText = val - 1;
+    });
+  }
+</script></main></div><div class="fixed bottom-space-lg right-space-lg z-50 pointer-events-none flex flex-col gap-space-sm"><div class="pointer-events-auto bg-surface-container-high/90 backdrop-blur-xl rounded-lg p-space-md shadow-2xl flex items-center gap-space-md max-w-sm"><div class="w-8 h-8 rounded bg-primary-container/20 flex items-center justify-center text-primary"><span class="material-symbols-outlined text-[20px]">download_done</span></div><div class="flex flex-col flex-1"><span class="font-body-strong text-body-strong text-on-surface">Downora Engine</span><span class="font-caption text-caption text-on-surface-variant">Ready to capture media links from clipboard</span></div><button class="text-outline hover:text-on-surface transition-colors"><span class="material-symbols-outlined text-[16px]">close</span></button></div></div></body></html>

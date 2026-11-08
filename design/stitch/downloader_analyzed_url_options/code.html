@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_dashboard" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Segoe+UI+Variable,+Segoe+UI,+-apple-system,+system-ui:wght@100..900&display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{"colors":{"surface-dim":"#131315","surface-bright":"#39393b","tertiary-fixed":"#f0dbff","secondary":"#b0c6ff","on-error":"#690005","surface-variant":"#353437","secondary-fixed":"#d9e2ff","on-secondary-fixed":"#001944","on-primary-container":"#004a46","error":"#ffb4ab","primary-fixed-dim":"#40dcd1","on-surface":"#e4e2e4","secondary-container":"#0068ec","background":"#131315","outline":"#859491","primary-fixed":"#65f8ed","surface-container-low":"#1b1b1d","on-tertiary-container":"#6100a7","on-secondary":"#002d6e","surface-tint":"#40dcd1","surface-container-highest":"#353437","surface-container":"#1f1f21","tertiary-container":"#cc97ff","on-secondary-fixed-variant":"#00429a","inverse-primary":"#006a64","tertiary-fixed-dim":"#ddb7ff","surface-container-high":"#2a2a2c","secondary-fixed-dim":"#b0c6ff","inverse-on-surface":"#303032","inverse-surface":"#e4e2e4","on-primary-fixed":"#00201e","surface-container-lowest":"#0e0e10","on-secondary-container":"#f2f3ff","tertiary":"#dfbbff","primary-container":"#00c2b8","on-tertiary-fixed":"#2c0051","primary":"#43ded4","surface":"#131315","error-container":"#93000a","on-primary":"#003734","on-tertiary-fixed-variant":"#6900b3","on-tertiary":"#490080","on-background":"#e4e2e4","outline-variant":"#3c4948","on-primary-fixed-variant":"#00504b","on-error-container":"#ffdad6","on-surface-variant":"#bbcac7"},"borderRadius":{"DEFAULT":"0.25rem","lg":"0.5rem","xl":"0.75rem","full":"9999px"},"spacing":{"space-xs":"0.25rem","space-lg":"1.25rem","space-base":"1rem","margin-window":"0.75rem","gutter-compact":"0.5rem","space-sm":"0.5rem","space-md":"0.75rem","space-xl":"1.5rem","gutter":"1rem","space-2xs":"0.125rem","space-2xl":"2rem","margin":"1.5rem"},"fontFamily":{"caption-strong":["\"Segoe UI Variable, Segoe UI, -apple-system, system-ui\""],"mono-metric":["\"JetBrains Mono, Segoe UI Mono, Consolas, monospace\""],"body-strong":["\"Segoe UI Variable, Segoe UI, -apple-system, system-ui\""],"title-md":["\"Segoe UI Variable, Segoe UI, -apple-system, system-ui\""],"display":["\"Segoe UI Variable, Segoe UI, -apple-system, system-ui\""],"body-lg":["\"Segoe UI Variable, Segoe UI, -apple-system, system-ui\""],"body-md":["\"Segoe UI Variable, Segoe UI, -apple-system, system-ui\""],"badge-label":["\"Segoe UI Variable, Segoe UI, -apple-system, system-ui\""],"caption":["\"Segoe UI Variable, Segoe UI, -apple-system, system-ui\""],"title-lg":["\"Segoe UI Variable, Segoe UI, -apple-system, system-ui\""]},"fontSize":{"caption-strong":["12px",{"lineHeight":"16px","letterSpacing":"0.01em","fontWeight":"600"}],"mono-metric":["12px",{"lineHeight":"16px","letterSpacing":"0em","fontWeight":"500"}],"body-strong":["13px",{"lineHeight":"18px","letterSpacing":"0em","fontWeight":"600"}],"title-md":["16px",{"lineHeight":"22px","letterSpacing":"-0.005em","fontWeight":"600"}],"display":["28px",{"lineHeight":"36px","letterSpacing":"-0.015em","fontWeight":"600"}],"body-lg":["14px",{"lineHeight":"20px","letterSpacing":"0em","fontWeight":"400"}],"body-md":["13px",{"lineHeight":"18px","letterSpacing":"0em","fontWeight":"400"}],"badge-label":["11px",{"lineHeight":"14px","letterSpacing":"0.02em","fontWeight":"600"}],"caption":["12px",{"lineHeight":"16px","letterSpacing":"0.01em","fontWeight":"400"}],"title-lg":["20px",{"lineHeight":"26px","letterSpacing":"-0.01em","fontWeight":"600"}]}}}}</script></head><body class="bg-background font-body-md text-on-surface antialiased select-none"><header class="fixed top-0 left-0 right-0 h-9 z-50 bg-surface-container-lowest/80 backdrop-blur-xl flex items-center justify-between select-none shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="flex items-center gap-space-sm pl-space-md h-full"><img alt="Downora App Logo" class="h-4 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/ALJJyrCdvw-fH-NDBpBrGdlAu7CpBcJMlYoyIAPSsf6yFDXB1vYjUZ7uU5ZzfTr-rzgqecbKsfFLfHMEND3x27-n6_csoGCEXeEPL9UvKYBsJaeU6y9ReuDrbjyi-CSBKjkP2l0U1oWjtx7Fv9u3eVBnmYvNsRrvzf4DIWjbsw-BHDRs_DXl27E2l7_YWlWdzzw7iwTZk_tAOkKZJEacS-3AvVFbTzjuRgKwKDl0-MPctu49dg"/><span class="font-caption-strong text-caption-strong tracking-wide text-on-surface">Downora</span><span class="font-caption text-caption text-on-surface-variant flex items-center gap-space-xs"><span class="w-1 h-1 rounded-full bg-outline-variant"></span>High Performance Media Engine</span></div><div class="flex-1 h-full mx-space-xl flex items-center justify-center"><div class="w-80 h-6 bg-surface-container-low/60 rounded flex items-center px-space-sm gap-space-xs"><span class="material-symbols-outlined text-outline text-[14px]">search</span><span class="font-caption text-caption text-outline">Search downloads, streams or protocols (Ctrl+K)</span></div></div><div class="flex items-center h-full"><div class="flex items-center pr-space-md gap-space-sm"><div class="w-5 h-5 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[12px]">person</span></div></div><div class="flex items-center h-full"><button aria-label="Minimize" class="w-[46px] h-9 flex items-center justify-center text-on-surface-variant hover:bg-surface-bright/40 hover:text-on-surface transition-colors"><span class="material-symbols-outlined text-[14px]">remove</span></button><button aria-label="Maximize" class="w-[46px] h-9 flex items-center justify-center text-on-surface-variant hover:bg-surface-bright/40 hover:text-on-surface transition-colors"><span class="material-symbols-outlined text-[12px]">crop_square</span></button><button aria-label="Close" class="w-[46px] h-9 flex items-center justify-center text-on-surface-variant hover:bg-on-error hover:text-on-background transition-colors"><span class="material-symbols-outlined text-[14px]">close</span></button></div></div></header><aside class="fixed left-0 top-9 bottom-0 w-60 bg-surface-container-low/95 backdrop-blur-2xl z-40 flex flex-col justify-between p-space-sm shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="flex flex-col gap-space-md"><div class="flex items-center justify-between px-space-sm py-space-xs"><div class="flex items-center gap-space-sm"><img alt="Downora App Logo" class="h-6 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/ALJJyrCdvw-fH-NDBpBrGdlAu7CpBcJMlYoyIAPSsf6yFDXB1vYjUZ7uU5ZzfTr-rzgqecbKsfFLfHMEND3x27-n6_csoGCEXeEPL9UvKYBsJaeU6y9ReuDrbjyi-CSBKjkP2l0U1oWjtx7Fv9u3eVBnmYvNsRrvzf4DIWjbsw-BHDRs_DXl27E2l7_YWlWdzzw7iwTZk_tAOkKZJEacS-3AvVFbTzjuRgKwKDl0-MPctu49dg"/><span class="font-title-md text-title-md tracking-tight text-on-surface">Downora</span></div><span class="px-space-xs py-0.5 rounded-full bg-surface-container-high text-primary font-badge-label text-badge-label">v2.4 Pro</span></div><nav class="flex flex-col gap-space-2xs" data-active-classes="bg-surface-container-high text-on-surface font-body-strong"><a class="group relative flex items-center gap-space-sm px-space-md h-9 rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" data-path="home" href="#"><span class="material-symbols-outlined text-[18px]">home</span><span class="font-body-md text-body-md">Home</span></a><a aria-current="page" class="group relative flex items-center gap-space-sm px-space-md h-9 rounded transition-colors bg-surface-container-high text-on-surface font-body-strong" data-path="downloader" href="#"><span class="material-symbols-outlined text-[18px]">cloud_download</span><span class="font-body-md text-body-md">Downloader</span></a><a class="group relative flex items-center justify-between px-space-md h-9 rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" data-path="download-queue" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[18px]">layers</span><span class="font-body-md text-body-md">Download Queue</span></div><span class="px-1.5 py-0.5 rounded-full bg-primary-container text-on-primary-container font-badge-label text-badge-label">3</span></a><a class="group relative flex items-center gap-space-sm px-space-md h-9 rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" data-path="media-library" href="#"><span class="material-symbols-outlined text-[18px]">movie</span><span class="font-body-md text-body-md">Media Library</span></a><a class="group relative flex items-center gap-space-sm px-space-md h-9 rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" data-path="history" href="#"><span class="material-symbols-outlined text-[18px]">history</span><span class="font-body-md text-body-md">History</span></a><a class="group relative flex items-center gap-space-sm px-space-md h-9 rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" data-path="settings" href="#"><span class="material-symbols-outlined text-[18px]">settings</span><span class="font-body-md text-body-md">Settings</span></a><a class="group relative flex items-center gap-space-sm px-space-md h-9 rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" data-path="about" href="#"><span class="material-symbols-outlined text-[18px]">info</span><span class="font-body-md text-body-md">About</span></a></nav></div><div class="flex flex-col gap-space-sm px-space-sm pb-space-xs"><div class="bg-surface-container/70 rounded p-space-sm flex flex-col gap-space-xs"><div class="flex items-center justify-between"><span class="font-caption-strong text-caption-strong text-on-surface">SSD Storage (D:)</span><span class="font-mono-metric text-mono-metric text-outline">13%</span></div><div class="w-full h-1 bg-surface-variant rounded-full overflow-hidden"><div class="h-full w-[13%] bg-primary rounded-full"></div></div><div class="flex items-center justify-between"><span class="font-caption text-caption text-on-surface-variant">68.4 GB used</span><span class="font-caption text-caption text-outline">512 GB</span></div></div><div class="flex items-center justify-between pt-space-xs"><div class="flex items-center gap-space-xs"><span class="w-2 h-2 rounded-full bg-primary"></span><span class="font-caption text-caption text-on-surface-variant">Online • 120 Mbps</span></div><div class="flex items-center bg-surface-container-high rounded-full p-0.5"><button class="w-5 h-5 rounded-full bg-primary flex items-center justify-center text-on-primary"><span class="material-symbols-outlined text-[12px]">dark_mode</span></button><button class="w-5 h-5 rounded-full flex items-center justify-center text-outline hover:text-on-surface"><span class="material-symbols-outlined text-[12px]">light_mode</span></button></div></div></div></aside><div class="pl-60"><main class="relative pt-9 w-full min-h-screen bg-background"><div class="flex flex-col w-full">
+<div class="p-space-base flex flex-col gap-space-lg max-w-[1360px] mx-auto w-full">
+<!-- Top Verified Stream URL Bar -->
+<div class="bg-surface-container-high rounded-lg p-space-sm shadow-md flex items-center justify-between gap-space-md">
+<div class="flex items-center gap-space-md flex-1 min-w-0">
+<div class="w-8 h-8 rounded bg-primary-container/15 flex items-center justify-center text-primary flex-shrink-0">
+<span class="material-symbols-outlined text-[18px]">verified</span>
+</div>
+<div class="flex flex-col min-w-0 flex-1">
+<div class="flex items-center gap-space-sm flex-wrap">
+<span class="font-mono-metric text-mono-metric text-on-surface truncate max-w-xl">https://www.youtube.com/watch?v=dQw4w9WgXcQ</span>
+<span class="px-space-xs py-0.5 rounded-full bg-primary/10 text-primary font-badge-label text-badge-label flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
+              yt-dlp v2024.11.04
+            </span>
+</div>
+<span class="font-caption text-caption text-on-surface-variant flex items-center gap-1">
+            Source verified • Protocol YouTube DASH / HLS • High speed extraction ready
+          </span>
+</div>
+</div>
+<div class="flex items-center gap-space-xs flex-shrink-0">
+<button class="h-8 px-space-md rounded bg-surface-container-highest hover:bg-surface-bright text-on-surface font-body-strong text-body-strong flex items-center gap-space-xs transition-all active:scale-95" id="btn-copy-url">
+<span class="material-symbols-outlined text-[16px]">content_copy</span>
+<span class="hidden sm:inline">Copy Link</span>
+</button>
+<button class="h-8 px-space-md rounded bg-surface-container-highest hover:bg-surface-bright text-primary font-body-strong text-body-strong flex items-center gap-space-xs transition-all active:scale-95" id="btn-analyze-another">
+<span class="material-symbols-outlined text-[16px]">search</span>
+<span>Analyze another link</span>
+</button>
+</div>
+</div>
+<!-- Main Two-Column View -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-lg items-start">
+<!-- Left Column: Video Preview, Metadata & Telemetry -->
+<div class="lg:col-span-5 flex flex-col gap-space-md">
+<!-- Media Card Container -->
+<div class="bg-surface-container-high rounded-xl overflow-hidden shadow-lg p-space-md flex flex-col gap-space-md">
+<!-- Thumbnail Area -->
+<div class="relative w-full aspect-video rounded-lg overflow-hidden bg-surface-container-lowest shadow-inner group">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out" data-alt="Cinematic high contrast film still from Interstellar depicting an endurance spacecraft docking against the backdrop of a massive curved planetary horizon in deep black cosmos with electric cyan orbital lights and volumetric lens flare reflecting off the metallic module surface" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAt69XP01g7uEppd_QUhYBfZq_WdsO8zUv99LYxWUDKcL6E2UYk0X7M3VP1HZwSRPI7qrpjoAxeCDfF4-k6xuu5gfTZUeBss8ouyycqjvMrAfItZHmAwB2OCfNfcx-T9lOKFpc8X_9eErJRG9DzNjIv6HeLN8Phz_czkoky9tIEov3gNcO1KX82LXQl9tRnwp6baOBrkUPMvjq2ht1tgCPo5isTRiXMWZDoQSd42J_e"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container-lowest/90 via-surface-container-lowest/20 to-transparent"></div>
+<!-- Badges Overlay -->
+<div class="absolute top-2.5 left-2.5 flex items-center gap-1.5">
+<span class="px-2 py-0.5 rounded bg-error-container/80 backdrop-blur-md text-error font-badge-label text-badge-label flex items-center gap-1 shadow-sm">
+<span class="material-symbols-outlined text-[14px]">smart_display</span>
+                YouTube
+              </span>
+<span class="px-2 py-0.5 rounded bg-surface-container-lowest/80 backdrop-blur-md text-primary font-badge-label text-badge-label shadow-sm">
+                IMAX Enhanced
+              </span>
+</div>
+<div class="absolute bottom-2.5 left-2.5 right-2.5 flex items-center justify-between">
+<div class="flex items-center gap-1.5">
+<span class="px-2 py-0.5 rounded bg-surface-container-lowest/90 backdrop-blur-md text-on-surface font-badge-label text-badge-label shadow-sm">
+                  4K 60fps HDR
+                </span>
+<span class="px-2 py-0.5 rounded bg-surface-container-lowest/90 backdrop-blur-md text-on-surface-variant font-mono-metric text-mono-metric">
+                  2160p
+                </span>
+</div>
+<span class="px-2 py-0.5 rounded bg-surface-container-lowest/90 backdrop-blur-md text-primary font-mono-metric text-mono-metric font-semibold">
+                04:12
+              </span>
+</div>
+<div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity backdrop-blur-xs bg-surface-container-lowest/30">
+<div class="w-12 h-12 rounded-full bg-primary/90 text-on-primary flex items-center justify-center shadow-xl transform scale-90 group-hover:scale-100 transition-transform">
+<span class="material-symbols-outlined text-[24px]">play_arrow</span>
+</div>
+</div>
+</div>
+<!-- Video Details -->
+<div class="flex flex-col gap-1">
+<h2 class="font-title-lg text-title-lg text-on-surface tracking-tight leading-snug">
+              Interstellar — Docking Scene (No Time For Caution) IMAX 4K 60fps HDR
+            </h2>
+<div class="flex items-center gap-space-sm text-outline font-caption text-caption flex-wrap pt-0.5">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">visibility</span>
+                94,210,488 views
+              </span>
+<span>•</span>
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">calendar_today</span>
+                Oct 26, 2014
+              </span>
+<span>•</span>
+<span class="text-primary font-caption-strong text-caption-strong">Dolby Atmos Audio</span>
+</div>
+</div>
+<!-- Channel Info Row -->
+<div class="bg-surface-container rounded-lg p-space-sm flex items-center justify-between gap-space-sm">
+<div class="flex items-center gap-space-sm min-w-0">
+<div class="w-10 h-10 rounded-full bg-surface-variant overflow-hidden flex-shrink-0 shadow-sm relative">
+<img class="w-full h-full object-cover" data-alt="Official round circular studio seal emblem of Warner Bros Pictures on dark brushed steel textured metallic roundel with subtle electric teal perimeter illumination" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBJ16GAtBWK1TcTqXseQCNveAa4bOl-2WYpHXXodVjUFsQsoXUpk7ySQd6q2lVk1nFQG0s4LMYCrwZ7d_3KjgXoXMW4A45FpmwXeiNwn-NOLkqco2o6l-PbxchUsLHQzE5YYMlH-VP_CRgvN6_e371E4Wzx5G5WBrAeVl_9MM1lII542a2cml0pi52IXyobq4OwYT60RokAwWEgikTINQnRSjrA_ghcKDojdp9Ez1KV"/>
+</div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-1">
+<span class="font-body-strong text-body-strong text-on-surface truncate">Warner Bros. Pictures</span>
+<span class="material-symbols-outlined text-primary text-[14px]" style="font-variation-settings: 'FILL' 1;">verified</span>
+</div>
+<span class="font-caption text-caption text-on-surface-variant">11.8M subscribers</span>
+</div>
+</div>
+<button class="h-7 px-space-sm rounded bg-surface-container-highest hover:bg-surface-bright text-on-surface font-caption-strong text-caption-strong flex items-center gap-1 transition-colors">
+<span class="material-symbols-outlined text-[14px]">open_in_new</span>
+<span>Channel</span>
+</button>
+</div>
+<!-- Parsed Media Metadata Chips -->
+<div class="grid grid-cols-2 gap-space-xs">
+<div class="bg-surface-container rounded-lg p-space-sm flex items-center gap-space-sm">
+<div class="w-7 h-7 rounded bg-secondary-container/20 text-secondary flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-[16px]">bookmark</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-caption text-caption text-on-surface-variant">Timeline Markers</span>
+<span class="font-body-strong text-body-strong text-on-surface">6 chapters available</span>
+</div>
+</div>
+<div class="bg-surface-container rounded-lg p-space-sm flex items-center gap-space-sm">
+<div class="w-7 h-7 rounded bg-tertiary-container/20 text-tertiary flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-[16px]">subtitles</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-caption text-caption text-on-surface-variant">Closed Captions</span>
+<span class="font-body-strong text-body-strong text-on-surface truncate">14 tracks (SRT, VTT)</span>
+</div>
+</div>
+</div>
+<!-- Bitrate Sparkline Visualization -->
+<div class="bg-surface-container rounded-lg p-space-sm flex flex-col gap-1.5">
+<div class="flex items-center justify-between text-caption text-on-surface-variant">
+<span class="font-caption-strong text-caption-strong text-on-surface flex items-center gap-1">
+<span class="material-symbols-outlined text-primary text-[14px]">speed</span>
+                Dynamic Video Bitrate Spectrum
+              </span>
+<span class="font-mono-metric text-mono-metric text-primary">Peak: 38.4 Mbps</span>
+</div>
+<div class="h-10 w-full flex items-end gap-0.5 pt-2">
+<div class="flex-1 bg-primary/20 hover:bg-primary h-[35%] rounded-t-xs transition-colors" title="Scene 1: 12 Mbps"></div>
+<div class="flex-1 bg-primary/30 hover:bg-primary h-[48%] rounded-t-xs transition-colors" title="Scene 2: 17 Mbps"></div>
+<div class="flex-1 bg-primary/40 hover:bg-primary h-[60%] rounded-t-xs transition-colors" title="Scene 3: 22 Mbps"></div>
+<div class="flex-1 bg-primary/50 hover:bg-primary h-[75%] rounded-t-xs transition-colors" title="Scene 4: 28 Mbps"></div>
+<div class="flex-1 bg-primary/70 hover:bg-primary h-[95%] rounded-t-xs transition-colors" title="Scene 5: 38 Mbps"></div>
+<div class="flex-1 bg-primary h-[100%] rounded-t-xs transition-colors" title="Scene 6: 38.4 Mbps"></div>
+<div class="flex-1 bg-primary/80 hover:bg-primary h-[82%] rounded-t-xs transition-colors" title="Scene 7: 31 Mbps"></div>
+<div class="flex-1 bg-primary/60 hover:bg-primary h-[65%] rounded-t-xs transition-colors" title="Scene 8: 24 Mbps"></div>
+<div class="flex-1 bg-primary/45 hover:bg-primary h-[50%] rounded-t-xs transition-colors" title="Scene 9: 18 Mbps"></div>
+<div class="flex-1 bg-primary/30 hover:bg-primary h-[40%] rounded-t-xs transition-colors" title="Scene 10: 15 Mbps"></div>
+<div class="flex-1 bg-primary/20 hover:bg-primary h-[25%] rounded-t-xs transition-colors" title="Scene 11: 9 Mbps"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Column: Download Configuration & Quality Selector -->
+<div class="lg:col-span-7 flex flex-col gap-space-md">
+<div class="bg-surface-container-high rounded-xl p-space-md shadow-lg flex flex-col gap-space-md">
+<!-- Mode Tabs (Segmented Control) -->
+<div class="flex items-center justify-between pb-space-xs">
+<div class="flex bg-surface-container-lowest p-1 rounded-lg">
+<button class="px-space-lg h-8 rounded-md bg-surface-container-high text-primary font-body-strong text-body-strong shadow flex items-center gap-space-xs transition-all" id="tab-video">
+<span class="material-symbols-outlined text-[16px]">videocam</span>
+<span>Video Stream</span>
+</button>
+<button class="px-space-lg h-8 rounded-md text-on-surface-variant hover:text-on-surface font-body-strong text-body-strong flex items-center gap-space-xs transition-all" id="tab-audio">
+<span class="material-symbols-outlined text-[16px]">audiotrack</span>
+<span>Audio Only (Lossless/MP3)</span>
+</button>
+</div>
+<div class="flex items-center gap-space-xs">
+<span class="font-caption text-caption text-on-surface-variant hidden sm:inline">Hardware Engine:</span>
+<span class="px-2 py-0.5 rounded bg-primary-container/20 text-on-primary-container font-badge-label text-badge-label">NVENC Ready</span>
+</div>
+</div>
+<!-- Video Quality Stream Table Selection -->
+<div class="flex flex-col gap-space-xs">
+<div class="flex items-center justify-between px-space-xs">
+<span class="font-caption-strong text-caption-strong text-on-surface">Available Streams & Encodings</span>
+<span class="font-caption text-caption text-on-surface-variant">Auto-muxing audio tracks</span>
+</div>
+<!-- Quality Rows List -->
+<div class="flex flex-col gap-1.5" id="quality-selector">
+<!-- Row 1: Selected (4K) -->
+<label class="quality-row relative flex items-center justify-between p-space-sm rounded-lg bg-surface-container hover:bg-surface-bright/40 cursor-pointer transition-all bg-gradient-to-r from-primary-container/15 via-surface-container to-surface-container">
+<div class="flex items-center gap-space-md min-w-0">
+<div class="w-4 h-4 rounded-full bg-primary flex items-center justify-center flex-shrink-0">
+<span class="w-1.5 h-1.5 rounded-full bg-on-primary"></span>
+</div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-space-xs flex-wrap">
+<span class="font-body-strong text-body-strong text-on-surface">2160p 4K UHD</span>
+<span class="px-1.5 py-0.5 rounded-full bg-primary-container text-on-primary-container font-badge-label text-badge-label">Best Quality</span>
+<span class="px-1.5 py-0.5 rounded bg-surface-container-highest text-primary font-caption text-caption">60 FPS</span>
+</div>
+<span class="font-caption text-caption text-on-surface-variant truncate">
+                      Codec: AV1 / VP9 (Master) • Container: MP4 • HDR10 PQ
+                    </span>
+</div>
+</div>
+<div class="flex items-center gap-space-md flex-shrink-0 text-right">
+<div class="flex flex-col items-end">
+<span class="font-mono-metric text-mono-metric text-primary font-bold">840 MB</span>
+<span class="font-caption text-caption text-outline">~45 sec @ 120M</span>
+</div>
+<input checked="" class="hidden" name="video_stream" type="radio" value="2160"/>
+</div>
+</label>
+<!-- Row 2: 1440p -->
+<label class="quality-row relative flex items-center justify-between p-space-sm rounded-lg bg-surface-container hover:bg-surface-bright/40 cursor-pointer transition-all">
+<div class="flex items-center gap-space-md min-w-0">
+<div class="w-4 h-4 rounded-full bg-surface-container-highest flex items-center justify-center flex-shrink-0">
+<span class="w-1.5 h-1.5 rounded-full bg-transparent"></span>
+</div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-space-xs flex-wrap">
+<span class="font-body-strong text-body-strong text-on-surface">1440p 2K QHD</span>
+<span class="px-1.5 py-0.5 rounded bg-surface-container-highest text-on-surface-variant font-caption text-caption">60 FPS</span>
+</div>
+<span class="font-caption text-caption text-on-surface-variant truncate">
+                      Codec: VP9 • Container: MP4 • Wide Gamut
+                    </span>
+</div>
+</div>
+<div class="flex items-center gap-space-md flex-shrink-0 text-right">
+<div class="flex flex-col items-end">
+<span class="font-mono-metric text-mono-metric text-on-surface">480 MB</span>
+<span class="font-caption text-caption text-outline">~26 sec</span>
+</div>
+<input class="hidden" name="video_stream" type="radio" value="1440"/>
+</div>
+</label>
+<!-- Row 3: 1080p -->
+<label class="quality-row relative flex items-center justify-between p-space-sm rounded-lg bg-surface-container hover:bg-surface-bright/40 cursor-pointer transition-all">
+<div class="flex items-center gap-space-md min-w-0">
+<div class="w-4 h-4 rounded-full bg-surface-container-highest flex items-center justify-center flex-shrink-0">
+<span class="w-1.5 h-1.5 rounded-full bg-transparent"></span>
+</div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-space-xs flex-wrap">
+<span class="font-body-strong text-body-strong text-on-surface">1080p FHD</span>
+<span class="px-1.5 py-0.5 rounded bg-surface-container-highest text-on-surface-variant font-caption text-caption">60 FPS</span>
+<span class="px-1.5 py-0.5 rounded bg-surface-container-highest text-outline font-caption text-caption">High Compat</span>
+</div>
+<span class="font-caption text-caption text-on-surface-variant truncate">
+                      Codec: H.264 (AVC1) • Container: MP4 • SDR
+                    </span>
+</div>
+</div>
+<div class="flex items-center gap-space-md flex-shrink-0 text-right">
+<div class="flex flex-col items-end">
+<span class="font-mono-metric text-mono-metric text-on-surface">210 MB</span>
+<span class="font-caption text-caption text-outline">~12 sec</span>
+</div>
+<input class="hidden" name="video_stream" type="radio" value="1080"/>
+</div>
+</label>
+<!-- Row 4: 720p -->
+<label class="quality-row relative flex items-center justify-between p-space-sm rounded-lg bg-surface-container hover:bg-surface-bright/40 cursor-pointer transition-all">
+<div class="flex items-center gap-space-md min-w-0">
+<div class="w-4 h-4 rounded-full bg-surface-container-highest flex items-center justify-center flex-shrink-0">
+<span class="w-1.5 h-1.5 rounded-full bg-transparent"></span>
+</div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-space-xs flex-wrap">
+<span class="font-body-strong text-body-strong text-on-surface">720p HD</span>
+<span class="px-1.5 py-0.5 rounded bg-surface-container-highest text-on-surface-variant font-caption text-caption">30 FPS</span>
+</div>
+<span class="font-caption text-caption text-on-surface-variant truncate">
+                      Codec: H.264 • Container: MP4
+                    </span>
+</div>
+</div>
+<div class="flex items-center gap-space-md flex-shrink-0 text-right">
+<div class="flex flex-col items-end">
+<span class="font-mono-metric text-mono-metric text-on-surface">95 MB</span>
+<span class="font-caption text-caption text-outline">~5 sec</span>
+</div>
+<input class="hidden" name="video_stream" type="radio" value="720"/>
+</div>
+</label>
+<!-- Row 5: 480p -->
+<label class="quality-row relative flex items-center justify-between p-space-sm rounded-lg bg-surface-container hover:bg-surface-bright/40 cursor-pointer transition-all">
+<div class="flex items-center gap-space-md min-w-0">
+<div class="w-4 h-4 rounded-full bg-surface-container-highest flex items-center justify-center flex-shrink-0">
+<span class="w-1.5 h-1.5 rounded-full bg-transparent"></span>
+</div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-space-xs">
+<span class="font-body-strong text-body-strong text-on-surface">480p SD</span>
+<span class="px-1.5 py-0.5 rounded bg-surface-container-highest text-on-surface-variant font-caption text-caption">24 FPS</span>
+</div>
+<span class="font-caption text-caption text-on-surface-variant truncate">
+                      Codec: H.264 • Container: MP4 • Standard Mobile
+                    </span>
+</div>
+</div>
+<div class="flex items-center gap-space-md flex-shrink-0 text-right">
+<div class="flex flex-col items-end">
+<span class="font-mono-metric text-mono-metric text-on-surface">42 MB</span>
+<span class="font-caption text-caption text-outline">~2 sec</span>
+</div>
+<input class="hidden" name="video_stream" type="radio" value="480"/>
+</div>
+</label>
+<!-- Row 6: Disabled State (360p) -->
+<div class="relative flex items-center justify-between p-space-sm rounded-lg bg-surface-container-lowest/50 opacity-50 cursor-not-allowed">
+<div class="flex items-center gap-space-md min-w-0">
+<div class="w-4 h-4 rounded-full bg-surface-container-highest flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-[12px] text-outline">lock</span>
+</div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-space-xs">
+<span class="font-body-strong text-body-strong text-outline">360p Low</span>
+<span class="px-1.5 py-0.5 rounded bg-surface-container text-outline font-caption text-caption">Unavailable</span>
+</div>
+<span class="font-caption text-caption text-outline truncate">
+                      H.264 • Stream removed by host or re-mux restricted
+                    </span>
+</div>
+</div>
+<span class="font-caption text-caption text-outline italic">Offline stream</span>
+</div>
+</div>
+</div>
+<!-- Advanced Audio & Metadata Preferences -->
+<div class="bg-surface-container rounded-lg p-space-sm flex flex-col gap-space-md">
+<!-- Audio Output Selection -->
+<div class="flex flex-col gap-space-xs">
+<div class="flex items-center justify-between">
+<span class="font-caption-strong text-caption-strong text-on-surface">Audio Extract Format</span>
+<span class="font-caption text-caption text-outline">FFmpeg Core v7.1</span>
+</div>
+<div class="flex flex-wrap gap-1.5">
+<button class="audio-format-chip px-space-md h-7 rounded bg-primary-container text-on-primary-container font-caption-strong text-caption-strong transition-transform active:scale-95 shadow-sm">
+                  MP3
+                </button>
+<button class="audio-format-chip px-space-md h-7 rounded bg-surface-container-highest hover:bg-surface-bright text-on-surface font-caption text-caption transition-colors">
+                  M4A (AAC)
+                </button>
+<button class="audio-format-chip px-space-md h-7 rounded bg-surface-container-highest hover:bg-surface-bright text-on-surface font-caption text-caption transition-colors">
+                  WAV
+                </button>
+<button class="audio-format-chip px-space-md h-7 rounded bg-surface-container-highest hover:bg-surface-bright text-on-surface font-caption text-caption transition-colors">
+                  FLAC (Lossless)
+                </button>
+</div>
+</div>
+<!-- Bitrate Selection -->
+<div class="flex flex-col gap-space-xs">
+<span class="font-caption-strong text-caption-strong text-on-surface">Audio Target Bitrate</span>
+<div class="flex flex-wrap gap-1.5">
+<button class="px-space-sm h-6 rounded bg-surface-container-highest hover:bg-surface-bright text-outline text-caption font-mono-metric">128 kbps</button>
+<button class="px-space-sm h-6 rounded bg-surface-container-highest hover:bg-surface-bright text-outline text-caption font-mono-metric">192 kbps</button>
+<button class="px-space-sm h-6 rounded bg-surface-container-highest hover:bg-surface-bright text-outline text-caption font-mono-metric">256 kbps</button>
+<button class="px-space-sm h-6 rounded bg-primary-container text-on-primary-container text-caption font-mono-metric font-bold">320 kbps (Max)</button>
+</div>
+</div>
+<!-- Toggles -->
+<div class="flex flex-col gap-space-xs pt-1">
+<!-- Toggle 1 -->
+<div class="flex items-center justify-between">
+<div class="flex flex-col">
+<span class="font-body-strong text-body-strong text-on-surface">Embed metadata, thumbnail & chapter markers</span>
+<span class="font-caption text-caption text-outline">Inject ID3v2 tags and cover artwork into media container</span>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-9 h-5 bg-surface-variant peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-primary peer-checked:bg-primary-container after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-on-primary-container after:rounded-full after:h-4 after:w-4 after:transition-all"></div>
+</label>
+</div>
+<!-- Toggle 2 -->
+<div class="flex items-center justify-between pt-1">
+<div class="flex flex-col">
+<span class="font-body-strong text-body-strong text-on-surface">Download English subtitles</span>
+<span class="font-caption text-caption text-outline">Auto-convert to standalone SRT & embed CC stream</span>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-9 h-5 bg-surface-variant peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-primary peer-checked:bg-primary-container after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-on-primary-container after:rounded-full after:h-4 after:w-4 after:transition-all"></div>
+</label>
+</div>
+</div>
+</div>
+<!-- Save Path Picker -->
+<div class="bg-surface-container rounded-lg p-space-sm flex flex-col sm:flex-row sm:items-center justify-between gap-space-sm">
+<div class="flex items-center gap-space-sm min-w-0">
+<span class="material-symbols-outlined text-outline text-[20px] flex-shrink-0">folder_open</span>
+<div class="flex flex-col min-w-0">
+<span class="font-caption text-caption text-on-surface-variant">Save destination</span>
+<span class="font-mono-metric text-mono-metric text-on-surface truncate">D:\Media\Downloads\Videos\4K</span>
+</div>
+</div>
+<div class="flex items-center gap-space-sm flex-shrink-0">
+<span class="px-2 py-0.5 rounded-full bg-surface-container-highest text-outline font-caption text-caption">
+                443.6 GB free on D:
+              </span>
+<button class="h-8 px-space-md rounded bg-surface-container-highest hover:bg-surface-bright text-on-surface font-body-strong text-body-strong transition-colors active:scale-95">
+                Browse...
+              </button>
+</div>
+</div>
+<!-- Action Footer Buttons -->
+<div class="flex items-center justify-end gap-space-md pt-space-xs">
+<button class="h-10 px-space-lg rounded bg-surface-container-highest hover:bg-surface-bright text-on-surface font-body-strong text-body-strong flex items-center gap-space-xs transition-all active:scale-95 shadow-sm">
+<span class="material-symbols-outlined text-[18px]">queue</span>
+<span>Add to queue</span>
+</button>
+<button class="h-10 px-space-xl rounded bg-gradient-to-r from-primary-container to-secondary-container hover:opacity-90 text-on-primary-container font-body-strong text-body-strong flex items-center gap-space-sm transition-all transform active:scale-98 shadow-md">
+<span class="material-symbols-outlined text-[20px]">download</span>
+<span>Download now (840 MB)</span>
+<span class="material-symbols-outlined text-[18px]">rocket_launch</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Inline Notice / Demonstrating Calm Source Warning State -->
+<div class="bg-surface-container-high rounded-xl p-space-md shadow-md flex flex-col md:flex-row md:items-center justify-between gap-space-md" id="source-alert-card">
+<div class="flex items-start gap-space-md">
+<div class="w-10 h-10 rounded-lg bg-surface-variant flex items-center justify-center text-tertiary flex-shrink-0 shadow-sm">
+<span class="material-symbols-outlined text-[22px]">warning</span>
+</div>
+<div class="flex flex-col gap-0.5">
+<div class="flex items-center gap-space-xs flex-wrap">
+<span class="font-body-strong text-body-strong text-on-surface">Source Notice: Restricted or Requires Sign-in</span>
+<span class="px-1.5 py-0.5 rounded bg-surface-container-highest text-tertiary font-badge-label text-badge-label">Vimeo Protocol Guard</span>
+</div>
+<p class="font-caption text-caption text-on-surface-variant max-w-3xl leading-relaxed">
+            This Vimeo source requires cookie authentication or private stream credentials. You can import browser cookies via Settings > Network to avoid throttled extraction.
+          </p>
+</div>
+</div>
+<div class="flex items-center gap-space-xs flex-shrink-0 self-end md:self-center">
+<button class="h-8 px-space-md rounded bg-surface-container-highest hover:bg-surface-bright text-on-surface font-body-strong text-body-strong transition-colors text-caption">
+          Retry Analysis
+        </button>
+<button class="h-8 px-space-md rounded bg-tertiary-container/30 hover:bg-tertiary-container/40 text-on-tertiary-container font-body-strong text-body-strong transition-colors text-caption flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">cookie</span>
+          Configure Cookies
+        </button>
+<button class="w-8 h-8 rounded flex items-center justify-center text-outline hover:text-on-surface transition-colors" id="dismiss-notice-btn" title="Dismiss Notice">
+<span class="material-symbols-outlined text-[16px]">close</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<script>
+  // Simple tab toggle micro-interaction
+  const tabVideo = document.getElementById('tab-video');
+  const tabAudio = document.getElementById('tab-audio');
+  
+  if (tabVideo && tabAudio) {
+    tabVideo.addEventListener('click', () => {
+      tabVideo.className = "px-space-lg h-8 rounded-md bg-surface-container-high text-primary font-body-strong text-body-strong shadow flex items-center gap-space-xs transition-all";
+      tabAudio.className = "px-space-lg h-8 rounded-md text-on-surface-variant hover:text-on-surface font-body-strong text-body-strong flex items-center gap-space-xs transition-all";
+    });
+
+    tabAudio.addEventListener('click', () => {
+      tabAudio.className = "px-space-lg h-8 rounded-md bg-surface-container-high text-primary font-body-strong text-body-strong shadow flex items-center gap-space-xs transition-all";
+      tabVideo.className = "px-space-lg h-8 rounded-md text-on-surface-variant hover:text-on-surface font-body-strong text-body-strong flex items-center gap-space-xs transition-all";
+    });
+  }
+
+  // Row selection state handler
+  const qualityRows = document.querySelectorAll('.quality-row');
+  qualityRows.forEach(row => {
+    row.addEventListener('click', () => {
+      qualityRows.forEach(r => {
+        r.classList.remove('bg-gradient-to-r', 'from-primary-container/15', 'via-surface-container', 'to-surface-container');
+        const indicator = r.querySelector('.w-4.h-4 > span');
+        const outerCircle = r.querySelector('.w-4.h-4');
+        if (indicator && outerCircle) {
+          outerCircle.classList.remove('bg-primary');
+          outerCircle.classList.add('bg-surface-container-highest');
+          indicator.classList.remove('bg-on-primary');
+          indicator.classList.add('bg-transparent');
+        }
+      });
+      row.classList.add('bg-gradient-to-r', 'from-primary-container/15', 'via-surface-container', 'to-surface-container');
+      const curIndicator = row.querySelector('.w-4.h-4 > span');
+      const curOuterCircle = row.querySelector('.w-4.h-4');
+      if (curIndicator && curOuterCircle) {
+        curOuterCircle.classList.add('bg-primary');
+        curOuterCircle.classList.remove('bg-surface-container-highest');
+        curIndicator.classList.add('bg-on-primary');
+        curIndicator.classList.remove('bg-transparent');
+      }
+    });
+  });
+
+  // Notice dismissal
+  const dismissBtn = document.getElementById('dismiss-notice-btn');
+  const alertCard = document.getElementById('source-alert-card');
+  if (dismissBtn && alertCard) {
+    dismissBtn.addEventListener('click', () => {
+      alertCard.style.opacity = '0';
+      alertCard.style.transform = 'translateY(8px)';
+      alertCard.style.transition = 'all 200ms ease';
+      setTimeout(() => alertCard.remove(), 200);
+    });
+  }
+</script></main></div><div class="fixed bottom-space-lg right-space-lg z-50 pointer-events-none flex flex-col gap-space-sm"><div class="pointer-events-auto bg-surface-container-high/90 backdrop-blur-xl rounded-lg p-space-md shadow-2xl flex items-center gap-space-md max-w-sm"><div class="w-8 h-8 rounded bg-primary-container/20 flex items-center justify-center text-primary"><span class="material-symbols-outlined text-[20px]">download_done</span></div><div class="flex flex-col flex-1"><span class="font-body-strong text-body-strong text-on-surface">Downora Engine</span><span class="font-caption text-caption text-on-surface-variant">Ready to capture media links from clipboard</span></div><button class="text-outline hover:text-on-surface transition-colors"><span class="material-symbols-outlined text-[16px]">close</span></button></div></div></body></html>
