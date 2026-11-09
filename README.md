@@ -8,7 +8,7 @@ Built with C#, .NET 10 and WPF (MVVM). Media extraction runs through yt-dlp and 
 
 ## Status
 
-**Phases 1–4 of 11 are complete.**
+**Phases 1–5 of 11 are complete.**
 
 - **Phase 1, foundation:** the solution, the Generic Host with DI, Serilog logging, SQLite with migrations, persistent settings, crash recovery and CI.
 - **Phase 2, shell UI:** the Fluent Velocity design system in dark and light, a sidebar with all seven pages, English and Arabic with a right-to-left layout, and real data on every page.
@@ -16,7 +16,9 @@ Built with C#, .NET 10 and WPF (MVVM). Media extraction runs through yt-dlp and 
 
 - **Phase 4, download:** pick a quality (or audio only: MP3, M4A or Opus) on the Downloader screen and the file really downloads into your download folder, with live progress (percent, size, speed, time left, merging/finishing stages). Each download is a saved job (waiting → extracting → downloading → processing → completed / failed / cancelled), so the Download Queue, History, Home statistics and crash recovery all show real data, and Cancel kills yt-dlp and removes the partial files. Free disk space is checked first, file names are made Windows-safe, and a new download never overwrites an older file. Optional, off by default: use the sign-in of your own browser (Edge, Chrome, Firefox or Brave) for content your account can already see, from Settings › Browser sign-in.
 
-Queue limits, pause/resume and retry arrive in Phase 5. See [docs/roadmap.md](docs/roadmap.md).
+- **Phase 5, download manager:** downloads now run through a real queue. At most the chosen number run at once (Settings › Downloads, 1 to 10; the rest wait in the order they were added), and changing the number takes effect immediately. Pause a download (or all of them) and what is downloaded so far is kept; resume it later and it continues where it stopped. Cancel works on running, waiting and paused downloads. A failed download has a Try again button, on the queue card and in History, that continues from its partial files; a cancelled one starts again from the beginning. Turn off "Start downloads automatically" to hold new downloads until you start them. Closing Downora pauses what was running and keeps its files.
+
+See [docs/roadmap.md](docs/roadmap.md).
 
 ## Requirements
 

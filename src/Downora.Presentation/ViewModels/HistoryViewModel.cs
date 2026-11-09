@@ -9,14 +9,40 @@ using Microsoft.Extensions.Logging;
 
 namespace Downora.Presentation.ViewModels;
 
-public sealed partial class HistoryViewModel(
-    IDownloadJobQueries jobs,
-    IDialogService dialogs,
-    IShellService shell,
-    TimeProvider time,
-    Localizer localizer,
-    ILogger<HistoryViewModel> logger) : SearchablePageViewModel(time, localizer, logger)
+public sealed partial class HistoryViewModel : SearchablePageViewModel
 {
+    private readonly IDownloadJobQueries jobs;
+    private readonly IDialogService dialogs;
+    private readonly IShellService shell;
+    private readonly IDownloadItemActions actions;
+
+    public HistoryViewModel(
+        IDownloadJobQueries jobs,
+        IDialogService dialogs,
+        IShellService shell,
+        DownloadFeed feed,
+        IDownloadItemActions actions,
+        TimeProvider time,
+        Localizer localizer,
+        ILogger<HistoryViewModel> logger)
+        : base(time, localizer, logger)
+    {
+        ArgumentNullException.ThrowIfNull(feed);
+        this.jobs = jobs;
+        this.dialogs = dialogs;
+        this.shell = shell;
+        this.actions = actions;
+
+        // A download that ends joins the list; one that is retried leaves it for the queue.
+        feed.Updated += (_, e) =>
+        {
+            if (e.StatusChanged && (e.Update.Job.IsFinished || Items.Any(i => i.Id == e.Update.Job.Id)))
+            {
+                _ = ReloadAsync(debounce: false);
+            }
+        };
+    }
+
     public ObservableCollection<DownloadItemViewModel> Items { get; } = [];
 
     [ObservableProperty]
@@ -39,7 +65,7 @@ public sealed partial class HistoryViewModel(
         Items.Clear();
         foreach (var job in items)
         {
-            Items.Add(new DownloadItemViewModel(job, L));
+            Items.Add(new DownloadItemViewModel(job, L, actions));
         }
 
         TotalCount = counts.Where(c => c.Key is Core.Enums.DownloadStatus.Completed or Core.Enums.DownloadStatus.Failed or Core.Enums.DownloadStatus.Cancelled)

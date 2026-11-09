@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using Downora.Core.Enums;
 using Downora.Core.Interfaces;
 using Downora.Core.Models;
@@ -24,10 +25,12 @@ public sealed partial class QueueViewModel : PageViewModel
 {
     private readonly IDownloadJobQueries _jobs;
     private readonly IDownloadItemActions _actions;
+    private readonly IDownloadJobService _service;
     private readonly Dictionary<Guid, DownloadItemViewModel> _all = [];
 
     public QueueViewModel(
         IDownloadJobQueries jobs,
+        IDownloadJobService service,
         DownloadFeed feed,
         IDownloadItemActions actions,
         Localizer localizer,
@@ -36,6 +39,7 @@ public sealed partial class QueueViewModel : PageViewModel
     {
         ArgumentNullException.ThrowIfNull(feed);
         _jobs = jobs;
+        _service = service;
         _actions = actions;
         Filters =
         [
@@ -58,6 +62,26 @@ public sealed partial class QueueViewModel : PageViewModel
     /// <summary>Nothing in the queue at all.</summary>
     [ObservableProperty]
     public partial bool IsQueueEmpty { get; private set; } = true;
+
+    /// <summary>Something is running or waiting, so Pause all does something.</summary>
+    [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(PauseAllCommand))]
+    public partial bool HasPausable { get; private set; }
+
+    /// <summary>Something is paused, so Resume all does something.</summary>
+    [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(ResumeAllCommand))]
+    public partial bool HasPaused { get; private set; }
+
+    /// <summary>"2 downloading · 3 waiting · 1 paused"; empty when the queue is empty.</summary>
+    [ObservableProperty]
+    public partial string SummaryText { get; private set; } = string.Empty;
+
+    [RelayCommand(CanExecute = nameof(HasPausable))]
+    private Task PauseAllAsync() => RunSafeAsync(() => _service.PauseAllAsync(), showLoading: false);
+
+    [RelayCommand(CanExecute = nameof(HasPaused))]
+    private Task ResumeAllAsync() => RunSafeAsync(() => _service.ResumeAllAsync(), showLoading: false);
 
     /// <summary>The queue has jobs, but none match the selected tab.</summary>
     [ObservableProperty]
@@ -173,6 +197,19 @@ public sealed partial class QueueViewModel : PageViewModel
 
         IsQueueEmpty = _all.Count == 0;
         IsFilterEmpty = !IsQueueEmpty && Items.Count == 0;
+
+        var running = _all.Values.Count(i => Matches(QueueFilter.InProgress, i.Status));
+        var waiting = _all.Values.Count(i => i.Status == DownloadStatus.Waiting);
+        var paused = _all.Values.Count(i => i.Status == DownloadStatus.Paused);
+        HasPausable = running + waiting > 0;
+        HasPaused = paused > 0;
+        var culture = L.Culture;
+        SummaryText = string.Join(" · ", new[]
+        {
+            running > 0 ? L.Format("Queue_SummaryRunning", running.ToString("N0", culture)) : null,
+            waiting > 0 ? L.Format("Queue_SummaryWaiting", waiting.ToString("N0", culture)) : null,
+            paused > 0 ? L.Format("Queue_SummaryPaused", paused.ToString("N0", culture)) : null,
+        }.Where(p => p is not null));
     }
 
     private static int Rank(DownloadStatus status) => status switch

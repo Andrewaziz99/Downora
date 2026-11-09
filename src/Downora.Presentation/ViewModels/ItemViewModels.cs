@@ -92,6 +92,17 @@ public sealed partial class DownloadItemViewModel : ObservableObject
     [ObservableProperty]
     public partial bool IsActive { get; private set; }
 
+    /// <summary>Waiting or downloading: Pause holds it and keeps what is downloaded.</summary>
+    [ObservableProperty]
+    public partial bool CanPause { get; private set; }
+
+    [ObservableProperty]
+    public partial bool IsPaused { get; private set; }
+
+    /// <summary>Failed or cancelled: Retry puts it back in the queue.</summary>
+    [ObservableProperty]
+    public partial bool CanRetry { get; private set; }
+
     public bool HasOutputFile => !string.IsNullOrEmpty(OutputPath);
 
     /// <summary>Updates the card from a job and, while it is running, the engine's latest progress.</summary>
@@ -117,6 +128,8 @@ public sealed partial class DownloadItemViewModel : ObservableObject
             ? _localizer["Stage_Cancelling"]
             : job.Status switch
             {
+                DownloadStatus.Waiting => _localizer["Stage_Queued"],
+                DownloadStatus.Paused => _localizer["Stage_Paused"],
                 DownloadStatus.Extracting => _localizer["Stage_Starting"],
                 DownloadStatus.Processing when progress?.Stage == DownloadStage.PostProcessing => _localizer["Stage_PostProcessing"],
                 DownloadStatus.Processing => _localizer["Stage_Merging"],
@@ -128,8 +141,14 @@ public sealed partial class DownloadItemViewModel : ObservableObject
         OutputPath = job.OutputPath;
         FinishedText = (job.CompletedAtUtc ?? job.CreatedAtUtc).ToLocalTime().ToString("g", culture);
         IsActive = !job.IsFinished;
+        CanPause = job.Status is DownloadStatus.Waiting or DownloadStatus.Extracting or DownloadStatus.Downloading;
+        IsPaused = job.Status == DownloadStatus.Paused;
+        CanRetry = job.Status is DownloadStatus.Failed or DownloadStatus.Cancelled;
 
         CancelCommand.NotifyCanExecuteChanged();
+        PauseCommand.NotifyCanExecuteChanged();
+        ResumeCommand.NotifyCanExecuteChanged();
+        RetryCommand.NotifyCanExecuteChanged();
         ShowFileCommand.NotifyCanExecuteChanged();
     }
 
@@ -149,6 +168,21 @@ public sealed partial class DownloadItemViewModel : ObservableObject
         CancelCommand.NotifyCanExecuteChanged();
         await _actions!.CancelAsync(Id).ConfigureAwait(true);
     }
+
+    private bool CanPauseNow() => CanPause && _actions is not null;
+
+    [RelayCommand(CanExecute = nameof(CanPauseNow))]
+    private Task PauseAsync() => _actions!.PauseAsync(Id);
+
+    private bool CanResumeNow() => IsPaused && _actions is not null;
+
+    [RelayCommand(CanExecute = nameof(CanResumeNow))]
+    private Task ResumeAsync() => _actions!.ResumeAsync(Id);
+
+    private bool CanRetryNow() => CanRetry && _actions is not null;
+
+    [RelayCommand(CanExecute = nameof(CanRetryNow))]
+    private Task RetryAsync() => _actions!.RetryAsync(Id);
 
     private bool CanOpen() => _actions is not null;
 

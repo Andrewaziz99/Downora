@@ -75,3 +75,12 @@ Serilog writes to `%LocalAppData%\Downora\logs\downora-YYYYMMDD.log`. Use `[Logg
 - Screens never subscribe to the service directly: `DownloadFeed` (Presentation) moves updates to the UI thread through `IUiThread` and flags real state changes. Item cards (`DownloadItemViewModel`) update in place through `Apply`.
 - Browser sign-in is opt-in (`AppSettings.UseBrowserSession`, `BrowserForCookies`). `CookieBrowsers` is the only list of accepted browsers; the name is passed to `--cookies-from-browser` and nothing else. Never read, copy, store or log cookie contents.
 - Live tests (real yt-dlp and FFmpeg, public 19-second video) run with `DOWNORA_LIVE_TESTS=1`; they look for the tools in `%LocalAppData%\Downora\tools` or `DOWNORA_TOOLS`.
+
+## The download queue (Phase 5)
+
+- `DownloadJobService` is the scheduler. `PumpAsync` is the only place a run starts: it fills free slots (`MaxConcurrentDownloads`, read live) with the oldest `Waiting` jobs, and it is called whenever a job is added, resumed or retried, a run ends, or the setting changes. Never start a run anywhere else.
+- States: new jobs are `Waiting` (or `Paused` when "start automatically" is off). Pause keeps partial files (the run is stopped with `PauseRequested`, so it ends `Paused` instead of `Cancelled`); only cancel discards them. Resume moves `Paused` to `Waiting`; Retry moves `Failed` or `Cancelled` to `Waiting` (a failed job continues from its files, a cancelled one restarts). Pausing during FFmpeg's joining step is refused. The rules are in `DownloadJobTransitions` (Core, pure).
+- Queue order is `QueueOrder`, strictly increasing per job added (`NextQueueOrder`), so jobs added in the same clock tick keep their order and a resumed or retried job keeps its original place.
+- The host starts the service before the database and settings are ready, so `IHostedService.StartAsync` only subscribes to settings changes. `App.xaml.cs` calls `IDownloadJobService.StartQueueAsync()` after startup to run jobs left waiting. Do not touch settings or the database from `StartAsync`.
+- Screens call `IDownloadItemActions` (pause, resume, retry, cancel) and never the service directly; actions swallow and log failures so a click can't crash the window.
+- Queue tests use `FakeEngine` with one gate per download (`DownloadQueueTests`), so concurrency is tested deterministically; wait for background work with `UntilAsync`, never a fixed sleep.

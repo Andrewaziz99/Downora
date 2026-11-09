@@ -83,6 +83,18 @@ public sealed partial class SettingsViewModel : Navigation.PageViewModel
 
     public IReadOnlyList<OptionViewModel<string>> BrowserOptions { get; }
 
+    /// <summary>1 to 10 simultaneous downloads.</summary>
+    public IReadOnlyList<int> ConcurrencyChoices { get; } =
+        [.. Enumerable.Range(AppSettings.MinConcurrentDownloads, AppSettings.MaxConcurrentDownloadsLimit - AppSettings.MinConcurrentDownloads + 1)];
+
+    /// <summary>How many downloads run at once; the rest wait in the queue.</summary>
+    [ObservableProperty]
+    public partial int MaxConcurrentDownloads { get; set; } = 3;
+
+    /// <summary>When off, new downloads are held (paused) in the queue until started.</summary>
+    [ObservableProperty]
+    public partial bool AutoStartDownloads { get; set; } = true;
+
     /// <summary>Opt-in: let yt-dlp use the sign-in of the chosen browser. Off until the user turns it on.</summary>
     [ObservableProperty]
     public partial bool UseBrowserSession { get; set; }
@@ -151,6 +163,8 @@ public sealed partial class SettingsViewModel : Navigation.PageViewModel
             SelectedTheme = ThemeOptions.First(o => o.Value == current.Theme);
             SelectedLanguage = LanguageOptions.First(o => o.Value == current.Language);
             DownloadDirectory = current.DownloadDirectory;
+            MaxConcurrentDownloads = current.MaxConcurrentDownloads;
+            AutoStartDownloads = current.AutoStartDownloads;
             UseBrowserSession = current.UseBrowserSession;
             SelectedBrowser = BrowserOptions.FirstOrDefault(o => o.Value == current.BrowserForCookies) ?? BrowserOptions[0];
             ErrorMessage = null;
@@ -181,6 +195,22 @@ public sealed partial class SettingsViewModel : Navigation.PageViewModel
 
         L.SetLanguage(value.Value);
         _ = SaveAsync(s => s.Language = value.Value);
+    }
+
+    partial void OnMaxConcurrentDownloadsChanged(int value)
+    {
+        if (!_loading)
+        {
+            _ = SaveAsync(s => s.MaxConcurrentDownloads = value);
+        }
+    }
+
+    partial void OnAutoStartDownloadsChanged(bool value)
+    {
+        if (!_loading)
+        {
+            _ = SaveAsync(s => s.AutoStartDownloads = value);
+        }
     }
 
     partial void OnUseBrowserSessionChanged(bool value)

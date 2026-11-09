@@ -232,5 +232,19 @@
   <data name="Browser_Chrome" xml:space="preserve"><value>Google Chrome</value></data>
   <data name="Browser_Firefox" xml:space="preserve"><value>Mozilla Firefox</value></data>
   <data name="Browser_Brave" xml:space="preserve"><value>Brave</value></data>
+  <data name="Queue_Pause" xml:space="preserve"><value>Pause</value></data>
+  <data name="Queue_Resume" xml:space="preserve"><value>Resume</value></data>
+  <data name="Queue_Retry" xml:space="preserve"><value>Try again</value></data>
+  <data name="Queue_PauseAll" xml:space="preserve"><value>Pause all</value></data>
+  <data name="Queue_ResumeAll" xml:space="preserve"><value>Resume all</value></data>
+  <data name="Queue_SummaryRunning" xml:space="preserve"><value>{0} downloading</value></data>
+  <data name="Queue_SummaryWaiting" xml:space="preserve"><value>{0} waiting</value></data>
+  <data name="Queue_SummaryPaused" xml:space="preserve"><value>{0} paused</value></data>
+  <data name="Stage_Queued" xml:space="preserve"><value>Waiting for a free slot…</value></data>
+  <data name="Stage_Paused" xml:space="preserve"><value>Paused. What is downloaded so far is kept.</value></data>
+  <data name="Settings_Concurrent" xml:space="preserve"><value>Simultaneous downloads</value></data>
+  <data name="Settings_ConcurrentDesc" xml:space="preserve"><value>How many downloads run at once. The rest wait in the queue.</value></data>
+  <data name="Settings_AutoStart" xml:space="preserve"><value>Start downloads automatically</value></data>
+  <data name="Settings_AutoStartDesc" xml:space="preserve"><value>When off, new downloads are held in the queue until you resume them.</value></data>
   <data name="Error_Generic" xml:space="preserve"><value>Something went wrong: {0}</value></data>
 </root>

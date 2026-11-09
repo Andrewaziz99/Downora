@@ -73,6 +73,30 @@
                             Icon="{ui:SymbolIcon FolderOpen24}"
                             ToolTip="{l:Loc Queue_OpenFolder}" />
                         <ui:Button
+                            Margin="0,0,4,0"
+                            Appearance="Transparent"
+                            AutomationProperties.Name="{l:Loc Queue_Pause}"
+                            Command="{Binding PauseCommand}"
+                            Icon="{ui:SymbolIcon Pause24}"
+                            ToolTip="{l:Loc Queue_Pause}"
+                            Visibility="{Binding CanPause, Converter={StaticResource BoolToVisibility}}" />
+                        <ui:Button
+                            Margin="0,0,4,0"
+                            Appearance="Transparent"
+                            AutomationProperties.Name="{l:Loc Queue_Resume}"
+                            Command="{Binding ResumeCommand}"
+                            Icon="{ui:SymbolIcon Play24}"
+                            ToolTip="{l:Loc Queue_Resume}"
+                            Visibility="{Binding IsPaused, Converter={StaticResource BoolToVisibility}}" />
+                        <ui:Button
+                            Margin="0,0,4,0"
+                            Appearance="Transparent"
+                            AutomationProperties.Name="{l:Loc Queue_Retry}"
+                            Command="{Binding RetryCommand}"
+                            Icon="{ui:SymbolIcon ArrowCounterclockwise24}"
+                            ToolTip="{l:Loc Queue_Retry}"
+                            Visibility="{Binding CanRetry, Converter={StaticResource BoolToVisibility}}" />
+                        <ui:Button
                             Appearance="Transparent"
                             AutomationProperties.Name="{l:Loc Common_Cancel}"
                             Command="{Binding CancelCommand}"

@@ -182,23 +182,89 @@ public class DownloadJobTransitionsTests
         Assert.Null(job.ErrorMessage);
     }
 
-    [Theory]
-    [InlineData(DownloadStatus.Completed)]
-    [InlineData(DownloadStatus.Failed)]
-    [InlineData(DownloadStatus.Cancelled)]
-    public void Finished_jobs_never_change(DownloadStatus finished)
+    [Fact]
+    public void A_completed_download_never_changes()
     {
         foreach (var target in Enum.GetValues<DownloadStatus>())
         {
-            Assert.False(DownloadJobTransitions.CanMove(finished, target), $"{finished} -> {target}");
+            Assert.False(DownloadJobTransitions.CanMove(DownloadStatus.Completed, target), $"Completed -> {target}");
+        }
+
+        var done = Job(DownloadStatus.Completed);
+        Assert.Throws<InvalidOperationException>(() => DownloadJobTransitions.Start(done, Now));
+        Assert.Throws<InvalidOperationException>(() => DownloadJobTransitions.Cancel(done, Now));
+        Assert.Throws<InvalidOperationException>(() => DownloadJobTransitions.Fail(done, DownloadErrorKind.Unknown, null, Now));
+        Assert.Throws<InvalidOperationException>(() => DownloadJobTransitions.Pause(done));
+        Assert.Throws<InvalidOperationException>(() => DownloadJobTransitions.Retry(done));
+        Assert.False(DownloadJobTransitions.ApplyProgress(done, Progress(DownloadStage.Downloading, 50)));
+    }
+
+    [Theory]
+    [InlineData(DownloadStatus.Failed)]
+    [InlineData(DownloadStatus.Cancelled)]
+    public void A_failed_or_cancelled_job_can_only_go_back_in_line(DownloadStatus finished)
+    {
+        foreach (var target in Enum.GetValues<DownloadStatus>())
+        {
+            Assert.True((target == DownloadStatus.Waiting) == DownloadJobTransitions.CanMove(finished, target), $"{finished} -> {target}");
         }
 
         Assert.Throws<InvalidOperationException>(() => DownloadJobTransitions.Start(Job(finished), Now));
         Assert.Throws<InvalidOperationException>(() => DownloadJobTransitions.Cancel(Job(finished), Now));
-        Assert.Throws<InvalidOperationException>(() => DownloadJobTransitions.Fail(Job(finished), DownloadErrorKind.Unknown, null, Now));
         Assert.Throws<InvalidOperationException>(() => DownloadJobTransitions.Complete(Job(finished), "x", 1, Now));
         Assert.Throws<InvalidOperationException>(() => DownloadJobTransitions.Pause(Job(finished)));
         Assert.False(DownloadJobTransitions.ApplyProgress(Job(finished), Progress(DownloadStage.Downloading, 50)));
+    }
+
+    [Fact]
+    public void Retrying_a_failed_job_keeps_its_progress_and_clears_the_error()
+    {
+        var job = Job();
+        DownloadJobTransitions.Start(job, Now);
+        DownloadJobTransitions.ApplyProgress(job, Progress(DownloadStage.Downloading, 60, 600, 1000));
+        DownloadJobTransitions.Fail(job, DownloadErrorKind.Network, "dropped", Now.AddMinutes(1));
+
+        DownloadJobTransitions.Retry(job);
+
+        Assert.Equal(DownloadStatus.Waiting, job.Status);
+        Assert.Equal(1, job.RetryCount);
+        Assert.Equal(DownloadErrorKind.None, job.ErrorKind);
+        Assert.Null(job.ErrorMessage);
+        Assert.Null(job.CompletedAtUtc);
+        Assert.Equal(60, job.ProgressPercent); // its partial files are still there, so it continues from here
+        Assert.Equal(600, job.DownloadedBytes);
+    }
+
+    [Fact]
+    public void Retrying_a_cancelled_job_starts_from_nothing_because_its_files_were_deleted()
+    {
+        var job = Job();
+        DownloadJobTransitions.Start(job, Now);
+        DownloadJobTransitions.ApplyProgress(job, Progress(DownloadStage.Downloading, 60, 600, 1000));
+        DownloadJobTransitions.Cancel(job, Now.AddMinutes(1));
+
+        DownloadJobTransitions.Retry(job);
+
+        Assert.Equal(DownloadStatus.Waiting, job.Status);
+        Assert.Equal(0, job.ProgressPercent);
+        Assert.Equal(0, job.DownloadedBytes);
+        Assert.Equal(1, job.RetryCount);
+    }
+
+    [Fact]
+    public void Resuming_puts_a_paused_job_back_in_line_with_its_progress()
+    {
+        var job = Job();
+        DownloadJobTransitions.Start(job, Now);
+        DownloadJobTransitions.ApplyProgress(job, Progress(DownloadStage.Downloading, 40, 400, 1000));
+        DownloadJobTransitions.Pause(job);
+
+        DownloadJobTransitions.Resume(job);
+
+        Assert.Equal(DownloadStatus.Waiting, job.Status);
+        Assert.Equal(40, job.ProgressPercent);
+        Assert.Equal(0, job.RetryCount);
+        Assert.Throws<InvalidOperationException>(() => DownloadJobTransitions.Resume(job)); // only a paused job resumes
     }
 
     [Fact]

@@ -224,6 +224,22 @@ S = {
  "Browser_Firefox": ("Mozilla Firefox", "Mozilla Firefox"),
  "Browser_Brave": ("Brave", "Brave"),
 
+ "Queue_Pause": ("Pause", "إيقاف مؤقت"),
+ "Queue_Resume": ("Resume", "استئناف"),
+ "Queue_Retry": ("Try again", "إعادة المحاولة"),
+ "Queue_PauseAll": ("Pause all", "إيقاف الكل مؤقتًا"),
+ "Queue_ResumeAll": ("Resume all", "استئناف الكل"),
+ "Queue_SummaryRunning": ("{0} downloading", "{0} قيد التنزيل"),
+ "Queue_SummaryWaiting": ("{0} waiting", "{0} في الانتظار"),
+ "Queue_SummaryPaused": ("{0} paused", "{0} متوقفة مؤقتًا"),
+ "Stage_Queued": ("Waiting for a free slot…", "في انتظار مكان شاغر…"),
+ "Stage_Paused": ("Paused. What is downloaded so far is kept.", "متوقف مؤقتًا. يتم الاحتفاظ بما تم تنزيله."),
+
+ "Settings_Concurrent": ("Simultaneous downloads", "التنزيلات المتزامنة"),
+ "Settings_ConcurrentDesc": ("How many downloads run at once. The rest wait in the queue.", "عدد التنزيلات التي تعمل في وقت واحد. تنتظر البقية في القائمة."),
+ "Settings_AutoStart": ("Start downloads automatically", "بدء التنزيلات تلقائيًا"),
+ "Settings_AutoStartDesc": ("When off, new downloads are held in the queue until you resume them.", "عند الإيقاف، تبقى التنزيلات الجديدة موقوفة في القائمة حتى تستأنفها."),
+
  "Error_Generic": ("Something went wrong: {0}", "حدث خطأ ما: {0}"),
 }
 

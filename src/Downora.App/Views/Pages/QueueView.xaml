@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     xmlns:l="clr-namespace:Downora.App.Localization"
     xmlns:controls="clr-namespace:Downora.App.Controls"
     xmlns:vm="clr-namespace:Downora.Presentation.ViewModels;assembly=Downora.Presentation"
@@ -19,6 +20,11 @@
         </Grid.RowDefinitions>
 
         <TextBlock Style="{StaticResource PageHeader}" Text="{l:Loc Nav_Queue}" />
+        <StackPanel HorizontalAlignment="Right" VerticalAlignment="Center" Orientation="Horizontal">
+            <TextBlock Margin="0,0,12,0" VerticalAlignment="Center" Style="{StaticResource Text.Secondary}" Text="{Binding SummaryText}" />
+            <ui:Button Margin="0,0,8,0" Command="{Binding PauseAllCommand}" Content="{l:Loc Queue_PauseAll}" Icon="{ui:SymbolIcon Pause24}" />
+            <ui:Button Command="{Binding ResumeAllCommand}" Content="{l:Loc Queue_ResumeAll}" Icon="{ui:SymbolIcon Play24}" />
+        </StackPanel>
 
         <Border Grid.Row="1" Margin="0,0,0,16" Padding="8" Style="{StaticResource Card}">
             <ListBox ItemsSource="{Binding Filters}" SelectedItem="{Binding SelectedFilter, Mode=TwoWay}" Style="{StaticResource TabStrip}">

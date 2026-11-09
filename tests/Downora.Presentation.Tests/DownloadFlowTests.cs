@@ -900,6 +900,217 @@ public sealed class DownloadFlowTests : IAsyncDisposable
         Assert.Null(item.ErrorMessage);
         Assert.Equal(DownloadErrorKind.None, item.ErrorKind);
     }
+
+    // ---- Phase 5: pause, resume, retry, the queue summary ----
+
+    [Fact]
+    public void Each_card_offers_only_the_buttons_that_make_sense_for_its_state()
+    {
+        (DownloadStatus Status, bool Pause, bool Resume, bool Retry, bool Cancel)[] cases =
+        [
+            (DownloadStatus.Waiting, true, false, false, true),
+            (DownloadStatus.Extracting, true, false, false, true),
+            (DownloadStatus.Downloading, true, false, false, true),
+            (DownloadStatus.Processing, false, false, false, true),
+            (DownloadStatus.Paused, false, true, false, true),
+            (DownloadStatus.Failed, false, false, true, false),
+            (DownloadStatus.Cancelled, false, false, true, false),
+            (DownloadStatus.Completed, false, false, false, false),
+        ];
+        var actions = Get<IDownloadItemActions>();
+
+        foreach (var (status, pause, resume, retry, cancel) in cases)
+        {
+            var item = new DownloadItemViewModel(Fakes.Job("x", status), _l, actions);
+
+            Assert.Equal(pause, item.PauseCommand.CanExecute(null));
+            Assert.Equal(resume, item.ResumeCommand.CanExecute(null));
+            Assert.Equal(retry, item.RetryCommand.CanExecute(null));
+            Assert.Equal(cancel, item.CancelCommand.CanExecute(null));
+            Assert.Equal(pause, item.CanPause);
+            Assert.Equal(resume, item.IsPaused);
+            Assert.Equal(retry, item.CanRetry);
+        }
+    }
+
+    [Fact]
+    public async Task The_card_buttons_pause_resume_and_retry_the_job()
+    {
+        var actions = Get<IDownloadItemActions>();
+        var running = new DownloadItemViewModel(Fakes.Job("a", DownloadStatus.Downloading), _l, actions);
+        var paused = new DownloadItemViewModel(Fakes.Job("b", DownloadStatus.Paused), _l, actions);
+        var failed = new DownloadItemViewModel(Fakes.Job("c", DownloadStatus.Failed), _l, actions);
+
+        await running.PauseCommand.ExecuteAsync(null);
+        await paused.ResumeCommand.ExecuteAsync(null);
+        await failed.RetryCommand.ExecuteAsync(null);
+
+        await _downloads.Received(1).PauseAsync(running.Id, Arg.Any<CancellationToken>());
+        await _downloads.Received(1).ResumeAsync(paused.Id, Arg.Any<CancellationToken>());
+        await _downloads.Received(1).RetryAsync(failed.Id, Arg.Any<CancellationToken>());
+    }
+
+    [Fact]
+    public async Task A_failing_action_is_swallowed_and_logged_not_thrown_into_the_ui()
+    {
+        _downloads.PauseAsync(Arg.Any<Guid>(), Arg.Any<CancellationToken>()).ThrowsAsync(new InvalidOperationException("db locked"));
+        var item = new DownloadItemViewModel(Fakes.Job("a", DownloadStatus.Downloading), _l, Get<IDownloadItemActions>());
+
+        await item.PauseCommand.ExecuteAsync(null);
+
+        await _downloads.Received(1).PauseAsync(item.Id, Arg.Any<CancellationToken>());
+    }
+
+    [Fact]
+    public void Waiting_and_paused_cards_say_why_nothing_is_moving()
+    {
+        var waiting = new DownloadItemViewModel(Fakes.Job("a", DownloadStatus.Waiting), _l);
+        var paused = new DownloadItemViewModel(Fakes.Job("b", DownloadStatus.Paused, downloaded: 5L << 20, total: 10L << 20), _l);
+
+        Assert.Equal("Waiting for a free slot…", waiting.StageText);
+        Assert.Equal("Paused. What is downloaded so far is kept.", paused.StageText);
+        Assert.Equal("5 MB of 10 MB", paused.SizeText);
+    }
+
+    [Fact]
+    public async Task A_card_changes_its_buttons_as_the_job_is_paused_and_resumed()
+    {
+        var job = Fakes.Job("a", DownloadStatus.Downloading);
+        _queries.GetActiveAsync(Arg.Any<CancellationToken>()).Returns([job]);
+        var queue = Get<QueueViewModel>();
+        await queue.OnNavigatedToAsync(CancellationToken.None);
+        var card = queue.Items.Single();
+        Assert.True(card.CanPause);
+
+        job.Status = DownloadStatus.Paused;
+        Send(job);
+        Assert.False(card.CanPause);
+        Assert.True(card.IsPaused);
+        Assert.True(card.ResumeCommand.CanExecute(null));
+
+        job.Status = DownloadStatus.Waiting;
+        Send(job);
+        Assert.True(card.CanPause);
+        Assert.False(card.IsPaused);
+    }
+
+    [Fact]
+    public async Task The_queue_summarises_what_is_running_waiting_and_paused_and_enables_pause_all_and_resume_all_accordingly()
+    {
+        _queries.GetActiveAsync(Arg.Any<CancellationToken>()).Returns(
+        [
+            Fakes.Job("a", DownloadStatus.Downloading), Fakes.Job("b", DownloadStatus.Extracting),
+            Fakes.Job("c", DownloadStatus.Waiting), Fakes.Job("d", DownloadStatus.Paused),
+        ]);
+        var queue = Get<QueueViewModel>();
+
+        await queue.OnNavigatedToAsync(CancellationToken.None);
+
+        Assert.Equal("2 downloading · 1 waiting · 1 paused", queue.SummaryText);
+        Assert.True(queue.PauseAllCommand.CanExecute(null));
+        Assert.True(queue.ResumeAllCommand.CanExecute(null));
+
+        await queue.PauseAllCommand.ExecuteAsync(null);
+        await queue.ResumeAllCommand.ExecuteAsync(null);
+        await _downloads.Received(1).PauseAllAsync(Arg.Any<CancellationToken>());
+        await _downloads.Received(1).ResumeAllAsync(Arg.Any<CancellationToken>());
+    }
+
+    [Fact]
+    public async Task Pause_all_is_off_when_nothing_can_be_paused_and_resume_all_when_nothing_is_paused()
+    {
+        var queue = Get<QueueViewModel>();
+        await queue.OnNavigatedToAsync(CancellationToken.None);
+        Assert.Equal(string.Empty, queue.SummaryText);
+        Assert.False(queue.PauseAllCommand.CanExecute(null));
+        Assert.False(queue.ResumeAllCommand.CanExecute(null));
+
+        var onlyPaused = Fakes.Job("p", DownloadStatus.Paused);
+        Send(onlyPaused);
+        Assert.False(queue.PauseAllCommand.CanExecute(null));
+        Assert.True(queue.ResumeAllCommand.CanExecute(null));
+        Assert.Equal("1 paused", queue.SummaryText);
+    }
+
+    [Fact]
+    public async Task History_shows_a_failed_download_with_a_retry_button_and_drops_it_once_retried()
+    {
+        var failed = Fakes.Job("bad", DownloadStatus.Failed);
+        failed.ErrorKind = DownloadErrorKind.Network;
+        _queries.GetHistoryAsync(Arg.Any<HistoryQuery>(), Arg.Any<CancellationToken>()).Returns([failed]);
+        _queries.CountByStatusAsync(Arg.Any<CancellationToken>()).Returns(new Dictionary<DownloadStatus, int> { [DownloadStatus.Failed] = 1 });
+        var history = Get<HistoryViewModel>();
+        await history.OnNavigatedToAsync(CancellationToken.None);
+        var item = history.Items.Single();
+        Assert.True(item.CanRetry);
+
+        await item.RetryCommand.ExecuteAsync(null);
+        await _downloads.Received(1).RetryAsync(failed.Id, Arg.Any<CancellationToken>());
+
+        // The job goes back to the queue: History reloads without it.
+        _queries.GetHistoryAsync(Arg.Any<HistoryQuery>(), Arg.Any<CancellationToken>()).Returns([]);
+        _queries.CountByStatusAsync(Arg.Any<CancellationToken>()).Returns(new Dictionary<DownloadStatus, int>());
+        failed.Status = DownloadStatus.Waiting;
+        Send(failed);
+        await Task.Delay(50, TestContext.Current.CancellationToken);
+        Assert.Empty(history.Items);
+    }
+
+    [Fact]
+    public async Task History_gains_a_download_the_moment_it_finishes()
+    {
+        var history = Get<HistoryViewModel>();
+        await history.OnNavigatedToAsync(CancellationToken.None);
+        Assert.Empty(history.Items);
+
+        var done = Fakes.Job("done", DownloadStatus.Completed);
+        _queries.GetHistoryAsync(Arg.Any<HistoryQuery>(), Arg.Any<CancellationToken>()).Returns([done]);
+        _queries.CountByStatusAsync(Arg.Any<CancellationToken>()).Returns(new Dictionary<DownloadStatus, int> { [DownloadStatus.Completed] = 1 });
+        Send(done);
+        await Task.Delay(50, TestContext.Current.CancellationToken);
+
+        Assert.Equal(["done"], history.Items.Select(i => i.Title));
+    }
+
+    [Fact]
+    public async Task Settings_saves_the_number_of_simultaneous_downloads_and_automatic_start()
+    {
+        var settings = Get<SettingsViewModel>();
+        await settings.OnNavigatedToAsync(CancellationToken.None);
+        Assert.Equal(3, settings.MaxConcurrentDownloads);
+        Assert.True(settings.AutoStartDownloads);
+        Assert.Equal(Enumerable.Range(1, 10), settings.ConcurrencyChoices);
+
+        settings.MaxConcurrentDownloads = 5;
+        settings.AutoStartDownloads = false;
+
+        Assert.Equal(5, _settings.Current.MaxConcurrentDownloads);
+        Assert.False(_settings.Current.AutoStartDownloads);
+
+        // Reopening the page shows what was saved.
+        await settings.OnNavigatedToAsync(CancellationToken.None);
+        Assert.Equal(5, settings.MaxConcurrentDownloads);
+        Assert.False(settings.AutoStartDownloads);
+    }
+
+    [Fact]
+    public void The_new_queue_labels_are_translated()
+    {
+        var ar = new Localizer();
+        ar.SetLanguage(AppLanguage.Arabic);
+        try
+        {
+            foreach (var key in new[] { "Queue_Pause", "Queue_Resume", "Queue_Retry", "Queue_PauseAll", "Queue_ResumeAll", "Queue_SummaryRunning",
+                "Queue_SummaryWaiting", "Queue_SummaryPaused", "Stage_Queued", "Stage_Paused", "Settings_Concurrent", "Settings_AutoStart" })
+            {
+                Assert.DoesNotContain("[", ar[key], StringComparison.Ordinal);
+            }
+        }
+        finally
+        {
+            ar.SetLanguage(AppLanguage.English);
+        }
+    }
 }
 
 internal static class JobExtensions

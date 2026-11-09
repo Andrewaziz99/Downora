@@ -77,14 +77,22 @@
                                     </StackPanel>
                                     <controls:StatusPill Grid.Column="3" HorizontalAlignment="Left" Status="{Binding Status}" Text="{Binding StatusLabel}" />
                                     <TextBlock Grid.Column="4" VerticalAlignment="Center" Style="{StaticResource Text.Metric}" Text="{Binding FinishedText}" />
-                                    <ui:Button
-                                        Grid.Column="5"
-                                        AutomationProperties.Name="{l:Loc History_ShowInFolder}"
-                                        Appearance="Transparent"
-                                        Command="{Binding DataContext.ShowInFolderCommand, ElementName=Root}"
-                                        CommandParameter="{Binding}"
-                                        Icon="{ui:SymbolIcon FolderOpen24}"
-                                        ToolTip="{l:Loc History_ShowInFolder}" />
+                                    <StackPanel Grid.Column="5" Orientation="Horizontal">
+                                        <ui:Button
+                                            AutomationProperties.Name="{l:Loc Queue_Retry}"
+                                            Appearance="Transparent"
+                                            Command="{Binding RetryCommand}"
+                                            Icon="{ui:SymbolIcon ArrowCounterclockwise24}"
+                                            ToolTip="{l:Loc Queue_Retry}"
+                                            Visibility="{Binding CanRetry, Converter={StaticResource BoolToVisibility}}" />
+                                        <ui:Button
+                                            AutomationProperties.Name="{l:Loc History_ShowInFolder}"
+                                            Appearance="Transparent"
+                                            Command="{Binding DataContext.ShowInFolderCommand, ElementName=Root}"
+                                            CommandParameter="{Binding}"
+                                            Icon="{ui:SymbolIcon FolderOpen24}"
+                                            ToolTip="{l:Loc History_ShowInFolder}" />
+                                    </StackPanel>
                                 </Grid>
                             </Border>
                         </DataTemplate>

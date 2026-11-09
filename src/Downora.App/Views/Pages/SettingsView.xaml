@@ -61,6 +61,31 @@
                 </StackPanel>
             </ui:CardControl>
 
+            <ui:CardControl Margin="0,0,0,4" Icon="{ui:SymbolIcon ArrowSync24}">
+                <ui:CardControl.Header>
+                    <StackPanel>
+                        <TextBlock Style="{StaticResource Text.Body}" Text="{l:Loc Settings_Concurrent}" />
+                        <TextBlock Style="{StaticResource Text.Caption}" Text="{l:Loc Settings_ConcurrentDesc}" />
+                    </StackPanel>
+                </ui:CardControl.Header>
+                <ComboBox
+                    MinWidth="120"
+                    AutomationProperties.Name="{l:Loc Settings_Concurrent}"
+                    ItemsSource="{Binding ConcurrencyChoices}"
+                    SelectedItem="{Binding MaxConcurrentDownloads, Mode=TwoWay}" />
+            </ui:CardControl>
+            <ui:CardControl Margin="0,0,0,4" Icon="{ui:SymbolIcon Play24}">
+                <ui:CardControl.Header>
+                    <StackPanel>
+                        <TextBlock Style="{StaticResource Text.Body}" Text="{l:Loc Settings_AutoStart}" />
+                        <TextBlock Style="{StaticResource Text.Caption}" Text="{l:Loc Settings_AutoStartDesc}" />
+                    </StackPanel>
+                </ui:CardControl.Header>
+                <ui:ToggleSwitch
+                    AutomationProperties.Name="{l:Loc Settings_AutoStart}"
+                    IsChecked="{Binding AutoStartDownloads, Mode=TwoWay}" />
+            </ui:CardControl>
+
             <!-- Browser sign-in (opt-in) -->
             <StackPanel x:Name="CookieSection">
                 <TextBlock Margin="0,20,0,8" Style="{StaticResource Text.BodyStrong}" Text="{l:Loc Settings_Cookies}" />

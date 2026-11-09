@@ -12,9 +12,14 @@ public static class DownloadJobTransitions
 {
     public static bool CanMove(DownloadStatus from, DownloadStatus to)
     {
-        if (from is DownloadStatus.Completed or DownloadStatus.Failed or DownloadStatus.Cancelled)
+        if (from == DownloadStatus.Completed)
         {
-            return false; // finished jobs only change when the user retries them (a new job)
+            return false; // a finished download never changes; downloading it again is a new job
+        }
+
+        if (from is DownloadStatus.Failed or DownloadStatus.Cancelled)
+        {
+            return to == DownloadStatus.Waiting; // the only way out: the user retries it
         }
 
         return to switch
@@ -36,6 +41,29 @@ public static class DownloadJobTransitions
         DownloadStage.Downloading => DownloadStatus.Downloading,
         _ => DownloadStatus.Processing,
     };
+
+    /// <summary>A paused job goes back in line. It keeps its partial files and progress.</summary>
+    public static void Resume(DownloadJob job) => Move(job, DownloadStatus.Waiting);
+
+    /// <summary>
+    /// A failed or cancelled job goes back in line. A failed one keeps its partial files, so the download continues
+    /// where it stopped; a cancelled one had them deleted, so it starts again from nothing.
+    /// </summary>
+    public static void Retry(DownloadJob job)
+    {
+        ArgumentNullException.ThrowIfNull(job);
+        var wasCancelled = job.Status == DownloadStatus.Cancelled;
+        Move(job, DownloadStatus.Waiting);
+        job.RetryCount++;
+        job.ErrorKind = DownloadErrorKind.None;
+        job.ErrorMessage = null;
+        job.CompletedAtUtc = null;
+        if (wasCancelled)
+        {
+            job.ProgressPercent = 0;
+            job.DownloadedBytes = 0;
+        }
+    }
 
     /// <summary>The job begins work. Valid from Waiting, or from Paused when it is resumed.</summary>
     public static void Start(DownloadJob job, DateTime nowUtc)

@@ -12,15 +12,15 @@ namespace Downora.Infrastructure.Services;
 
 /// <summary>
 /// Creates download jobs, runs each through <see cref="IDownloadEngine"/> and saves every state change, so the queue,
-/// history, Home statistics and crash recovery all read real data. One job runs as one engine call; a queue that
-/// limits how many run at once (Phase 5) replaces the "start immediately" step in <see cref="StartAsync"/> only.
+/// history, Home statistics and crash recovery all read real data. One job is one engine call; the queue decides
+/// when each call starts: at most <c>MaxConcurrentDownloads</c> at a time, oldest waiting job first.
 /// </summary>
 internal sealed partial class DownloadJobService(
     IDbContextFactory<DownoraDbContext> contextFactory,
     IDownloadEngine engine,
     ISettingsService settings,
     TimeProvider time,
-    ILogger<DownloadJobService> logger) : IDownloadJobService, IHostedService
+    ILogger<DownloadJobService> logger) : IDownloadJobService, IHostedService, IDisposable
 {
     /// <summary>Progress is saved this often; status changes are saved at once.</summary>
     internal static readonly TimeSpan SaveInterval = TimeSpan.FromSeconds(2);
@@ -29,9 +29,13 @@ internal sealed partial class DownloadJobService(
     internal static readonly TimeSpan NotifyInterval = TimeSpan.FromMilliseconds(250);
 
     private readonly ConcurrentDictionary<Guid, Run> _runs = new();
+    private readonly SemaphoreSlim _pumpGate = new(1, 1);
     private volatile bool _stopping;
+    private long _lastOrder;
 
     public event EventHandler<DownloadJobUpdate>? JobUpdated;
+
+    public void Dispose() => _pumpGate.Dispose();
 
     public async Task<DownloadStartResult> StartAsync(NewDownload download, CancellationToken cancellationToken = default)
     {
@@ -64,8 +68,9 @@ internal sealed partial class DownloadJobService(
             AudioBitrateKbps = download.Kind == MediaKind.Audio ? download.AudioBitrateKbps : null,
             OutputDirectory = current.DownloadDirectory,
             TotalBytes = download.EstimatedBytes,
-            Status = DownloadStatus.Waiting,
-            QueueOrder = now.Ticks,
+            // With "start automatically" off the job is held until the user starts it.
+            Status = current.AutoStartDownloads ? DownloadStatus.Waiting : DownloadStatus.Paused,
+            QueueOrder = NextQueueOrder(now.Ticks),
             CreatedAtUtc = now,
         };
 
@@ -73,13 +78,11 @@ internal sealed partial class DownloadJobService(
         await db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
         LogCreated(job.Id, job.MediaKind, job.QualityPreset);
 
-        var snapshot = job.Clone(); // taken before the run starts changing the job on another thread
-        var run = new Run(new CancellationTokenSource());
-        _runs[job.Id] = run;
+        var snapshot = job.Clone(); // taken before the queue starts changing the job on another thread
         Publish(job, null);
 
-        // The run outlives this call: the caller gets the job back straight away and follows it through JobUpdated.
-        run.Task = Task.Run(() => RunAsync(job, run), CancellationToken.None);
+        // The queue starts it now if a slot is free; either way the caller follows it through JobUpdated.
+        await PumpAsync().ConfigureAwait(false);
         return new DownloadStartResult(snapshot, WasAlreadyActive: false);
     }
 
@@ -87,20 +90,12 @@ internal sealed partial class DownloadJobService(
     {
         if (_runs.TryGetValue(jobId, out var run))
         {
-            try
-            {
-                await run.Cancellation.CancelAsync().ConfigureAwait(false);
-            }
-            catch (ObjectDisposedException)
-            {
-                // The run finished while we were asking it to stop; there is nothing left to cancel.
-            }
-
-            await run.Task.ConfigureAwait(false);
+            run.PauseRequested = false; // cancelling wins over a pause asked for a moment earlier
+            await StopRunAsync(run).ConfigureAwait(false);
             return true;
         }
 
-        // Not running: a job left Waiting or Paused (by a restart) is cancelled directly.
+        // Not running: a job that is waiting or paused is cancelled directly.
         await using var db = await contextFactory.CreateDbContextAsync(cancellationToken).ConfigureAwait(false);
         var job = await db.DownloadJobs.FirstOrDefaultAsync(j => j.Id == jobId, cancellationToken).ConfigureAwait(false);
         if (job is null || job.IsFinished)
@@ -115,7 +110,210 @@ internal sealed partial class DownloadJobService(
         return true;
     }
 
-    public Task StartAsync(CancellationToken cancellationToken) => Task.CompletedTask;
+    public async Task<bool> PauseAsync(Guid jobId, CancellationToken cancellationToken = default)
+    {
+        if (_runs.TryGetValue(jobId, out var run))
+        {
+            // Once FFmpeg is joining the streams there is little left to save, and stopping it would redo that work.
+            if (run.Job.Status == DownloadStatus.Processing)
+            {
+                return false;
+            }
+
+            run.PauseRequested = true;
+            await StopRunAsync(run).ConfigureAwait(false);
+            return true;
+        }
+
+        await using var db = await contextFactory.CreateDbContextAsync(cancellationToken).ConfigureAwait(false);
+        var job = await db.DownloadJobs.FirstOrDefaultAsync(j => j.Id == jobId, cancellationToken).ConfigureAwait(false);
+        if (job is not { Status: DownloadStatus.Waiting })
+        {
+            return false;
+        }
+
+        DownloadJobTransitions.Pause(job);
+        await db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+        Publish(job, null);
+        return true;
+    }
+
+    public async Task<bool> ResumeAsync(Guid jobId, CancellationToken cancellationToken = default)
+    {
+        if (!await ChangeAsync(jobId, DownloadStatus.Paused, DownloadJobTransitions.Resume, cancellationToken).ConfigureAwait(false))
+        {
+            return false;
+        }
+
+        await PumpAsync().ConfigureAwait(false);
+        return true;
+    }
+
+    public async Task<bool> RetryAsync(Guid jobId, CancellationToken cancellationToken = default)
+    {
+        var changed = await ChangeAsync(jobId, DownloadStatus.Failed, DownloadJobTransitions.Retry, cancellationToken).ConfigureAwait(false)
+                      || await ChangeAsync(jobId, DownloadStatus.Cancelled, DownloadJobTransitions.Retry, cancellationToken).ConfigureAwait(false);
+        if (changed)
+        {
+            LogRetried(jobId);
+            await PumpAsync().ConfigureAwait(false);
+        }
+
+        return changed;
+    }
+
+    public async Task PauseAllAsync(CancellationToken cancellationToken = default)
+    {
+        DownloadStatus[] holdable = [DownloadStatus.Waiting, DownloadStatus.Extracting, DownloadStatus.Downloading];
+        List<Guid> ids;
+        await using (var db = await contextFactory.CreateDbContextAsync(cancellationToken).ConfigureAwait(false))
+        {
+            // Newest first, so waiting jobs are held before a finishing download frees a slot for them.
+            ids = await db.DownloadJobs.AsNoTracking().Where(j => holdable.Contains(j.Status))
+                .OrderByDescending(j => j.QueueOrder).Select(j => j.Id).ToListAsync(cancellationToken).ConfigureAwait(false);
+        }
+
+        foreach (var id in ids)
+        {
+            await PauseAsync(id, cancellationToken).ConfigureAwait(false);
+        }
+    }
+
+    public async Task ResumeAllAsync(CancellationToken cancellationToken = default)
+    {
+        List<Guid> ids;
+        await using (var db = await contextFactory.CreateDbContextAsync(cancellationToken).ConfigureAwait(false))
+        {
+            ids = await db.DownloadJobs.AsNoTracking().Where(j => j.Status == DownloadStatus.Paused)
+                .OrderBy(j => j.QueueOrder).Select(j => j.Id).ToListAsync(cancellationToken).ConfigureAwait(false);
+        }
+
+        foreach (var id in ids)
+        {
+            await ChangeAsync(id, DownloadStatus.Paused, DownloadJobTransitions.Resume, cancellationToken).ConfigureAwait(false);
+        }
+
+        await PumpAsync().ConfigureAwait(false);
+    }
+
+    /// <summary>Applies a state change to a job that is in the expected state and not running. Returns false otherwise.</summary>
+    private async Task<bool> ChangeAsync(Guid jobId, DownloadStatus expected, Action<DownloadJob> change, CancellationToken cancellationToken)
+    {
+        if (_runs.ContainsKey(jobId))
+        {
+            return false;
+        }
+
+        await using var db = await contextFactory.CreateDbContextAsync(cancellationToken).ConfigureAwait(false);
+        var job = await db.DownloadJobs.FirstOrDefaultAsync(j => j.Id == jobId, cancellationToken).ConfigureAwait(false);
+        if (job is null || job.Status != expected)
+        {
+            return false;
+        }
+
+        change(job);
+        await db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+        Publish(job, null);
+        return true;
+    }
+
+    /// <summary>The next place in line: later than every job added before, even when the clock hasn't moved.</summary>
+    private long NextQueueOrder(long ticks)
+    {
+        while (true)
+        {
+            var last = Interlocked.Read(ref _lastOrder);
+            var order = Math.Max(ticks, last + 1);
+            if (Interlocked.CompareExchange(ref _lastOrder, order, last) == last)
+            {
+                return order;
+            }
+        }
+    }
+
+    private static async Task StopRunAsync(Run run)
+    {
+        try
+        {
+            await run.Cancellation.CancelAsync().ConfigureAwait(false);
+        }
+        catch (ObjectDisposedException)
+        {
+            // The run finished while we were asking it to stop; there is nothing left to stop.
+        }
+
+        await run.Task.ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Start of the host. The database and settings aren't ready yet at this point, so it only arranges for the
+    /// queue to follow the concurrency setting; <see cref="StartQueueAsync"/> starts the work.
+    /// </summary>
+    public Task StartAsync(CancellationToken cancellationToken)
+    {
+        settings.Changed += OnSettingsChanged;
+        return Task.CompletedTask;
+    }
+
+    public Task StartQueueAsync(CancellationToken cancellationToken = default) => PumpAsync();
+
+    private void OnSettingsChanged(object? sender, AppSettings e) => _ = PumpQuietlyAsync();
+
+    private async Task PumpQuietlyAsync()
+    {
+        try
+        {
+            await PumpAsync().ConfigureAwait(false);
+        }
+#pragma warning disable CA1031 // A failed queue check is logged; the next change of state runs it again.
+        catch (Exception ex)
+#pragma warning restore CA1031
+        {
+            LogPumpFailed(ex);
+        }
+    }
+
+    /// <summary>
+    /// Starts waiting jobs, oldest first, until the concurrency limit is reached. Called whenever something could
+    /// free a slot or add work: a job added, resumed or retried, a download ending, the setting changing.
+    /// </summary>
+    private async Task PumpAsync()
+    {
+        if (_stopping)
+        {
+            return;
+        }
+
+        await _pumpGate.WaitAsync().ConfigureAwait(false);
+        try
+        {
+            var limit = Math.Clamp(settings.Current.MaxConcurrentDownloads, AppSettings.MinConcurrentDownloads, AppSettings.MaxConcurrentDownloadsLimit);
+            var free = limit - _runs.Count;
+            if (free <= 0 || _stopping)
+            {
+                return;
+            }
+
+            var running = _runs.Keys.ToList();
+            await using var db = await contextFactory.CreateDbContextAsync().ConfigureAwait(false);
+            var next = await db.DownloadJobs.AsNoTracking()
+                .Where(j => j.Status == DownloadStatus.Waiting && !running.Contains(j.Id))
+                .OrderBy(j => j.QueueOrder).ThenBy(j => j.CreatedAtUtc)
+                .Take(free)
+                .ToListAsync().ConfigureAwait(false);
+
+            foreach (var job in next)
+            {
+                var run = new Run(job, new CancellationTokenSource());
+                _runs[job.Id] = run;
+                run.Task = Task.Run(() => RunAsync(job, run), CancellationToken.None);
+            }
+        }
+        finally
+        {
+            _pumpGate.Release();
+        }
+    }
 
     /// <summary>
     /// The app is closing: stop every download but keep its partial files, and leave the jobs Paused so they can be
@@ -124,6 +322,7 @@ internal sealed partial class DownloadJobService(
     public async Task StopAsync(CancellationToken cancellationToken)
     {
         _stopping = true;
+        settings.Changed -= OnSettingsChanged;
         var running = _runs.Values.ToList();
         foreach (var run in running)
         {
@@ -194,9 +393,9 @@ internal sealed partial class DownloadJobService(
         }
         catch (OperationCanceledException) when (token.IsCancellationRequested)
         {
-            if (_stopping)
+            if (_stopping || run.PauseRequested)
             {
-                // Closing the app: keep the partial files so the download can continue later.
+                // Paused by the user or the app closing: keep the partial files so the download can continue later.
                 DownloadJobTransitions.Pause(job);
                 LogPaused(job.Id);
             }
@@ -233,6 +432,9 @@ internal sealed partial class DownloadJobService(
         Publish(job, job.Status == DownloadStatus.Completed ? null : latest);
         _runs.TryRemove(job.Id, out _);
         run.Cancellation.Dispose();
+
+        // The slot is free: the next waiting job starts.
+        await PumpQuietlyAsync().ConfigureAwait(false);
     }
 
     private DownloadRequest BuildRequest(DownloadJob job) => new()
@@ -315,9 +517,15 @@ internal sealed partial class DownloadJobService(
         }
     }
 
-    private sealed class Run(CancellationTokenSource cancellation)
+    private sealed class Run(DownloadJob job, CancellationTokenSource cancellation)
     {
+        /// <summary>The live job, changed only by the run's own task.</summary>
+        public DownloadJob Job { get; } = job;
+
         public CancellationTokenSource Cancellation { get; } = cancellation;
+
+        /// <summary>Set when the user paused the job, so that stopping it keeps its files instead of discarding them.</summary>
+        public volatile bool PauseRequested;
 
         public Task Task { get; set; } = Task.CompletedTask;
     }
@@ -350,6 +558,12 @@ internal sealed partial class DownloadJobService(
 
     [LoggerMessage(Level = LogLevel.Information, Message = "Download job {JobId} is already queued or running; not starting another")]
     private partial void LogDuplicate(Guid jobId);
+
+    [LoggerMessage(Level = LogLevel.Information, Message = "Download job {JobId} put back in line to try again")]
+    private partial void LogRetried(Guid jobId);
+
+    [LoggerMessage(Level = LogLevel.Warning, Message = "Could not start waiting downloads")]
+    private partial void LogPumpFailed(Exception exception);
 
     [LoggerMessage(Level = LogLevel.Information, Message = "Download job {JobId} completed")]
     private partial void LogCompleted(Guid jobId);

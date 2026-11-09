@@ -232,5 +232,19 @@
   <data name="Browser_Chrome" xml:space="preserve"><value>Google Chrome</value></data>
   <data name="Browser_Firefox" xml:space="preserve"><value>Mozilla Firefox</value></data>
   <data name="Browser_Brave" xml:space="preserve"><value>Brave</value></data>
+  <data name="Queue_Pause" xml:space="preserve"><value>إيقاف مؤقت</value></data>
+  <data name="Queue_Resume" xml:space="preserve"><value>استئناف</value></data>
+  <data name="Queue_Retry" xml:space="preserve"><value>إعادة المحاولة</value></data>
+  <data name="Queue_PauseAll" xml:space="preserve"><value>إيقاف الكل مؤقتًا</value></data>
+  <data name="Queue_ResumeAll" xml:space="preserve"><value>استئناف الكل</value></data>
+  <data name="Queue_SummaryRunning" xml:space="preserve"><value>{0} قيد التنزيل</value></data>
+  <data name="Queue_SummaryWaiting" xml:space="preserve"><value>{0} في الانتظار</value></data>
+  <data name="Queue_SummaryPaused" xml:space="preserve"><value>{0} متوقفة مؤقتًا</value></data>
+  <data name="Stage_Queued" xml:space="preserve"><value>في انتظار مكان شاغر…</value></data>
+  <data name="Stage_Paused" xml:space="preserve"><value>متوقف مؤقتًا. يتم الاحتفاظ بما تم تنزيله.</value></data>
+  <data name="Settings_Concurrent" xml:space="preserve"><value>التنزيلات المتزامنة</value></data>
+  <data name="Settings_ConcurrentDesc" xml:space="preserve"><value>عدد التنزيلات التي تعمل في وقت واحد. تنتظر البقية في القائمة.</value></data>
+  <data name="Settings_AutoStart" xml:space="preserve"><value>بدء التنزيلات تلقائيًا</value></data>
+  <data name="Settings_AutoStartDesc" xml:space="preserve"><value>عند الإيقاف، تبقى التنزيلات الجديدة موقوفة في القائمة حتى تستأنفها.</value></data>
   <data name="Error_Generic" xml:space="preserve"><value>حدث خطأ ما: {0}</value></data>
 </root>

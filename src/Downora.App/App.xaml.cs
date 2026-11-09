@@ -54,6 +54,7 @@ public partial class App : Application
             await settingsService.LoadAsync().ConfigureAwait(true);
             await services.GetRequiredService<IJobRecoveryService>().RecoverInterruptedJobsAsync().ConfigureAwait(true);
             await services.GetRequiredService<IToolManager>().PrepareAsync().ConfigureAwait(true);
+            await services.GetRequiredService<IDownloadJobService>().StartQueueAsync().ConfigureAwait(true);
 
             var settings = settingsService.Current;
             services.GetRequiredService<Localizer>().SetLanguage(settings.Language);

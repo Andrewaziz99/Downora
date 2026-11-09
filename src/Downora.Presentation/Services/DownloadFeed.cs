@@ -79,6 +79,12 @@ public interface IDownloadItemActions
 {
     Task CancelAsync(Guid jobId);
 
+    Task PauseAsync(Guid jobId);
+
+    Task ResumeAsync(Guid jobId);
+
+    Task RetryAsync(Guid jobId);
+
     void OpenFolder(string folder);
 
     /// <summary>Shows the file in Explorer; if it was moved or deleted, opens its folder instead.</summary>
@@ -90,17 +96,25 @@ internal sealed partial class DownloadItemActions(
     IShellService shell,
     ILogger<DownloadItemActions> logger) : IDownloadItemActions
 {
-    public async Task CancelAsync(Guid jobId)
+    public Task CancelAsync(Guid jobId) => RunAsync(jobId, "cancel", () => jobs.CancelAsync(jobId));
+
+    public Task PauseAsync(Guid jobId) => RunAsync(jobId, "pause", () => jobs.PauseAsync(jobId));
+
+    public Task ResumeAsync(Guid jobId) => RunAsync(jobId, "resume", () => jobs.ResumeAsync(jobId));
+
+    public Task RetryAsync(Guid jobId) => RunAsync(jobId, "retry", () => jobs.RetryAsync(jobId));
+
+    private async Task RunAsync(Guid jobId, string action, Func<Task<bool>> work)
     {
         try
         {
-            await jobs.CancelAsync(jobId).ConfigureAwait(true);
+            await work().ConfigureAwait(true);
         }
-#pragma warning disable CA1031 // A failed cancel is logged; the card keeps showing the real state of the job.
+#pragma warning disable CA1031 // A failed action is logged; the card keeps showing the real state of the job.
         catch (Exception ex)
 #pragma warning restore CA1031
         {
-            LogCancelFailed(jobId, ex);
+            LogActionFailed(action, jobId, ex);
         }
     }
 
@@ -132,8 +146,8 @@ internal sealed partial class DownloadItemActions(
         }
     }
 
-    [LoggerMessage(Level = LogLevel.Warning, Message = "Could not cancel download {JobId}")]
-    private partial void LogCancelFailed(Guid jobId, Exception exception);
+    [LoggerMessage(Level = LogLevel.Warning, Message = "Could not {Action} download {JobId}")]
+    private partial void LogActionFailed(string action, Guid jobId, Exception exception);
 
     [LoggerMessage(Level = LogLevel.Warning, Message = "Could not open {Path} in Explorer")]
     private partial void LogShellFailed(string path, Exception exception);
