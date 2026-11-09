@@ -59,6 +59,7 @@ public enum AudioFormat
     M4a,
     Wav,
     Flac,
+    Opus,
 }
 
 public enum AppTheme
@@ -86,6 +87,7 @@ public enum DownloadErrorKind
     Network,
     ToolMissing,
     DiskFull,
+    BrowserCookies,
     Unknown,
 }
 

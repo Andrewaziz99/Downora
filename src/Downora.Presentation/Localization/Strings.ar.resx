@@ -178,12 +178,12 @@
   <data name="Error_Unavailable_Body" xml:space="preserve"><value>ربما تمت إزالته أو جعله خاصًا، أو أن الرابط غير صحيح.</value></data>
   <data name="Error_Network_Title" xml:space="preserve"><value>تعذّر الوصول إلى الموقع</value></data>
   <data name="Error_Network_Body" xml:space="preserve"><value>تحقّق من اتصالك بالإنترنت وأعد المحاولة. إذا تكرر ذلك فقد يكون الموقع يحدّ من الطلبات مؤقتًا.</value></data>
-  <data name="Error_ToolMissing_Title" xml:space="preserve"><value>أداة yt-dlp غير مثبّتة</value></data>
-  <data name="Error_ToolMissing_Body" xml:space="preserve"><value>يستخدم Downora أداة yt-dlp (وDeno لروابط YouTube) لقراءة الروابط. يتم تنزيلهما من الإصدارات الرسمية والتحقق منهما قبل الاستخدام.</value></data>
+  <data name="Error_ToolMissing_Title" xml:space="preserve"><value>الأدوات المطلوبة غير مثبّتة</value></data>
+  <data name="Error_ToolMissing_Body" xml:space="preserve"><value>يستخدم Downora أداة yt-dlp لقراءة الروابط وتنزيلها، وFFmpeg لدمج الوسائط وتحويلها، وDeno لروابط YouTube. يتم تنزيلها من الإصدارات الرسمية والتحقق منها قبل الاستخدام.</value></data>
   <data name="Error_DiskFull_Title" xml:space="preserve"><value>القرص ممتلئ</value></data>
   <data name="Error_DiskFull_Body" xml:space="preserve"><value>أفرغ بعض المساحة أو اختر مجلد تنزيل آخر من الإعدادات.</value></data>
   <data name="Error_Unknown_Title" xml:space="preserve"><value>حدث خطأ ما</value></data>
-  <data name="Error_Unknown_Body" xml:space="preserve"><value>تعذّر على Downora تحليل هذا الرابط.</value></data>
+  <data name="Error_Unknown_Body" xml:space="preserve"><value>تعذّر على Downora إكمال هذا الإجراء. قد تفيدك التفاصيل أدناه.</value></data>
   <data name="Error_InstallFailed" xml:space="preserve"><value>تعذّر التثبيت: {0}</value></data>
   <data name="Settings_Tools" xml:space="preserve"><value>الأدوات</value></data>
   <data name="Tool_YtDlp" xml:space="preserve"><value>yt-dlp</value></data>
@@ -201,5 +201,36 @@
   <data name="Common_Open" xml:space="preserve"><value>فتح</value></data>
   <data name="Common_Cancel" xml:space="preserve"><value>إلغاء</value></data>
   <data name="Common_Refresh" xml:space="preserve"><value>تحديث</value></data>
+  <data name="Error_BrowserCookies_Title" xml:space="preserve"><value>تعذّرت قراءة تسجيل الدخول من المتصفح</value></data>
+  <data name="Error_BrowserCookies_Body" xml:space="preserve"><value>أغلق المتصفح وأعد المحاولة، أو اختر متصفحًا آخر من الإعدادات. تقفل بعض المتصفحات بيانات تسجيل الدخول أثناء تشغيلها.</value></data>
+  <data name="Downloader_Download" xml:space="preserve"><value>تنزيل</value></data>
+  <data name="Downloader_DownloadAudio" xml:space="preserve"><value>تنزيل الصوت</value></data>
+  <data name="Downloader_PickQuality" xml:space="preserve"><value>اختر الجودة</value></data>
+  <data name="Downloader_AudioTitle" xml:space="preserve"><value>صوت فقط</value></data>
+  <data name="Downloader_AudioFormat" xml:space="preserve"><value>صيغة الصوت</value></data>
+  <data name="Downloader_Started" xml:space="preserve"><value>تمت الإضافة إلى قائمة التنزيل.</value></data>
+  <data name="Downloader_AlreadyActive" xml:space="preserve"><value>هذا العنصر موجود بالفعل في قائمة التنزيل بالجودة نفسها.</value></data>
+  <data name="Downloader_UseBrowserSignIn" xml:space="preserve"><value>استخدام تسجيل الدخول من متصفحي</value></data>
+  <data name="Downloader_OpenSignInSettings" xml:space="preserve"><value>فتح إعدادات تسجيل الدخول</value></data>
+  <data name="Downloader_SignInHint" xml:space="preserve"><value>لن يستخدم Downora تسجيل الدخول من متصفحك إلا إذا فعّلته من الإعدادات.</value></data>
+  <data name="AudioFormat_Mp3" xml:space="preserve"><value>MP3</value></data>
+  <data name="AudioFormat_M4a" xml:space="preserve"><value>M4A (AAC)</value></data>
+  <data name="AudioFormat_Opus" xml:space="preserve"><value>Opus</value></data>
+  <data name="Queue_Eta" xml:space="preserve"><value>متبقي {0}</value></data>
+  <data name="Queue_OpenFolder" xml:space="preserve"><value>فتح المجلد</value></data>
+  <data name="Queue_ShowFile" xml:space="preserve"><value>إظهار الملف</value></data>
+  <data name="Stage_Starting" xml:space="preserve"><value>جارٍ البدء…</value></data>
+  <data name="Stage_Merging" xml:space="preserve"><value>جارٍ دمج الفيديو والصوت…</value></data>
+  <data name="Stage_PostProcessing" xml:space="preserve"><value>جارٍ إنهاء العملية…</value></data>
+  <data name="Stage_Cancelling" xml:space="preserve"><value>جارٍ الإلغاء…</value></data>
+  <data name="Settings_Cookies" xml:space="preserve"><value>تسجيل الدخول من المتصفح</value></data>
+  <data name="Settings_CookiesUse" xml:space="preserve"><value>استخدام تسجيل الدخول من متصفحي</value></data>
+  <data name="Settings_CookiesDesc" xml:space="preserve"><value>يتيح لـ Downora استخدام تسجيل الدخول الموجود في متصفحك لتنزيل المحتوى المسموح لحسابك برؤيته، مثل الفيديوهات الخاصة بالأعضاء أو المقيّدة بالعمر. الخيار متوقف ما لم تفعّله. لا ينسخ Downora ملفات تعريف الارتباط ولا يخزّنها ولا يسجّلها: تقرؤها أداة yt-dlp من المتصفح في كل مرة تعمل فيها. قد يلزم إغلاق متصفحات مثل Chrome وEdge أولًا.</value></data>
+  <data name="Settings_CookiesBrowser" xml:space="preserve"><value>المتصفح</value></data>
+  <data name="Settings_CookiesBrowserDesc" xml:space="preserve"><value>أي متصفح يُستخدم تسجيل الدخول منه.</value></data>
+  <data name="Browser_Edge" xml:space="preserve"><value>Microsoft Edge</value></data>
+  <data name="Browser_Chrome" xml:space="preserve"><value>Google Chrome</value></data>
+  <data name="Browser_Firefox" xml:space="preserve"><value>Mozilla Firefox</value></data>
+  <data name="Browser_Brave" xml:space="preserve"><value>Brave</value></data>
   <data name="Error_Generic" xml:space="preserve"><value>حدث خطأ ما: {0}</value></data>
 </root>

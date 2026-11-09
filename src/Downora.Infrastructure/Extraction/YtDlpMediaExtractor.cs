@@ -11,6 +11,7 @@ namespace Downora.Infrastructure.Extraction;
 internal sealed partial class YtDlpMediaExtractor(
     IToolManager tools,
     IProcessRunner runner,
+    ISettingsService settings,
     ILogger<YtDlpMediaExtractor> logger) : IMediaExtractor
 {
     public static readonly TimeSpan AnalyzeTimeout = TimeSpan.FromSeconds(90);
@@ -91,6 +92,13 @@ internal sealed partial class YtDlpMediaExtractor(
             // YouTube needs a JavaScript runtime for its challenges (yt-dlp ≥ 2025.11).
             args.Add("--js-runtimes");
             args.Add($"deno:{deno}");
+        }
+
+        // Opt-in: reuse the user's own browser sign-in for content their account can already see.
+        if (CookieBrowsers.For(settings.Current) is { } browser)
+        {
+            args.Add("--cookies-from-browser");
+            args.Add(browser);
         }
 
         // Everything after "--" is a URL, never an option, whatever it contains.

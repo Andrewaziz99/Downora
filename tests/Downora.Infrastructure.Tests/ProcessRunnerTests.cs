@@ -109,7 +109,7 @@ public class LiveExtractionTests
 
         var tools = Substitute.For<IToolManager>();
         tools.GetPath(ToolKind.YtDlp).Returns(ytDlp);
-        var extractor = new YtDlpMediaExtractor(tools, new ProcessRunner(NullLogger<ProcessRunner>.Instance), NullLogger<YtDlpMediaExtractor>.Instance);
+        var extractor = new YtDlpMediaExtractor(tools, new ProcessRunner(NullLogger<ProcessRunner>.Instance), ExtractionTests.Settings(), NullLogger<YtDlpMediaExtractor>.Instance);
 
         var result = await extractor.AnalyzeAsync(new UrlValidator(new SourceDetector()).Validate(link), TestContext.Current.CancellationToken);
 

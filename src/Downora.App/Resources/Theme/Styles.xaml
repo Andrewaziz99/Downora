@@ -405,6 +405,56 @@
         </Setter>
     </Style>
 
+    <!-- Vertical list of choices where one row is selected (the quality picker). Rows bound to IsAvailable=false are dimmed and can't be chosen. -->
+    <Style x:Key="OptionList" TargetType="ListBox">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled" />
+        <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Disabled" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ListBox">
+                    <ItemsPresenter />
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="ItemContainerStyle">
+            <Setter.Value>
+                <Style TargetType="ListBoxItem">
+                    <Setter Property="Margin" Value="0,0,0,4" />
+                    <Setter Property="Cursor" Value="Hand" />
+                    <Setter Property="IsEnabled" Value="{Binding IsAvailable}" />
+                    <Setter Property="AutomationProperties.Name" Value="{Binding Label}" />
+                    <Setter Property="FocusVisualStyle" Value="{StaticResource FocusRing}" />
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="ListBoxItem">
+                                <Border x:Name="Root" Padding="12,8" Background="{DynamicResource Brush.SurfaceRaised}" BorderBrush="Transparent" BorderThickness="1" CornerRadius="{StaticResource Radius.Control}">
+                                    <ContentPresenter VerticalAlignment="Center" />
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter TargetName="Root" Property="Background" Value="{DynamicResource Brush.SurfaceHover}" />
+                                    </Trigger>
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter TargetName="Root" Property="BorderBrush" Value="{DynamicResource Brush.Accent}" />
+                                        <Setter TargetName="Root" Property="Background" Value="{DynamicResource Brush.NavSelected}" />
+                                    </Trigger>
+                                    <Trigger Property="IsEnabled" Value="False">
+                                        <Setter TargetName="Root" Property="Opacity" Value="0.45" />
+                                        <Setter TargetName="Root" Property="Background" Value="Transparent" />
+                                        <Setter Property="Cursor" Value="Arrow" />
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
     <!-- Count bubble on tabs and the sidebar -->
     <Style x:Key="CountBadge" TargetType="Border">
         <Setter Property="MinWidth" Value="20" />

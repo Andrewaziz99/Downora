@@ -61,6 +61,37 @@
                 </StackPanel>
             </ui:CardControl>
 
+            <!-- Browser sign-in (opt-in) -->
+            <StackPanel x:Name="CookieSection">
+                <TextBlock Margin="0,20,0,8" Style="{StaticResource Text.BodyStrong}" Text="{l:Loc Settings_Cookies}" />
+                <ui:CardControl Margin="0,0,0,4" Icon="{ui:SymbolIcon Person24}">
+                    <ui:CardControl.Header>
+                        <StackPanel>
+                            <TextBlock Style="{StaticResource Text.Body}" Text="{l:Loc Settings_CookiesUse}" />
+                            <TextBlock MaxWidth="560" HorizontalAlignment="Left" Style="{StaticResource Text.Caption}" Text="{l:Loc Settings_CookiesDesc}" TextTrimming="None" TextWrapping="Wrap" />
+                        </StackPanel>
+                    </ui:CardControl.Header>
+                    <ui:ToggleSwitch
+                        x:Name="CookieToggle"
+                        AutomationProperties.Name="{l:Loc Settings_CookiesUse}"
+                        IsChecked="{Binding UseBrowserSession, Mode=TwoWay}" />
+                </ui:CardControl>
+                <ui:CardControl Margin="0,0,0,4" Icon="{ui:SymbolIcon Globe24}" IsEnabled="{Binding UseBrowserSession}">
+                    <ui:CardControl.Header>
+                        <StackPanel>
+                            <TextBlock Style="{StaticResource Text.Body}" Text="{l:Loc Settings_CookiesBrowser}" />
+                            <TextBlock Style="{StaticResource Text.Caption}" Text="{l:Loc Settings_CookiesBrowserDesc}" />
+                        </StackPanel>
+                    </ui:CardControl.Header>
+                    <ComboBox
+                        MinWidth="200"
+                        AutomationProperties.Name="{l:Loc Settings_CookiesBrowser}"
+                        DisplayMemberPath="Label"
+                        ItemsSource="{Binding BrowserOptions}"
+                        SelectedItem="{Binding SelectedBrowser, Mode=TwoWay}" />
+                </ui:CardControl>
+            </StackPanel>
+
             <!-- Data -->
             <TextBlock Margin="0,20,0,8" Style="{StaticResource Text.BodyStrong}" Text="{l:Loc Settings_Data}" />
             <ui:CardControl Margin="0,0,0,4" Icon="{ui:SymbolIcon Database24}">

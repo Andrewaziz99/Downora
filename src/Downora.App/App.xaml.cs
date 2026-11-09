@@ -42,6 +42,7 @@ public partial class App : Application
             builder.Services.AddSingleton<IShellService, ShellService>();
             builder.Services.AddSingleton<IAppInfo, AppInfoProvider>();
             builder.Services.AddSingleton<IClipboardService, ClipboardService>();
+            builder.Services.AddSingleton<IUiThread, UiThread>();
             builder.Services.AddSingleton<MainWindow>();
 
             _host = builder.Build();

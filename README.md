@@ -8,13 +8,15 @@ Built with C#, .NET 10 and WPF (MVVM). Media extraction runs through yt-dlp and 
 
 ## Status
 
-**Phases 1–2 of 11 are complete.**
+**Phases 1–4 of 11 are complete.**
 
 - **Phase 1, foundation:** the solution, the Generic Host with DI, Serilog logging, SQLite with migrations, persistent settings, crash recovery and CI.
 - **Phase 2, shell UI:** the Fluent Velocity design system in dark and light, a sidebar with all seven pages, English and Arabic with a right-to-left layout, and real data on every page.
 - **Phase 3, analyze:** paste a YouTube, SoundCloud, Vimeo or other supported link and Downora validates it, detects the platform, and shows the title, uploader, duration, thumbnail and every available quality with its estimated size (or the full list of a playlist). Clear messages for sign-in-only, region-locked, DRM-protected and unavailable content. yt-dlp, FFmpeg and Deno are copied from the bundle or downloaded from their official releases with SHA-256 verification, and can be installed or updated from Settings › Tools.
 
-The download engine arrives in Phases 3–7. See [docs/roadmap.md](docs/roadmap.md).
+- **Phase 4, download:** pick a quality (or audio only: MP3, M4A or Opus) on the Downloader screen and the file really downloads into your download folder, with live progress (percent, size, speed, time left, merging/finishing stages). Each download is a saved job (waiting → extracting → downloading → processing → completed / failed / cancelled), so the Download Queue, History, Home statistics and crash recovery all show real data, and Cancel kills yt-dlp and removes the partial files. Free disk space is checked first, file names are made Windows-safe, and a new download never overwrites an older file. Optional, off by default: use the sign-in of your own browser (Edge, Chrome, Firefox or Brave) for content your account can already see, from Settings › Browser sign-in.
+
+Queue limits, pause/resume and retry arrive in Phase 5. See [docs/roadmap.md](docs/roadmap.md).
 
 ## Requirements
 

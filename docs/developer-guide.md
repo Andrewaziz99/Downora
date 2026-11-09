@@ -65,3 +65,13 @@ From Phase 3, external processes are reached only through `IProcessRunner`, so u
 ## Logs
 
 Serilog writes to `%LocalAppData%\Downora\logs\downora-YYYYMMDD.log`. Use `[LoggerMessage]` source-generated methods for log calls (CA1848). Raw tool output belongs in the log, not in messages shown to the user.
+
+## Downloading (Phase 4)
+
+- `IDownloadEngine` (Core) downloads one item; `YtDlpDownloadEngine` (Infrastructure) is the only code that knows yt-dlp's command line. `YtDlpDownloadArguments` builds the arguments (pure, unit-tested), `YtDlpProgressParser` and `ProgressTracker` turn its machine-readable output into progress (pure, tested against `tests/.../Fixtures/dl_*.out`).
+- yt-dlp prints download progress on stdout but post-processing steps on stderr, so the engine reads both. Its console encoding garbles non-Latin text in the printed file path (Arabic titles), so the engine also finds the finished file by the unique name it chose. Never rely on yt-dlp's printed text for names.
+- Every job keeps its partial files in `<download folder>\.downora-partial\<job id>`. Cancelling the token only stops the tool; the job service calls `DiscardPartialFilesAsync` when the *user* cancels, and not when the app closes or the tool crashes, so a later resume (Phase 5) can continue.
+- `IDownloadJobService` (`DownloadJobService`) creates the job row, runs the engine, applies the state rules in `DownloadJobTransitions` (Core, pure), saves changes (progress at most every 2 s) and raises `JobUpdated` from a background thread. A Phase 5 scheduler replaces only the "start immediately" step in `StartAsync`.
+- Screens never subscribe to the service directly: `DownloadFeed` (Presentation) moves updates to the UI thread through `IUiThread` and flags real state changes. Item cards (`DownloadItemViewModel`) update in place through `Apply`.
+- Browser sign-in is opt-in (`AppSettings.UseBrowserSession`, `BrowserForCookies`). `CookieBrowsers` is the only list of accepted browsers; the name is passed to `--cookies-from-browser` and nothing else. Never read, copy, store or log cookie contents.
+- Live tests (real yt-dlp and FFmpeg, public 19-second video) run with `DOWNORA_LIVE_TESTS=1`; they look for the tools in `%LocalAppData%\Downora\tools` or `DOWNORA_TOOLS`.

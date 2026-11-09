@@ -1,6 +1,7 @@
 using Downora.Core.Interfaces;
 using Downora.Core.Services;
 using Downora.Infrastructure.Database;
+using Downora.Infrastructure.Downloads;
 using Downora.Infrastructure.Extraction;
 using Downora.Infrastructure.Processes;
 using Downora.Infrastructure.Tools;
@@ -45,6 +46,12 @@ public static class DependencyInjection
         services.AddSingleton<IProcessRunner, ProcessRunner>();
         services.AddSingleton<IToolManager, ToolManager>();
         services.AddSingleton<IMediaExtractor, YtDlpMediaExtractor>();
+
+        // Downloading: the engine drives yt-dlp; the job service saves state and stops with the host so no tool outlives the app.
+        services.AddSingleton<IDownloadEngine, YtDlpDownloadEngine>();
+        services.AddSingleton<DownloadJobService>();
+        services.AddSingleton<IDownloadJobService>(sp => sp.GetRequiredService<DownloadJobService>());
+        services.AddHostedService(sp => sp.GetRequiredService<DownloadJobService>());
         services.AddSingleton(_ =>
         {
             var http = new HttpClient { Timeout = TimeSpan.FromMinutes(15) };

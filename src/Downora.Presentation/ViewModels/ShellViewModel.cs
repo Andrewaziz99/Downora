@@ -54,9 +54,11 @@ public sealed partial class ShellViewModel : ObservableObject
         ISettingsService settings,
         IDiskSpaceService disk,
         IDownloadJobQueries jobs,
+        DownloadFeed feed,
         Localizer localizer,
         ILogger<ShellViewModel> logger)
     {
+        ArgumentNullException.ThrowIfNull(feed);
         _navigation = navigation;
         _theme = theme;
         _settings = settings;
@@ -80,6 +82,15 @@ public sealed partial class ShellViewModel : ObservableObject
         ];
 
         _navigation.Navigated += OnNavigated;
+
+        // The sidebar count follows downloads starting and ending, wherever the user is in the app.
+        feed.Updated += (_, e) =>
+        {
+            if (e.StatusChanged)
+            {
+                _ = RefreshQueueBadgeAsync();
+            }
+        };
         _theme.EffectiveThemeChanged += (_, _) => OnPropertyChanged(nameof(IsDarkTheme));
         _settings.Changed += (_, _) => RefreshStorage();
         _localizer.LanguageChanged += (_, _) => RefreshStorage();

@@ -1,0 +1,10 @@
+DWN|downloading|262144|NA|NA|524288.0|NA|1|20|301
+DWN|downloading|524288|NA|NA|1048576.0|NA|2|20|301
+DWN|downloading|1310720|NA|NA|1572864.0|NA|5|20|301
+DWN|downloading|2621440|NA|NA|1572864.0|NA|10|20|301
+DWN|downloading|5242880|NA|NA|1835008.0|NA|20|20|301
+DWN|finished|5242880|5242880|NA|1835008.0|NA|NA|NA|301
+this line is not progress at all
+PP|started|MoveFiles
+PP|finished|MoveFiles
+FILE|C:\Downloads\Live replay.mp4

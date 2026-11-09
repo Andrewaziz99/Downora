@@ -28,6 +28,7 @@ public class ViewModelTests
     private readonly IClipboardService _clipboard = Substitute.For<IClipboardService>();
     private readonly IMediaExtractor _extractor = Substitute.For<IMediaExtractor>();
     private readonly IToolManager _tools = Substitute.For<IToolManager>();
+    private readonly IDownloadJobService _downloads = Substitute.For<IDownloadJobService>();
 
     public ViewModelTests()
     {
@@ -57,6 +58,8 @@ public class ViewModelTests
         services.AddSingleton(_clipboard);
         services.AddSingleton(_extractor);
         services.AddSingleton(_tools);
+        services.AddSingleton(_downloads);
+        services.AddSingleton<IUiThread>(new InlineUiThread());
         services.AddSingleton<IUrlValidator>(new Core.Services.UrlValidator(new Core.Services.SourceDetector()));
         return services.BuildServiceProvider();
     }

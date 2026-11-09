@@ -62,8 +62,16 @@ public sealed partial class SettingsViewModel : Navigation.PageViewModel
             new(AppLanguage.English, "Language_English", localizer),
             new(AppLanguage.Arabic, "Language_Arabic", localizer),
         ];
+        BrowserOptions =
+        [
+            new(CookieBrowsers.Edge, "Browser_Edge", localizer),
+            new(CookieBrowsers.Chrome, "Browser_Chrome", localizer),
+            new(CookieBrowsers.Firefox, "Browser_Firefox", localizer),
+            new(CookieBrowsers.Brave, "Browser_Brave", localizer),
+        ];
         SelectedTheme = ThemeOptions[0];
         SelectedLanguage = LanguageOptions[0];
+        SelectedBrowser = BrowserOptions[0];
         _loading = false;
     }
 
@@ -72,6 +80,35 @@ public sealed partial class SettingsViewModel : Navigation.PageViewModel
     public IReadOnlyList<OptionViewModel<AppTheme>> ThemeOptions { get; }
 
     public IReadOnlyList<OptionViewModel<AppLanguage>> LanguageOptions { get; }
+
+    public IReadOnlyList<OptionViewModel<string>> BrowserOptions { get; }
+
+    /// <summary>Opt-in: let yt-dlp use the sign-in of the chosen browser. Off until the user turns it on.</summary>
+    [ObservableProperty]
+    public partial bool UseBrowserSession { get; set; }
+
+    [ObservableProperty]
+    public partial OptionViewModel<string> SelectedBrowser { get; set; }
+
+    private bool _cookieRevealPending;
+
+    /// <summary>Raised when another screen asks to see the sign-in option, so an open Settings page can scroll to it.</summary>
+    public event EventHandler? CookieOptionsRevealRequested;
+
+    /// <summary>Called by screens that explain why the sign-in option would help (the "sign-in required" card).</summary>
+    public void RevealCookieOptions()
+    {
+        _cookieRevealPending = true;
+        CookieOptionsRevealRequested?.Invoke(this, EventArgs.Empty);
+    }
+
+    /// <summary>True once per request: the view calls it after it has scrolled, so later visits don't scroll again.</summary>
+    public bool ConsumeCookieReveal()
+    {
+        var pending = _cookieRevealPending;
+        _cookieRevealPending = false;
+        return pending;
+    }
 
     [ObservableProperty]
     public partial OptionViewModel<AppTheme> SelectedTheme { get; set; }
@@ -114,6 +151,8 @@ public sealed partial class SettingsViewModel : Navigation.PageViewModel
             SelectedTheme = ThemeOptions.First(o => o.Value == current.Theme);
             SelectedLanguage = LanguageOptions.First(o => o.Value == current.Language);
             DownloadDirectory = current.DownloadDirectory;
+            UseBrowserSession = current.UseBrowserSession;
+            SelectedBrowser = BrowserOptions.FirstOrDefault(o => o.Value == current.BrowserForCookies) ?? BrowserOptions[0];
             ErrorMessage = null;
         }
         finally
@@ -142,6 +181,35 @@ public sealed partial class SettingsViewModel : Navigation.PageViewModel
 
         L.SetLanguage(value.Value);
         _ = SaveAsync(s => s.Language = value.Value);
+    }
+
+    partial void OnUseBrowserSessionChanged(bool value)
+    {
+        if (_loading)
+        {
+            return;
+        }
+
+        // Turning it on saves the browser shown; turning it off keeps the choice for next time.
+        var browser = SelectedBrowser.Value;
+        _ = SaveAsync(s =>
+        {
+            s.UseBrowserSession = value;
+            if (value)
+            {
+                s.BrowserForCookies = browser;
+            }
+        });
+    }
+
+    partial void OnSelectedBrowserChanged(OptionViewModel<string> value)
+    {
+        if (_loading)
+        {
+            return;
+        }
+
+        _ = SaveAsync(s => s.BrowserForCookies = value.Value);
     }
 
     [RelayCommand]

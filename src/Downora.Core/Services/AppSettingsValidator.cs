@@ -43,6 +43,10 @@ public static class AppSettingsValidator
         {
             errors.Add("Pick which browser's session to use, or turn the option off.");
         }
+        else if (!string.IsNullOrWhiteSpace(settings.BrowserForCookies) && !CookieBrowsers.IsSupported(settings.BrowserForCookies))
+        {
+            errors.Add($"The browser must be one of {string.Join(", ", CookieBrowsers.Supported)}.");
+        }
 
         return errors;
     }

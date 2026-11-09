@@ -44,8 +44,15 @@ public class ExtractionTests
         return tools;
     }
 
-    private static YtDlpMediaExtractor Extractor(FakeProcessRunner runner, IToolManager? tools = null) =>
-        new(tools ?? Tools(), runner, NullLogger<YtDlpMediaExtractor>.Instance);
+    internal static ISettingsService Settings(AppSettings? settings = null)
+    {
+        var service = Substitute.For<ISettingsService>();
+        service.Current.Returns(_ => (settings ?? AppSettings.CreateDefault(@"C:\Downloads")).Clone());
+        return service;
+    }
+
+    private static YtDlpMediaExtractor Extractor(FakeProcessRunner runner, IToolManager? tools = null, AppSettings? settings = null) =>
+        new(tools ?? Tools(), runner, Settings(settings), NullLogger<YtDlpMediaExtractor>.Instance);
 
     // ---- Parsing real yt-dlp output ----
 

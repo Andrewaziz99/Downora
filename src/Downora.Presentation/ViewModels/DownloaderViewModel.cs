@@ -21,11 +21,17 @@ public enum DownloaderState
     Error,
 }
 
-/// <summary>Paste a link, analyze it, and see what it offers. Downloading is added in Phase 4.</summary>
+/// <summary>Paste a link, analyze it, pick a quality (or audio only) and download it.</summary>
 public sealed partial class DownloaderViewModel : PageViewModel, IDisposable
 {
-    /// <summary>Tools needed just to read links: yt-dlp, plus Deno for YouTube's JavaScript challenges.</summary>
-    internal static readonly ToolKind[] AnalysisTools = [ToolKind.YtDlp, ToolKind.Deno];
+    /// <summary>
+    /// Everything Downora needs to read and download links: yt-dlp, FFmpeg (joins video and audio, converts audio)
+    /// and Deno (YouTube's JavaScript challenges).
+    /// </summary>
+    internal static readonly ToolKind[] RequiredTools = [ToolKind.YtDlp, ToolKind.Ffmpeg, ToolKind.Deno];
+
+    /// <summary>Tools a download cannot run without. Deno is only needed for some sites, so it never blocks a download.</summary>
+    private static readonly ToolKind[] DownloadTools = [ToolKind.YtDlp, ToolKind.Ffmpeg];
 
     private readonly IUrlValidator _validator;
     private readonly IMediaExtractor _extractor;
@@ -34,8 +40,12 @@ public sealed partial class DownloaderViewModel : PageViewModel, IDisposable
     private readonly IShellService _shell;
     private readonly IClipboardService _clipboard;
     private readonly INavigationService _navigation;
+    private readonly IDownloadJobService _downloads;
+    private readonly IDownloadItemActions _actions;
     private CancellationTokenSource? _analysis;
     private string? _lastAnalyzedUrl;
+    private UrlValidationResult? _analyzedUrl;
+    private MediaInfo? _media;
 
     public DownloaderViewModel(
         IUrlValidator validator,
@@ -45,10 +55,14 @@ public sealed partial class DownloaderViewModel : PageViewModel, IDisposable
         IShellService shell,
         IClipboardService clipboard,
         INavigationService navigation,
+        IDownloadJobService downloads,
+        DownloadFeed feed,
+        IDownloadItemActions actions,
         Localizer localizer,
         ILogger<DownloaderViewModel> logger)
         : base(localizer, logger)
     {
+        ArgumentNullException.ThrowIfNull(feed);
         _validator = validator;
         _extractor = extractor;
         _tools = tools;
@@ -56,6 +70,16 @@ public sealed partial class DownloaderViewModel : PageViewModel, IDisposable
         _shell = shell;
         _clipboard = clipboard;
         _navigation = navigation;
+        _downloads = downloads;
+        _actions = actions;
+        AudioFormats =
+        [
+            new(AudioFormat.Mp3, "AudioFormat_Mp3", localizer),
+            new(AudioFormat.M4a, "AudioFormat_M4a", localizer),
+            new(AudioFormat.Opus, "AudioFormat_Opus", localizer),
+        ];
+        SelectedAudioFormat = AudioFormats[0];
+        feed.Updated += OnFeedUpdated;
     }
 
     [ObservableProperty]
@@ -68,7 +92,7 @@ public sealed partial class DownloaderViewModel : PageViewModel, IDisposable
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(IsIdle), nameof(IsAnalyzing), nameof(IsMedia), nameof(IsPlaylist), nameof(IsError))]
-    [NotifyCanExecuteChangedFor(nameof(AnalyzeCommand))]
+    [NotifyCanExecuteChangedFor(nameof(AnalyzeCommand), nameof(DownloadVideoCommand), nameof(DownloadAudioCommand))]
     public partial DownloaderState State { get; private set; }
 
     public bool IsIdle => State == DownloaderState.Idle;
@@ -110,7 +134,37 @@ public sealed partial class DownloaderViewModel : PageViewModel, IDisposable
     [NotifyCanExecuteChangedFor(nameof(OpenInBrowserCommand))]
     public partial string? WebpageUrl { get; private set; }
 
+    /// <summary>The video qualities (Best, 4K … 360p). Rows the site doesn't offer are shown but can't be picked.</summary>
     public ObservableCollection<QualityOptionViewModel> Qualities { get; } = [];
+
+    [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(DownloadVideoCommand))]
+    public partial QualityOptionViewModel? SelectedQuality { get; set; }
+
+    /// <summary>The audio-only choice, with the size of the best audio stream. Null when the site has no audio.</summary>
+    [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(DownloadAudioCommand))]
+    public partial QualityOptionViewModel? AudioOption { get; private set; }
+
+    public IReadOnlyList<OptionViewModel<AudioFormat>> AudioFormats { get; }
+
+    [ObservableProperty]
+    public partial OptionViewModel<AudioFormat> SelectedAudioFormat { get; set; }
+
+    /// <summary>The download most recently started from this screen, followed live (progress, merging, failure).</summary>
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(HasStartedDownload), nameof(ShowStartedSignInAction))]
+    public partial DownloadItemViewModel? StartedDownload { get; private set; }
+
+    public bool HasStartedDownload => StartedDownload is not null;
+
+    /// <summary>"Added to your queue" / "Already in your queue".</summary>
+    [ObservableProperty]
+    public partial string? StartedMessage { get; private set; }
+
+    /// <summary>The started download failed because the site wants a signed-in user, and the browser sign-in option is off.</summary>
+    public bool ShowStartedSignInAction =>
+        StartedDownload is { ErrorKind: DownloadErrorKind.RequiresSignIn } && !_settings.Current.UseBrowserSession;
 
     // ---- Playlist ----
 
@@ -137,6 +191,12 @@ public sealed partial class DownloaderViewModel : PageViewModel, IDisposable
     public partial string? ErrorDetail { get; private set; }
 
     public bool CanInstallTools => ErrorKind == DownloadErrorKind.ToolMissing;
+
+    /// <summary>"Use my browser sign-in": offered only while the option is off. It opens Settings; it never turns the option on by itself.</summary>
+    public bool CanUseBrowserSignIn => ErrorKind == DownloadErrorKind.RequiresSignIn && !_settings.Current.UseBrowserSession;
+
+    /// <summary>The sign-in option is on but the browser's sign-in couldn't be read, so Settings is where to fix it.</summary>
+    public bool CanOpenSignInSettings => ErrorKind == DownloadErrorKind.BrowserCookies;
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(InstallToolsCommand))]
@@ -175,6 +235,10 @@ public sealed partial class DownloaderViewModel : PageViewModel, IDisposable
         ValidationMessage = null;
         UrlText = url.Url!.AbsoluteUri;
         _lastAnalyzedUrl = UrlText;
+        _analyzedUrl = url;
+        StartedDownload = null;
+        StartedMessage = null;
+        ErrorMessage = null;
 
         _analysis?.Dispose();
         _analysis = new CancellationTokenSource();
@@ -234,7 +298,7 @@ public sealed partial class DownloaderViewModel : PageViewModel, IDisposable
         IsInstalling = true;
         try
         {
-            foreach (var tool in AnalysisTools.Where(t => _tools.GetPath(t) is null))
+            foreach (var tool in RequiredTools.Where(t => _tools.GetPath(t) is null))
             {
                 var name = L[$"Tool_{tool}"];
                 InstallStatus = L.Format("Downloader_Installing", name, string.Empty);
@@ -258,6 +322,73 @@ public sealed partial class DownloaderViewModel : PageViewModel, IDisposable
         if (_lastAnalyzedUrl is { } url)
         {
             await AnalyzeAsync(url).ConfigureAwait(true);
+        }
+    }
+
+    [RelayCommand]
+    private async Task OpenSignInSettingsAsync()
+    {
+        await _navigation.NavigateToAsync<SettingsViewModel>().ConfigureAwait(true);
+        if (_navigation.Current is SettingsViewModel settings)
+        {
+            settings.RevealCookieOptions();
+        }
+    }
+
+    private bool CanDownloadVideo() => IsMedia && !IsLive && SelectedQuality is { IsAvailable: true };
+
+    [RelayCommand(CanExecute = nameof(CanDownloadVideo))]
+    private Task DownloadVideoAsync() => StartDownloadAsync(MediaKind.Video, SelectedQuality);
+
+    private bool CanDownloadAudio() => IsMedia && !IsLive && AudioOption is { IsAvailable: true };
+
+    [RelayCommand(CanExecute = nameof(CanDownloadAudio))]
+    private Task DownloadAudioAsync() => StartDownloadAsync(MediaKind.Audio, AudioOption);
+
+    private Task StartDownloadAsync(MediaKind kind, QualityOptionViewModel? option) => RunSafeAsync(async () =>
+    {
+        if (_media is null || _analyzedUrl is null || option is null)
+        {
+            return;
+        }
+
+        // Fail here, with a button that fixes it, rather than later as a failed job.
+        if (DownloadTools.Any(t => _tools.GetPath(t) is null))
+        {
+            ShowError(DownloadErrorKind.ToolMissing, null);
+            return;
+        }
+
+        var settings = _settings.Current;
+        var request = new NewDownload
+        {
+            SourceUrl = _analyzedUrl.Url!.AbsoluteUri,
+            NormalizedUrl = _analyzedUrl.NormalizedUrl ?? _analyzedUrl.Url.AbsoluteUri,
+            Platform = _media.Platform,
+            Title = _media.Title,
+            Uploader = _media.Uploader,
+            ThumbnailUrl = _media.ThumbnailUrl,
+            Duration = _media.Duration,
+            Kind = kind,
+            Quality = kind == MediaKind.Audio ? QualityPreset.AudioOnly : option.Preset,
+            Container = settings.PreferredVideoContainer,
+            AudioFormat = SelectedAudioFormat.Value,
+            AudioBitrateKbps = settings.DefaultAudioBitrateKbps,
+            EstimatedBytes = option.EstimatedBytes,
+        };
+
+        var started = await _downloads.StartAsync(request).ConfigureAwait(true);
+        StartedDownload = new DownloadItemViewModel(started.Job, L, _actions);
+        StartedMessage = L[started.WasAlreadyActive ? "Downloader_AlreadyActive" : "Downloader_Started"];
+    }, showLoading: false);
+
+    /// <summary>Follows the download this screen started, so its card shows live progress and, if it fails, why.</summary>
+    private void OnFeedUpdated(object? sender, DownloadFeedEvent e)
+    {
+        if (StartedDownload is { } started && started.Id == e.Update.Job.Id)
+        {
+            started.Apply(e.Update.Job, e.Update.Progress);
+            OnPropertyChanged(nameof(ShowStartedSignInAction));
         }
     }
 
@@ -291,11 +422,24 @@ public sealed partial class DownloaderViewModel : PageViewModel, IDisposable
         WebpageUrl = media.WebpageUrl.Length > 0 ? media.WebpageUrl : _lastAnalyzedUrl;
         IsLive = media.IsLive;
 
+        _media = media;
         Qualities.Clear();
+        AudioOption = null;
         foreach (var option in QualityOptions.Build(media))
         {
-            Qualities.Add(new QualityOptionViewModel(option, L));
+            var row = new QualityOptionViewModel(option, L);
+            if (option.Preset == QualityPreset.AudioOnly)
+            {
+                AudioOption = row;
+            }
+            else
+            {
+                Qualities.Add(row);
+            }
         }
+
+        SelectedQuality = DefaultQuality(Qualities, _settings.Current.DefaultVideoQuality);
+        SelectedAudioFormat = AudioFormats.FirstOrDefault(f => f.Value == _settings.Current.PreferredAudioFormat) ?? AudioFormats[0];
 
         var audio = QualityOptions.BestAudio(media);
         BestAudioText = audio is null
@@ -307,6 +451,16 @@ public sealed partial class DownloaderViewModel : PageViewModel, IDisposable
             }.Where(p => p is not null)));
 
         State = DownloaderState.Media;
+    }
+
+    /// <summary>
+    /// The saved default if the site offers it, otherwise the nearest lower quality, otherwise the best there is.
+    /// (Rows run from highest to lowest, so "lower" means further down the list.)
+    /// </summary>
+    internal static QualityOptionViewModel? DefaultQuality(IReadOnlyList<QualityOptionViewModel> rows, QualityPreset wanted)
+    {
+        var start = Math.Max(0, rows.ToList().FindIndex(r => r.Preset == wanted));
+        return rows.Skip(start).FirstOrDefault(r => r.IsAvailable) ?? rows.FirstOrDefault(r => r.IsAvailable);
     }
 
     private void ShowPlaylist(PlaylistInfo playlist)
@@ -341,6 +495,8 @@ public sealed partial class DownloaderViewModel : PageViewModel, IDisposable
             ? null
             : L.Format("Downloader_Details", detail);
         OnPropertyChanged(nameof(CanInstallTools));
+        OnPropertyChanged(nameof(CanUseBrowserSignIn));
+        OnPropertyChanged(nameof(CanOpenSignInSettings));
         State = DownloaderState.Error;
     }
 
@@ -372,6 +528,7 @@ public sealed class QualityOptionViewModel
         Preset = option.Preset;
         Label = localizer[$"Quality_{option.Preset}"];
         IsAvailable = option.IsAvailable;
+        EstimatedBytes = option.EstimatedBytes;
         Detail = !option.IsAvailable
             ? localizer["Downloader_NotOffered"]
             : string.Join(" · ", new[]
@@ -390,6 +547,7 @@ public sealed class QualityOptionViewModel
     }
 
     public QualityPreset Preset { get; }
+    public long? EstimatedBytes { get; }
     public string Label { get; }
     public string Detail { get; }
     public string SizeText { get; }

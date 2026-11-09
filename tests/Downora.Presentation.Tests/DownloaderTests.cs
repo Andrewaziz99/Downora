@@ -23,6 +23,8 @@ public class DownloaderTests
     private readonly IShellService _shell = Substitute.For<IShellService>();
     private readonly IClipboardService _clipboard = Substitute.For<IClipboardService>();
     private readonly INavigationService _navigation = Substitute.For<INavigationService>();
+    private readonly IDownloadJobService _downloads = Substitute.For<IDownloadJobService>();
+    private readonly IDownloadItemActions _actions = Substitute.For<IDownloadItemActions>();
 
     private static readonly MediaInfo Zoo = new(
         "jNQXAC9IVRw", "Me at the zoo", "jawed", TimeSpan.FromSeconds(19), "https://i.ytimg.com/vi/jNQXAC9IVRw/hq.jpg",
@@ -33,7 +35,8 @@ public class DownloaderTests
         ]);
 
     private DownloaderViewModel Create() => new(
-        new UrlValidator(new SourceDetector()), _extractor, _tools, _settings, _shell, _clipboard, _navigation, _l,
+        new UrlValidator(new SourceDetector()), _extractor, _tools, _settings, _shell, _clipboard, _navigation, _downloads,
+        new DownloadFeed(_downloads, new InlineUiThread(), NullLogger<DownloadFeed>.Instance), _actions, _l,
         NullLogger<DownloaderViewModel>.Instance);
 
     private void Returns(AnalysisResult result) =>
@@ -76,7 +79,8 @@ public class DownloaderTests
         Assert.Equal("jawed", vm.Uploader);
         Assert.Equal("0:19", vm.DurationText);
         Assert.Equal("YouTube", vm.PlatformLabel);
-        Assert.Equal(8, vm.Qualities.Count);
+        Assert.Equal(7, vm.Qualities.Count);
+        Assert.Equal(QualityPreset.AudioOnly, vm.AudioOption?.Preset);
 
         var p360 = vm.Qualities.Single(q => q.Preset == QualityPreset.P360);
         Assert.True(p360.IsAvailable);
@@ -297,6 +301,8 @@ public class HomeAndToolsTests
         services.AddSingleton(clipboard ?? Substitute.For<IClipboardService>());
         services.AddSingleton(extractor);
         services.AddSingleton(tools);
+        services.AddSingleton(Substitute.For<IDownloadJobService>());
+        services.AddSingleton<IUiThread>(new InlineUiThread());
         services.AddSingleton<IUrlValidator>(new UrlValidator(new SourceDetector()));
         return services.BuildServiceProvider();
     }

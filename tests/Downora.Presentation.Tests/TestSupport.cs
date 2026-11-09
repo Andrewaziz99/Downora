@@ -42,6 +42,12 @@ internal sealed class FakeSettings : ISettingsService
     }
 }
 
+/// <summary>Runs UI work immediately, so tests don't need a dispatcher.</summary>
+internal sealed class InlineUiThread : IUiThread
+{
+    public void Post(Action action) => action();
+}
+
 internal sealed class FakeTheme : IThemeService
 {
     public AppTheme Theme { get; private set; } = AppTheme.Dark;

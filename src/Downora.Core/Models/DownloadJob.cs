@@ -48,6 +48,14 @@ public class DownloadJob
     public DateTime? StartedAtUtc { get; set; }
     public DateTime? CompletedAtUtc { get; set; }
 
+    /// <summary>A copy that can be handed to other threads. The playlist link is not copied.</summary>
+    public DownloadJob Clone()
+    {
+        var copy = (DownloadJob)MemberwiseClone();
+        copy.PlaylistBatch = null;
+        return copy;
+    }
+
     /// <summary>True when the job will not change again unless the user retries it.</summary>
     public bool IsFinished => Status is DownloadStatus.Completed or DownloadStatus.Failed or DownloadStatus.Cancelled;
 }

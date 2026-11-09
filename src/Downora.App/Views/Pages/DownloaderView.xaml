@@ -107,32 +107,66 @@
                     <Border Grid.Column="2" VerticalAlignment="Top" Style="{StaticResource Card}">
                         <StackPanel>
                             <TextBlock Margin="0,0,0,10" Style="{StaticResource Text.TitleMd}" Text="{l:Loc Downloader_Qualities}" />
-                            <ItemsControl ItemsSource="{Binding Qualities}">
-                                <ItemsControl.ItemTemplate>
+                            <ListBox
+                                AutomationProperties.Name="{l:Loc Downloader_Qualities}"
+                                ItemsSource="{Binding Qualities}"
+                                SelectedItem="{Binding SelectedQuality, Mode=TwoWay}"
+                                Style="{StaticResource OptionList}">
+                                <ListBox.ItemTemplate>
                                     <DataTemplate DataType="{x:Type vm:QualityOptionViewModel}">
-                                        <Border x:Name="Row" Margin="0,0,0,4" Padding="12,8" Background="{DynamicResource Brush.SurfaceRaised}" CornerRadius="6">
-                                            <Grid>
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="Auto" MinWidth="120" />
-                                                    <ColumnDefinition Width="*" />
-                                                    <ColumnDefinition Width="Auto" />
-                                                </Grid.ColumnDefinitions>
-                                                <TextBlock VerticalAlignment="Center" Style="{StaticResource Text.BodyStrong}" Text="{Binding Label}" />
-                                                <TextBlock Grid.Column="1" Margin="12,0" VerticalAlignment="Center" Style="{StaticResource Text.Caption}" Text="{Binding Detail}" />
-                                                <TextBlock Grid.Column="2" VerticalAlignment="Center" Style="{StaticResource Text.Metric}" Text="{Binding SizeText}" />
-                                            </Grid>
-                                        </Border>
-                                        <DataTemplate.Triggers>
-                                            <DataTrigger Binding="{Binding IsAvailable}" Value="False">
-                                                <Setter TargetName="Row" Property="Opacity" Value="0.45" />
-                                                <Setter TargetName="Row" Property="Background" Value="Transparent" />
-                                            </DataTrigger>
-                                        </DataTemplate.Triggers>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto" MinWidth="120" />
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="Auto" />
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock VerticalAlignment="Center" Style="{StaticResource Text.BodyStrong}" Text="{Binding Label}" />
+                                            <TextBlock Grid.Column="1" Margin="12,0" VerticalAlignment="Center" Style="{StaticResource Text.Caption}" Text="{Binding Detail}" />
+                                            <TextBlock Grid.Column="2" VerticalAlignment="Center" Style="{StaticResource Text.Metric}" Text="{Binding SizeText}" />
+                                        </Grid>
                                     </DataTemplate>
-                                </ItemsControl.ItemTemplate>
-                            </ItemsControl>
-                            <TextBlock Margin="0,10,0,0" Style="{StaticResource Text.Secondary}" Text="{Binding BestAudioText}" Visibility="{Binding BestAudioText, Converter={StaticResource HasValueToVisibility}}" />
-                            <Border Margin="0,14,0,0" BorderBrush="{DynamicResource Brush.Border}" BorderThickness="0,1,0,0" Padding="0,12,0,0">
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+
+                            <ui:Button
+                                Margin="0,10,0,0"
+                                HorizontalAlignment="Stretch"
+                                HorizontalContentAlignment="Center"
+                                Appearance="Primary"
+                                Command="{Binding DownloadVideoCommand}"
+                                Content="{l:Loc Downloader_Download}"
+                                Icon="{ui:SymbolIcon ArrowDownload24}" />
+
+                            <!-- Audio only -->
+                            <Border Margin="0,16,0,0" BorderBrush="{DynamicResource Brush.Border}" BorderThickness="0,1,0,0" Padding="0,14,0,0">
+                                <StackPanel>
+                                    <Grid>
+                                        <TextBlock Style="{StaticResource Text.TitleMd}" Text="{l:Loc Downloader_AudioTitle}" />
+                                        <TextBlock HorizontalAlignment="Right" Style="{StaticResource Text.Metric}" Text="{Binding AudioOption.SizeText}" />
+                                    </Grid>
+                                    <TextBlock Margin="0,4,0,0" Style="{StaticResource Text.Secondary}" Text="{Binding BestAudioText}" TextWrapping="Wrap" Visibility="{Binding BestAudioText, Converter={StaticResource HasValueToVisibility}}" />
+                                    <Grid Margin="0,10,0,0">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <ComboBox
+                                            AutomationProperties.Name="{l:Loc Downloader_AudioFormat}"
+                                            DisplayMemberPath="Label"
+                                            ItemsSource="{Binding AudioFormats}"
+                                            SelectedItem="{Binding SelectedAudioFormat, Mode=TwoWay}" />
+                                        <ui:Button
+                                            Grid.Column="1"
+                                            Margin="8,0,0,0"
+                                            Command="{Binding DownloadAudioCommand}"
+                                            Content="{l:Loc Downloader_DownloadAudio}"
+                                            Icon="{ui:SymbolIcon MusicNote224}" />
+                                    </Grid>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- Where it goes -->
+                            <Border Margin="0,16,0,0" BorderBrush="{DynamicResource Brush.Border}" BorderThickness="0,1,0,0" Padding="0,12,0,0">
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="*" />
@@ -142,6 +176,19 @@
                                     <ui:Button Grid.Column="1" Margin="8,0,0,0" Appearance="Transparent" Command="{Binding ChangeFolderCommand}" Content="{l:Loc Downloader_ChangeFolder}" />
                                 </Grid>
                             </Border>
+
+                            <!-- The download just started from here, followed live -->
+                            <StackPanel Margin="0,14,0,0" Visibility="{Binding HasStartedDownload, Converter={StaticResource BoolToVisibility}}">
+                                <TextBlock Margin="0,0,0,8" Style="{StaticResource Text.BodyStrong}" Text="{Binding StartedMessage}" />
+                                <ContentPresenter Content="{Binding StartedDownload}" ContentTemplate="{StaticResource DownloadCard}" />
+                                <ui:Button
+                                    Appearance="Primary"
+                                    Command="{Binding OpenSignInSettingsCommand}"
+                                    Content="{l:Loc Downloader_UseBrowserSignIn}"
+                                    Icon="{ui:SymbolIcon Person24}"
+                                    Visibility="{Binding ShowStartedSignInAction, Converter={StaticResource BoolToVisibility}}" />
+                            </StackPanel>
+                            <TextBlock Margin="0,10,0,0" Style="{StaticResource Text.Error}" Text="{Binding ErrorMessage}" TextWrapping="Wrap" Visibility="{Binding ErrorMessage, Converter={StaticResource HasValueToVisibility}}" />
                         </StackPanel>
                     </Border>
                 </Grid>
@@ -241,11 +288,25 @@
                                     Icon="{ui:SymbolIcon ArrowDownload24}"
                                     Visibility="{Binding CanInstallTools, Converter={StaticResource BoolToVisibility}}" />
                                 <ui:Button
+                                    Appearance="Primary"
+                                    Command="{Binding OpenSignInSettingsCommand}"
+                                    Content="{l:Loc Downloader_UseBrowserSignIn}"
+                                    Icon="{ui:SymbolIcon Person24}"
+                                    Visibility="{Binding CanUseBrowserSignIn, Converter={StaticResource BoolToVisibility}}" />
+                                <ui:Button
+                                    Appearance="Primary"
+                                    Command="{Binding OpenSignInSettingsCommand}"
+                                    Content="{l:Loc Downloader_OpenSignInSettings}"
+                                    Icon="{ui:SymbolIcon Settings24}"
+                                    Visibility="{Binding CanOpenSignInSettings, Converter={StaticResource BoolToVisibility}}" />
+                                <ui:Button
+                                    Margin="8,0,0,0"
                                     Command="{Binding RetryCommand}"
                                     Content="{l:Loc Common_TryAgain}"
                                     Icon="{ui:SymbolIcon ArrowCounterclockwise24}"
                                     Visibility="{Binding CanInstallTools, Converter={StaticResource BoolToVisibility}, ConverterParameter=Invert}" />
                             </StackPanel>
+                            <TextBlock Margin="0,10,0,0" Style="{StaticResource Text.Caption}" Text="{l:Loc Downloader_SignInHint}" TextWrapping="Wrap" Visibility="{Binding CanUseBrowserSignIn, Converter={StaticResource BoolToVisibility}}" />
                             <TextBlock Margin="0,10,0,0" Style="{StaticResource Text.Secondary}" Text="{Binding InstallStatus}" TextWrapping="Wrap" Visibility="{Binding InstallStatus, Converter={StaticResource HasValueToVisibility}}" />
                         </StackPanel>
                     </Grid>

@@ -53,3 +53,10 @@ public interface IClipboardService
     /// <summary>The clipboard text, or null when it holds no text or can't be read right now.</summary>
     string? GetText();
 }
+
+/// <summary>Runs work on the UI thread. Downloads report from background threads; screens change only through this.</summary>
+public interface IUiThread
+{
+    /// <summary>Runs <paramref name="action"/> on the UI thread: at once when already there, otherwise queued.</summary>
+    void Post(Action action);
+}

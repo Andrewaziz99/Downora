@@ -8,7 +8,13 @@ public static class ErrorClassifier
     // Checked in order: the first match wins, so more specific causes come first.
     private static readonly (DownloadErrorKind Kind, string[] Phrases)[] Rules =
     [
-        (DownloadErrorKind.Drm, ["drm protected", "drm-protected", " drm "]),
+        // The user's own browser sign-in couldn't be read (browser open and locking its cookie file, no such profile…).
+        (DownloadErrorKind.BrowserCookies,
+        [
+            "cookie database", "cookies database", "failed to decrypt", "could not find firefox cookies", "could not find chrome cookies",
+            "could not find edge cookies", "could not find brave cookies", "unsupported browser specified for cookies", "failed to read cookies",
+        ]),
+        (DownloadErrorKind.Drm,["drm protected", "drm-protected", " drm "]),
         (DownloadErrorKind.RequiresSignIn,
         [
             "sign in to confirm", "login required", "log in to", "private video", "this video is private",
