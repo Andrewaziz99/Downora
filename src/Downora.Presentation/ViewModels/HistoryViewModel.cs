@@ -1,6 +1,7 @@
 using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Downora.Core.Enums;
 using Downora.Core.Interfaces;
 using Downora.Core.Models;
 using Downora.Presentation.Localization;
@@ -15,6 +16,7 @@ public sealed partial class HistoryViewModel : SearchablePageViewModel
     private readonly IDialogService dialogs;
     private readonly IShellService shell;
     private readonly IDownloadItemActions actions;
+    private readonly bool _ready;
 
     public HistoryViewModel(
         IDownloadJobQueries jobs,
@@ -32,6 +34,15 @@ public sealed partial class HistoryViewModel : SearchablePageViewModel
         this.dialogs = dialogs;
         this.shell = shell;
         this.actions = actions;
+        StatusFilters =
+        [
+            new(null, "History_FilterAll", localizer),
+            new(DownloadStatus.Completed, "History_FilterCompleted", localizer),
+            new(DownloadStatus.Failed, "History_FilterFailed", localizer),
+            new(DownloadStatus.Cancelled, "History_FilterCancelled", localizer),
+        ];
+        SelectedStatus = StatusFilters[0];
+        _ready = true;
 
         // A download that ends joins the list; one that is retried leaves it for the queue.
         feed.Updated += (_, e) =>
@@ -44,6 +55,19 @@ public sealed partial class HistoryViewModel : SearchablePageViewModel
     }
 
     public ObservableCollection<DownloadItemViewModel> Items { get; } = [];
+
+    public IReadOnlyList<OptionViewModel<DownloadStatus?>> StatusFilters { get; }
+
+    [ObservableProperty]
+    public partial OptionViewModel<DownloadStatus?> SelectedStatus { get; set; }
+
+    partial void OnSelectedStatusChanged(OptionViewModel<DownloadStatus?> value)
+    {
+        if (_ready)
+        {
+            _ = ReloadAsync(debounce: false);
+        }
+    }
 
     [ObservableProperty]
     public partial bool IsHistoryEmpty { get; private set; } = true;
@@ -58,7 +82,7 @@ public sealed partial class HistoryViewModel : SearchablePageViewModel
 
     protected override async Task LoadAsync(CancellationToken cancellationToken)
     {
-        var items = await jobs.GetHistoryAsync(new HistoryQuery(SearchText), cancellationToken).ConfigureAwait(true);
+        var items = await jobs.GetHistoryAsync(new HistoryQuery(SearchText, SelectedStatus.Value), cancellationToken).ConfigureAwait(true);
         var counts = await jobs.CountByStatusAsync(cancellationToken).ConfigureAwait(true);
         cancellationToken.ThrowIfCancellationRequested();
 
@@ -90,6 +114,19 @@ public sealed partial class HistoryViewModel : SearchablePageViewModel
         }
 
         await RunSafeAsync(() => jobs.ClearHistoryAsync()).ConfigureAwait(true);
+        await ReloadAsync(debounce: false).ConfigureAwait(true);
+    }
+
+    /// <summary>Drops one entry from History. The downloaded file and its library entry stay.</summary>
+    [RelayCommand]
+    private async Task RemoveAsync(DownloadItemViewModel? item)
+    {
+        if (item is null)
+        {
+            return;
+        }
+
+        await RunSafeAsync(() => jobs.RemoveFromHistoryAsync(item.Id)).ConfigureAwait(true);
         await ReloadAsync(debounce: false).ConfigureAwait(true);
     }
 

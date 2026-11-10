@@ -8,7 +8,17 @@
     <AssemblyName>Downora</AssemblyName>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <ApplicationIcon>Assets\downora.ico</ApplicationIcon>
+    <!-- Only for the tray icon (System.Windows.Forms.NotifyIcon); the UI is WPF. -->
+    <UseWindowsForms>true</UseWindowsForms>
+    <!-- WPF reads its DPI mode from app.manifest; WinForms' advice to configure it in code does not apply here. -->
+    <NoWarn>$(NoWarn);WFO0003</NoWarn>
   </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Keeps WinForms' type names (Application, MessageBox, Clipboard...) from clashing with WPF's. -->
+    <Using Remove="System.Windows.Forms" />
+    <Using Remove="System.Drawing" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Downora.Core\Downora.Core.csproj" />

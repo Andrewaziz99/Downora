@@ -104,7 +104,13 @@
   <data name="History_ClearConfirmBody" xml:space="preserve"><value>سيؤدي هذا إلى إزالة {0} من التنزيلات المنتهية من القائمة. لن يتم المساس بالملفات على القرص أو بمكتبة الوسائط.</value></data>
   <data name="History_EmptyTitle" xml:space="preserve"><value>لا يوجد سجل تنزيلات</value></data>
   <data name="History_EmptyBody" xml:space="preserve"><value>تُعرض هنا التنزيلات المكتملة والفاشلة والملغاة.</value></data>
-  <data name="History_NoResults" xml:space="preserve"><value>لا توجد تنزيلات تطابق بحثك.</value></data>
+  <data name="History_NoResults" xml:space="preserve"><value>لا توجد تنزيلات تطابق بحثك أو الفلتر.</value></data>
+  <data name="History_FilterAll" xml:space="preserve"><value>الكل</value></data>
+  <data name="History_FilterCompleted" xml:space="preserve"><value>المكتملة</value></data>
+  <data name="History_FilterFailed" xml:space="preserve"><value>الفاشلة</value></data>
+  <data name="History_FilterCancelled" xml:space="preserve"><value>الملغاة</value></data>
+  <data name="History_Remove" xml:space="preserve"><value>إزالة من السجل</value></data>
+  <data name="History_RemoveTip" xml:space="preserve"><value>تزيل هذا الإدخال. لا يتم المساس بالملف أو المكتبة.</value></data>
   <data name="History_ShowInFolder" xml:space="preserve"><value>إظهار في المجلد</value></data>
   <data name="Settings_Appearance" xml:space="preserve"><value>المظهر</value></data>
   <data name="Settings_Theme" xml:space="preserve"><value>سمة التطبيق</value></data>
@@ -199,6 +205,32 @@
   <data name="Error_Unknown_Title" xml:space="preserve"><value>حدث خطأ ما</value></data>
   <data name="Error_Unknown_Body" xml:space="preserve"><value>تعذّر على Downora إكمال هذا الإجراء. قد تفيدك التفاصيل أدناه.</value></data>
   <data name="Error_InstallFailed" xml:space="preserve"><value>تعذّر التثبيت: {0}</value></data>
+  <data name="Settings_Windows" xml:space="preserve"><value>ويندوز</value></data>
+  <data name="Settings_LaunchAtStartup" xml:space="preserve"><value>تشغيل Downora عند تسجيل الدخول</value></data>
+  <data name="Settings_LaunchAtStartupDesc" xml:space="preserve"><value>يضيف Downora إلى التطبيقات التي يشغّلها ويندوز عند تسجيل الدخول. أوقفه هنا لإزالته.</value></data>
+  <data name="Settings_StartMinimized" xml:space="preserve"><value>البدء في شريط المهام</value></data>
+  <data name="Settings_StartMinimizedDesc" xml:space="preserve"><value>عندما يبدأ Downora تلقائيًا عند تسجيل الدخول، يبقى في شريط المهام بدل فتح نافذته.</value></data>
+  <data name="Settings_CloseToTray" xml:space="preserve"><value>الاستمرار في العمل بشريط المهام عند إغلاق النافذة</value></data>
+  <data name="Settings_CloseToTrayDesc" xml:space="preserve"><value>تستمر التنزيلات في الخلفية. استخدم «خروج» من قائمة الشريط لإغلاق Downora.</value></data>
+  <data name="Settings_KeepHistory" xml:space="preserve"><value>الاحتفاظ بسجل التنزيلات</value></data>
+  <data name="Settings_KeepHistoryDesc" xml:space="preserve"><value>تُزال الإدخالات الأقدم من السجل. لا يتم المساس بملفاتك أو بمكتبة الوسائط.</value></data>
+  <data name="Settings_KeepForever" xml:space="preserve"><value>للأبد</value></data>
+  <data name="Settings_Keep30" xml:space="preserve"><value>30 يومًا</value></data>
+  <data name="Settings_Keep90" xml:space="preserve"><value>90 يومًا</value></data>
+  <data name="Settings_Keep180" xml:space="preserve"><value>180 يومًا</value></data>
+  <data name="Settings_Keep365" xml:space="preserve"><value>سنة واحدة</value></data>
+  <data name="Settings_YtDlpAutoUpdate" xml:space="preserve"><value>إبقاء yt-dlp محدّثًا</value></data>
+  <data name="Settings_YtDlpAutoUpdateDesc" xml:space="preserve"><value>يتحقق من وجود إصدار جديد عند بدء Downora، مرة واحدة يوميًا على الأكثر وليس أثناء التنزيل. تتغير المواقع كثيرًا، وإصدار yt-dlp القديم يتوقف عن العمل.</value></data>
+  <data name="Settings_FfmpegOwn" xml:space="preserve"><value>استخدام FFmpeg الخاص بي</value></data>
+  <data name="Settings_FfmpegOwnDesc" xml:space="preserve"><value>اختر ملف ffmpeg.exe ثبّتَّه بنفسك بدلًا من النسخة التي يديرها Downora.</value></data>
+  <data name="Settings_FfmpegBundled" xml:space="preserve"><value>يتم استخدام النسخة التي يديرها Downora</value></data>
+  <data name="Settings_FfmpegPickTitle" xml:space="preserve"><value>اختر ffmpeg.exe</value></data>
+  <data name="Settings_FfmpegUseBundled" xml:space="preserve"><value>استخدام نسخة Downora</value></data>
+  <data name="Tray_Open" xml:space="preserve"><value>فتح Downora</value></data>
+  <data name="Tray_PauseAll" xml:space="preserve"><value>إيقاف كل التنزيلات مؤقتًا</value></data>
+  <data name="Tray_ResumeAll" xml:space="preserve"><value>استئناف كل التنزيلات</value></data>
+  <data name="Tray_Exit" xml:space="preserve"><value>خروج</value></data>
+  <data name="Tray_Active" xml:space="preserve"><value>Downora: {0} قيد التنزيل</value></data>
   <data name="Settings_Tools" xml:space="preserve"><value>الأدوات</value></data>
   <data name="Tool_YtDlp" xml:space="preserve"><value>yt-dlp</value></data>
   <data name="Tool_YtDlpDesc" xml:space="preserve"><value>يقرأ الروابط وينزّل الوسائط.</value></data>

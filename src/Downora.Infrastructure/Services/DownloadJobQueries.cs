@@ -84,18 +84,35 @@ internal sealed class DownloadJobQueries(
     public async Task<int> ClearHistoryAsync(CancellationToken cancellationToken = default)
     {
         await using var db = await contextFactory.CreateDbContextAsync(cancellationToken).ConfigureAwait(false);
+        return await DeleteAsync(db, db.DownloadJobs.Where(j => Finished.Contains(j.Status)), cancellationToken).ConfigureAwait(false);
+    }
+
+    public async Task<int> PruneHistoryAsync(DateTime cutoffUtc, CancellationToken cancellationToken = default)
+    {
+        await using var db = await contextFactory.CreateDbContextAsync(cancellationToken).ConfigureAwait(false);
+        return await DeleteAsync(
+            db,
+            db.DownloadJobs.Where(j => Finished.Contains(j.Status) && (j.CompletedAtUtc ?? j.CreatedAtUtc) < cutoffUtc),
+            cancellationToken).ConfigureAwait(false);
+    }
+
+    public async Task<bool> RemoveFromHistoryAsync(Guid jobId, CancellationToken cancellationToken = default)
+    {
+        await using var db = await contextFactory.CreateDbContextAsync(cancellationToken).ConfigureAwait(false);
+        return await DeleteAsync(db, db.DownloadJobs.Where(j => j.Id == jobId && Finished.Contains(j.Status)), cancellationToken).ConfigureAwait(false) > 0;
+    }
+
+    /// <summary>Deletes the selected (finished) jobs. Their library entries are unlinked first, so the files stay in the library.</summary>
+    private static async Task<int> DeleteAsync(DownoraDbContext db, IQueryable<DownloadJob> selected, CancellationToken cancellationToken)
+    {
         await using var transaction = await db.Database.BeginTransactionAsync(cancellationToken).ConfigureAwait(false);
 
-        // Unlink library entries first so the files stay in the library.
         await db.MediaItems
-            .Where(m => m.DownloadJobId != null && db.DownloadJobs.Any(j => j.Id == m.DownloadJobId && Finished.Contains(j.Status)))
+            .Where(m => m.DownloadJobId != null && selected.Any(j => j.Id == m.DownloadJobId))
             .ExecuteUpdateAsync(s => s.SetProperty(m => m.DownloadJobId, (Guid?)null), cancellationToken)
             .ConfigureAwait(false);
 
-        var removed = await db.DownloadJobs
-            .Where(j => Finished.Contains(j.Status))
-            .ExecuteDeleteAsync(cancellationToken)
-            .ConfigureAwait(false);
+        var removed = await selected.ExecuteDeleteAsync(cancellationToken).ConfigureAwait(false);
 
         await transaction.CommitAsync(cancellationToken).ConfigureAwait(false);
         return removed;

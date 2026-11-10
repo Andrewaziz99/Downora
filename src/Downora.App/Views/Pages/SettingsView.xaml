@@ -107,6 +107,56 @@
                     AutomationProperties.Name="{l:Loc Settings_EmbedCover}"
                     IsChecked="{Binding EmbedCoverArt, Mode=TwoWay}" />
             </ui:CardControl>
+            <ui:CardControl Margin="0,0,0,4" Icon="{ui:SymbolIcon History24}">
+                <ui:CardControl.Header>
+                    <StackPanel>
+                        <TextBlock Style="{StaticResource Text.Body}" Text="{l:Loc Settings_KeepHistory}" />
+                        <TextBlock MaxWidth="560" HorizontalAlignment="Left" Style="{StaticResource Text.Caption}" Text="{l:Loc Settings_KeepHistoryDesc}" TextTrimming="None" TextWrapping="Wrap" />
+                    </StackPanel>
+                </ui:CardControl.Header>
+                <ComboBox
+                    MinWidth="180"
+                    AutomationProperties.Name="{l:Loc Settings_KeepHistory}"
+                    DisplayMemberPath="Label"
+                    ItemsSource="{Binding HistoryRetentionOptions}"
+                    SelectedItem="{Binding SelectedHistoryRetention, Mode=TwoWay}" />
+            </ui:CardControl>
+
+            <!-- Windows: start with Windows, tray -->
+            <TextBlock Margin="0,20,0,8" Style="{StaticResource Text.BodyStrong}" Text="{l:Loc Settings_Windows}" />
+            <ui:CardControl Margin="0,0,0,4" Icon="{ui:SymbolIcon Power24}">
+                <ui:CardControl.Header>
+                    <StackPanel>
+                        <TextBlock Style="{StaticResource Text.Body}" Text="{l:Loc Settings_LaunchAtStartup}" />
+                        <TextBlock MaxWidth="560" HorizontalAlignment="Left" Style="{StaticResource Text.Caption}" Text="{l:Loc Settings_LaunchAtStartupDesc}" TextTrimming="None" TextWrapping="Wrap" />
+                    </StackPanel>
+                </ui:CardControl.Header>
+                <ui:ToggleSwitch
+                    AutomationProperties.Name="{l:Loc Settings_LaunchAtStartup}"
+                    IsChecked="{Binding LaunchAtStartup, Mode=TwoWay}" />
+            </ui:CardControl>
+            <ui:CardControl Margin="0,0,0,4" Icon="{ui:SymbolIcon ArrowMinimize24}">
+                <ui:CardControl.Header>
+                    <StackPanel>
+                        <TextBlock Style="{StaticResource Text.Body}" Text="{l:Loc Settings_StartMinimized}" />
+                        <TextBlock MaxWidth="560" HorizontalAlignment="Left" Style="{StaticResource Text.Caption}" Text="{l:Loc Settings_StartMinimizedDesc}" TextTrimming="None" TextWrapping="Wrap" />
+                    </StackPanel>
+                </ui:CardControl.Header>
+                <ui:ToggleSwitch
+                    AutomationProperties.Name="{l:Loc Settings_StartMinimized}"
+                    IsChecked="{Binding StartMinimized, Mode=TwoWay}" />
+            </ui:CardControl>
+            <ui:CardControl Margin="0,0,0,4" Icon="{ui:SymbolIcon WindowArrowUp24}">
+                <ui:CardControl.Header>
+                    <StackPanel>
+                        <TextBlock Style="{StaticResource Text.Body}" Text="{l:Loc Settings_CloseToTray}" />
+                        <TextBlock MaxWidth="560" HorizontalAlignment="Left" Style="{StaticResource Text.Caption}" Text="{l:Loc Settings_CloseToTrayDesc}" TextTrimming="None" TextWrapping="Wrap" />
+                    </StackPanel>
+                </ui:CardControl.Header>
+                <ui:ToggleSwitch
+                    AutomationProperties.Name="{l:Loc Settings_CloseToTray}"
+                    IsChecked="{Binding CloseToTray, Mode=TwoWay}" />
+            </ui:CardControl>
 
             <!-- Browser sign-in (opt-in) -->
             <StackPanel x:Name="CookieSection">
@@ -174,6 +224,30 @@
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
+            <ui:CardControl Margin="0,0,0,4" Icon="{ui:SymbolIcon ArrowSync24}">
+                <ui:CardControl.Header>
+                    <StackPanel>
+                        <TextBlock Style="{StaticResource Text.Body}" Text="{l:Loc Settings_YtDlpAutoUpdate}" />
+                        <TextBlock MaxWidth="560" HorizontalAlignment="Left" Style="{StaticResource Text.Caption}" Text="{l:Loc Settings_YtDlpAutoUpdateDesc}" TextTrimming="None" TextWrapping="Wrap" />
+                    </StackPanel>
+                </ui:CardControl.Header>
+                <ui:ToggleSwitch
+                    AutomationProperties.Name="{l:Loc Settings_YtDlpAutoUpdate}"
+                    IsChecked="{Binding YtDlpAutoUpdate, Mode=TwoWay}" />
+            </ui:CardControl>
+            <ui:CardControl Margin="0,0,0,4" Icon="{ui:SymbolIcon Video24}">
+                <ui:CardControl.Header>
+                    <StackPanel>
+                        <TextBlock Style="{StaticResource Text.Body}" Text="{l:Loc Settings_FfmpegOwn}" />
+                        <TextBlock MaxWidth="560" HorizontalAlignment="Left" Style="{StaticResource Text.Caption}" Text="{l:Loc Settings_FfmpegOwnDesc}" TextTrimming="None" TextWrapping="Wrap" />
+                        <TextBlock Margin="0,2,0,0" FlowDirection="LeftToRight" HorizontalAlignment="Left" Style="{StaticResource Text.Metric}" Text="{Binding FfmpegPathDisplay}" TextWrapping="Wrap" />
+                    </StackPanel>
+                </ui:CardControl.Header>
+                <StackPanel Orientation="Horizontal">
+                    <ui:Button Command="{Binding BrowseFfmpegCommand}" Content="{l:Loc Settings_Browse}" />
+                    <ui:Button Margin="6,0,0,0" Command="{Binding ClearFfmpegPathCommand}" Content="{l:Loc Settings_FfmpegUseBundled}" />
+                </StackPanel>
+            </ui:CardControl>
         </StackPanel>
     </ScrollViewer>
 </UserControl>

@@ -21,6 +21,9 @@ public interface IDialogService
     /// <summary>Shows a folder picker; null when the user cancels.</summary>
     string? PickFolder(string title, string? initialFolder);
 
+    /// <summary>Shows a file picker for one program (an .exe); null when the user cancels.</summary>
+    string? PickProgram(string title, string? initialFile);
+
     /// <summary>Asks the user to confirm a destructive action; true when they pick <paramref name="confirmText"/>.</summary>
     Task<bool> ConfirmAsync(string title, string message, string confirmText, string cancelText);
 }

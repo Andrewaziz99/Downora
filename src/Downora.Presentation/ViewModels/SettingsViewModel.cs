@@ -69,9 +69,18 @@ public sealed partial class SettingsViewModel : Navigation.PageViewModel
             new(CookieBrowsers.Firefox, "Browser_Firefox", localizer),
             new(CookieBrowsers.Brave, "Browser_Brave", localizer),
         ];
+        HistoryRetentionOptions =
+        [
+            new(null, "Settings_KeepForever", localizer),
+            new(30, "Settings_Keep30", localizer),
+            new(90, "Settings_Keep90", localizer),
+            new(180, "Settings_Keep180", localizer),
+            new(365, "Settings_Keep365", localizer),
+        ];
         SelectedTheme = ThemeOptions[0];
         SelectedLanguage = LanguageOptions[0];
         SelectedBrowser = BrowserOptions[0];
+        SelectedHistoryRetention = HistoryRetentionOptions[0];
         _loading = false;
     }
 
@@ -82,6 +91,35 @@ public sealed partial class SettingsViewModel : Navigation.PageViewModel
     public IReadOnlyList<OptionViewModel<AppLanguage>> LanguageOptions { get; }
 
     public IReadOnlyList<OptionViewModel<string>> BrowserOptions { get; }
+
+    public IReadOnlyList<OptionViewModel<int?>> HistoryRetentionOptions { get; }
+
+    /// <summary>How long finished downloads stay in History; older ones are removed (their files and library entries are not).</summary>
+    [ObservableProperty]
+    public partial OptionViewModel<int?> SelectedHistoryRetention { get; set; }
+
+    /// <summary>Keeps yt-dlp up to date by itself: checked at most once a day, never while downloads run.</summary>
+    [ObservableProperty]
+    public partial bool YtDlpAutoUpdate { get; set; } = true;
+
+    [ObservableProperty]
+    public partial bool LaunchAtStartup { get; set; }
+
+    [ObservableProperty]
+    public partial bool StartMinimized { get; set; }
+
+    [ObservableProperty]
+    public partial bool CloseToTray { get; set; }
+
+    /// <summary>The user's own ffmpeg.exe, or empty when Downora's copy is used.</summary>
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(HasFfmpegPath), nameof(FfmpegPathDisplay))]
+    [NotifyCanExecuteChangedFor(nameof(ClearFfmpegPathCommand))]
+    public partial string FfmpegPath { get; private set; } = string.Empty;
+
+    public bool HasFfmpegPath => FfmpegPath.Length > 0;
+
+    public string FfmpegPathDisplay => HasFfmpegPath ? Localizer.LeftToRight(FfmpegPath) : L["Settings_FfmpegBundled"];
 
     /// <summary>1 to 10 simultaneous downloads.</summary>
     public IReadOnlyList<int> ConcurrencyChoices { get; } =
@@ -173,6 +211,12 @@ public sealed partial class SettingsViewModel : Navigation.PageViewModel
             DownloadDirectory = current.DownloadDirectory;
             MaxConcurrentDownloads = current.MaxConcurrentDownloads;
             AutoStartDownloads = current.AutoStartDownloads;
+            SelectedHistoryRetention = HistoryRetentionOptions.FirstOrDefault(o => o.Value == current.HistoryRetentionDays) ?? HistoryRetentionOptions[0];
+            YtDlpAutoUpdate = current.YtDlpAutoUpdate;
+            LaunchAtStartup = current.LaunchAtStartup;
+            StartMinimized = current.StartMinimized;
+            CloseToTray = current.CloseToTray;
+            FfmpegPath = current.FfmpegPathOverride ?? string.Empty;
             EmbedMetadata = current.EmbedMetadata;
             EmbedCoverArt = current.EmbedCoverArt;
             UseBrowserSession = current.UseBrowserSession;
@@ -222,6 +266,80 @@ public sealed partial class SettingsViewModel : Navigation.PageViewModel
             _ = SaveAsync(s => s.AutoStartDownloads = value);
         }
     }
+
+    partial void OnSelectedHistoryRetentionChanged(OptionViewModel<int?> value)
+    {
+        if (!_loading)
+        {
+            _ = SaveAsync(s => s.HistoryRetentionDays = value.Value);
+        }
+    }
+
+    partial void OnYtDlpAutoUpdateChanged(bool value)
+    {
+        if (!_loading)
+        {
+            _ = SaveAsync(s => s.YtDlpAutoUpdate = value);
+        }
+    }
+
+    partial void OnLaunchAtStartupChanged(bool value)
+    {
+        if (!_loading)
+        {
+            _ = SaveAsync(s => s.LaunchAtStartup = value);
+        }
+    }
+
+    partial void OnStartMinimizedChanged(bool value)
+    {
+        if (!_loading)
+        {
+            _ = SaveAsync(s => s.StartMinimized = value);
+        }
+    }
+
+    partial void OnCloseToTrayChanged(bool value)
+    {
+        if (!_loading)
+        {
+            _ = SaveAsync(s => s.CloseToTray = value);
+        }
+    }
+
+    [RelayCommand]
+    private async Task BrowseFfmpegAsync()
+    {
+        var picked = _dialogs.PickProgram(L["Settings_FfmpegPickTitle"], FfmpegPath);
+        if (string.IsNullOrWhiteSpace(picked) || !await SaveAsync(s => s.FfmpegPathOverride = picked).ConfigureAwait(true))
+        {
+            return;
+        }
+
+        FfmpegPath = picked;
+        await RefreshToolsAsync().ConfigureAwait(true);
+    }
+
+    private bool CanClearFfmpegPath() => HasFfmpegPath;
+
+    [RelayCommand(CanExecute = nameof(CanClearFfmpegPath))]
+    private async Task ClearFfmpegPathAsync()
+    {
+        if (await SaveAsync(s => s.FfmpegPathOverride = null).ConfigureAwait(true))
+        {
+            FfmpegPath = string.Empty;
+            await RefreshToolsAsync().ConfigureAwait(true);
+        }
+    }
+
+    private Task RefreshToolsAsync() => RunSafeAsync(async () =>
+    {
+        var statuses = await _tools.GetStatusAsync().ConfigureAwait(true);
+        foreach (var row in ToolRows)
+        {
+            row.Apply(statuses);
+        }
+    }, showLoading: false);
 
     partial void OnEmbedMetadataChanged(bool value)
     {

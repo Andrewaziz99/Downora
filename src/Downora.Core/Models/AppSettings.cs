@@ -44,8 +44,17 @@ public class AppSettings
     /// <summary>Set once downloads from before the library existed have been added to it; later removals then stay removed.</summary>
     public bool LibraryBackfilled { get; set; }
 
+    /// <summary>Start Downora when the user signs in to Windows.</summary>
     public bool LaunchAtStartup { get; set; }
+
+    /// <summary>When Downora starts by itself at sign-in, stay in the tray instead of opening the window.</summary>
     public bool StartMinimized { get; set; }
+
+    /// <summary>Closing the window hides it to the tray and downloads keep running; "Exit" in the tray menu really quits.</summary>
+    public bool CloseToTray { get; set; }
+
+    /// <summary>When yt-dlp was last checked for an update automatically. Limits the check to once a day.</summary>
+    public DateTime? LastToolCheckUtc { get; set; }
 
     public AppTheme Theme { get; set; } = AppTheme.System;
     public AppLanguage Language { get; set; } = AppLanguage.English;

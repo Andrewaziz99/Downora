@@ -19,6 +19,20 @@ internal sealed class DialogService : IDialogService
         return dialog.ShowDialog(Application.Current.MainWindow) == true ? dialog.FolderName : null;
     }
 
+    public string? PickProgram(string title, string? initialFile)
+    {
+        var dialog = new OpenFileDialog
+        {
+            Title = title,
+            Multiselect = false,
+            CheckFileExists = true,
+            Filter = "Programs (*.exe)|*.exe",
+            InitialDirectory = initialFile is { Length: > 0 } && Path.GetDirectoryName(initialFile) is { } dir && Directory.Exists(dir) ? dir : string.Empty,
+        };
+
+        return dialog.ShowDialog(Application.Current.MainWindow) == true ? dialog.FileName : null;
+    }
+
     public async Task<bool> ConfirmAsync(string title, string message, string confirmText, string cancelText)
     {
         var box = new Wpf.Ui.Controls.MessageBox

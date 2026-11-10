@@ -19,6 +19,12 @@ public interface IDownloadJobQueries
 
     /// <summary>Deletes finished jobs. Library entries and files on disk are kept. Returns how many were removed.</summary>
     Task<int> ClearHistoryAsync(CancellationToken cancellationToken = default);
+
+    /// <summary>Deletes finished jobs that ended before <paramref name="cutoffUtc"/>. Library entries and files are kept. Returns how many were removed.</summary>
+    Task<int> PruneHistoryAsync(DateTime cutoffUtc, CancellationToken cancellationToken = default);
+
+    /// <summary>Deletes one finished job from history. The file and its library entry are kept. Returns false when there is no such finished job.</summary>
+    Task<bool> RemoveFromHistoryAsync(Guid jobId, CancellationToken cancellationToken = default);
 }
 
 /// <summary>The local media library.</summary>

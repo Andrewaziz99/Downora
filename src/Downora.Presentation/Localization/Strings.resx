@@ -104,7 +104,13 @@
   <data name="History_ClearConfirmBody" xml:space="preserve"><value>This removes {0} finished downloads from the list. Files on disk and your media library are not touched.</value></data>
   <data name="History_EmptyTitle" xml:space="preserve"><value>No download history</value></data>
   <data name="History_EmptyBody" xml:space="preserve"><value>Completed, failed and cancelled downloads are listed here.</value></data>
-  <data name="History_NoResults" xml:space="preserve"><value>No downloads match your search.</value></data>
+  <data name="History_NoResults" xml:space="preserve"><value>No downloads match your search or filter.</value></data>
+  <data name="History_FilterAll" xml:space="preserve"><value>All</value></data>
+  <data name="History_FilterCompleted" xml:space="preserve"><value>Completed</value></data>
+  <data name="History_FilterFailed" xml:space="preserve"><value>Failed</value></data>
+  <data name="History_FilterCancelled" xml:space="preserve"><value>Cancelled</value></data>
+  <data name="History_Remove" xml:space="preserve"><value>Remove from history</value></data>
+  <data name="History_RemoveTip" xml:space="preserve"><value>Removes this entry. The file and your library are not touched.</value></data>
   <data name="History_ShowInFolder" xml:space="preserve"><value>Show in folder</value></data>
   <data name="Settings_Appearance" xml:space="preserve"><value>Appearance</value></data>
   <data name="Settings_Theme" xml:space="preserve"><value>App theme</value></data>
@@ -199,6 +205,32 @@
   <data name="Error_Unknown_Title" xml:space="preserve"><value>Something went wrong</value></data>
   <data name="Error_Unknown_Body" xml:space="preserve"><value>Downora couldn't finish this. The details below may help.</value></data>
   <data name="Error_InstallFailed" xml:space="preserve"><value>Couldn't install: {0}</value></data>
+  <data name="Settings_Windows" xml:space="preserve"><value>Windows</value></data>
+  <data name="Settings_LaunchAtStartup" xml:space="preserve"><value>Start Downora when I sign in</value></data>
+  <data name="Settings_LaunchAtStartupDesc" xml:space="preserve"><value>Adds Downora to the apps Windows starts when you sign in. Turn it off here to remove it.</value></data>
+  <data name="Settings_StartMinimized" xml:space="preserve"><value>Start in the tray</value></data>
+  <data name="Settings_StartMinimizedDesc" xml:space="preserve"><value>When Downora starts by itself at sign-in, it stays in the tray instead of opening its window.</value></data>
+  <data name="Settings_CloseToTray" xml:space="preserve"><value>Keep running in the tray when I close the window</value></data>
+  <data name="Settings_CloseToTrayDesc" xml:space="preserve"><value>Downloads continue in the background. Use Exit in the tray menu to quit Downora.</value></data>
+  <data name="Settings_KeepHistory" xml:space="preserve"><value>Keep download history</value></data>
+  <data name="Settings_KeepHistoryDesc" xml:space="preserve"><value>Older entries are removed from History. Your files and media library are not touched.</value></data>
+  <data name="Settings_KeepForever" xml:space="preserve"><value>Forever</value></data>
+  <data name="Settings_Keep30" xml:space="preserve"><value>30 days</value></data>
+  <data name="Settings_Keep90" xml:space="preserve"><value>90 days</value></data>
+  <data name="Settings_Keep180" xml:space="preserve"><value>180 days</value></data>
+  <data name="Settings_Keep365" xml:space="preserve"><value>1 year</value></data>
+  <data name="Settings_YtDlpAutoUpdate" xml:space="preserve"><value>Keep yt-dlp up to date</value></data>
+  <data name="Settings_YtDlpAutoUpdateDesc" xml:space="preserve"><value>Checks for a new version when Downora starts, at most once a day and never while downloads are running. Sites change often, and an old yt-dlp stops working.</value></data>
+  <data name="Settings_FfmpegOwn" xml:space="preserve"><value>Use my own FFmpeg</value></data>
+  <data name="Settings_FfmpegOwnDesc" xml:space="preserve"><value>Pick an ffmpeg.exe you installed yourself instead of the one Downora manages.</value></data>
+  <data name="Settings_FfmpegBundled" xml:space="preserve"><value>Using the copy Downora manages</value></data>
+  <data name="Settings_FfmpegPickTitle" xml:space="preserve"><value>Choose ffmpeg.exe</value></data>
+  <data name="Settings_FfmpegUseBundled" xml:space="preserve"><value>Use Downora's copy</value></data>
+  <data name="Tray_Open" xml:space="preserve"><value>Open Downora</value></data>
+  <data name="Tray_PauseAll" xml:space="preserve"><value>Pause all downloads</value></data>
+  <data name="Tray_ResumeAll" xml:space="preserve"><value>Resume all downloads</value></data>
+  <data name="Tray_Exit" xml:space="preserve"><value>Exit</value></data>
+  <data name="Tray_Active" xml:space="preserve"><value>Downora: {0} downloading</value></data>
   <data name="Settings_Tools" xml:space="preserve"><value>Tools</value></data>
   <data name="Tool_YtDlp" xml:space="preserve"><value>yt-dlp</value></data>
   <data name="Tool_YtDlpDesc" xml:space="preserve"><value>Reads links and downloads media.</value></data>

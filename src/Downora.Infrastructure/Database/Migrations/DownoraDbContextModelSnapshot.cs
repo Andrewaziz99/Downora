@@ -32,6 +32,9 @@ namespace Downora.Infrastructure.Database.Migrations
                         .HasMaxLength(32)
                         .HasColumnType("TEXT");
 
+                    b.Property<bool>("CloseToTray")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int>("DefaultAudioBitrateKbps")
                         .HasColumnType("INTEGER");
 
@@ -61,6 +64,9 @@ namespace Downora.Infrastructure.Database.Migrations
                     b.Property<string>("Language")
                         .IsRequired()
                         .HasMaxLength(16)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("LastToolCheckUtc")
                         .HasColumnType("TEXT");
 
                     b.Property<bool>("LaunchAtStartup")

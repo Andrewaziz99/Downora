@@ -30,15 +30,27 @@
                 Icon="{ui:SymbolIcon Delete24}" />
         </Grid>
 
-        <ui:TextBox
-            Grid.Row="1"
-            Width="360"
-            Margin="0,0,0,16"
-            HorizontalAlignment="Left"
-            AutomationProperties.Name="{l:Loc History_Search}"
-            Icon="{ui:SymbolIcon Search24}"
-            PlaceholderText="{l:Loc History_Search}"
-            Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" />
+        <Border Grid.Row="1" Margin="0,0,0,16" Padding="8" Style="{StaticResource Card}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="360" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <ui:TextBox
+                    AutomationProperties.Name="{l:Loc History_Search}"
+                    Icon="{ui:SymbolIcon Search24}"
+                    PlaceholderText="{l:Loc History_Search}"
+                    Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" />
+                <ListBox
+                    Grid.Column="1"
+                    Margin="12,0"
+                    VerticalAlignment="Center"
+                    DisplayMemberPath="Label"
+                    ItemsSource="{Binding StatusFilters}"
+                    SelectedItem="{Binding SelectedStatus, Mode=TwoWay}"
+                    Style="{StaticResource TabStrip}" />
+            </Grid>
+        </Border>
 
         <TextBlock Grid.Row="2" Margin="0,0,0,12" Style="{StaticResource Text.Error}" Text="{Binding ErrorMessage}" Visibility="{Binding ErrorMessage, Converter={StaticResource HasValueToVisibility}}" />
 
@@ -92,6 +104,13 @@
                                             CommandParameter="{Binding}"
                                             Icon="{ui:SymbolIcon FolderOpen24}"
                                             ToolTip="{l:Loc History_ShowInFolder}" />
+                                        <ui:Button
+                                            AutomationProperties.Name="{l:Loc History_Remove}"
+                                            Appearance="Transparent"
+                                            Command="{Binding DataContext.RemoveCommand, ElementName=Root}"
+                                            CommandParameter="{Binding}"
+                                            Icon="{ui:SymbolIcon Dismiss24}"
+                                            ToolTip="{l:Loc History_RemoveTip}" />
                                     </StackPanel>
                                 </Grid>
                             </Border>

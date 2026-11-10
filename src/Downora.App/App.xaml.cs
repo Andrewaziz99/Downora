@@ -3,6 +3,7 @@ using System.Windows.Threading;
 using Downora.App.Services;
 using Downora.App.Views;
 using Downora.Core.Interfaces;
+using Downora.Core.Services;
 using Downora.Infrastructure;
 using Downora.Infrastructure.Logging;
 using Downora.Infrastructure.Services;
@@ -17,9 +18,12 @@ using Serilog;
 namespace Downora.App;
 
 /// <summary>Composition root: builds the host, prepares the database, applies theme and language, then shows the shell.</summary>
+[System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1001:Types that own disposable fields should be disposable", Justification = "An Application has no Dispose; the single-instance handle and tray icon are disposed in OnExit.")]
 public partial class App : Application
 {
     private IHost? _host;
+    private SingleInstance? _instance;
+    private TrayService? _tray;
 
     protected override async void OnStartup(StartupEventArgs e)
     {
@@ -29,6 +33,16 @@ public partial class App : Application
         Log.Logger = LoggingSetup.CreateLogger(paths);
         RegisterGlobalExceptionHandlers();
         Log.Information("Downora {Version} starting", AppInfo.Version);
+
+        // One Downora at a time: a second launch just brings the first one forward.
+        _instance = new SingleInstance();
+        if (!_instance.IsFirst)
+        {
+            Log.Information("Downora is already running; asking it to show its window");
+            _instance.SignalRunningInstance();
+            Shutdown(0);
+            return;
+        }
 
         try
         {
@@ -43,6 +57,9 @@ public partial class App : Application
             builder.Services.AddSingleton<IAppInfo, AppInfoProvider>();
             builder.Services.AddSingleton<IClipboardService, ClipboardService>();
             builder.Services.AddSingleton<IUiThread, UiThread>();
+            builder.Services.AddSingleton<IStartupRegistry, StartupRegistry>();
+            builder.Services.AddSingleton<WindowLifecycle>();
+            builder.Services.AddSingleton<TrayService>();
             builder.Services.AddSingleton<MainWindow>();
 
             _host = builder.Build();
@@ -56,6 +73,11 @@ public partial class App : Application
             await services.GetRequiredService<IToolManager>().PrepareAsync().ConfigureAwait(true);
             await services.GetRequiredService<IDownloadJobService>().StartQueueAsync().ConfigureAwait(true);
 
+            services.GetRequiredService<IStartupEntrySynchronizer>().Synchronize();
+
+            // History retention and the daily yt-dlp update check; they never throw and nobody waits for them.
+            _ = services.GetRequiredService<IAppMaintenance>().RunStartupTasksAsync();
+
             // Adds downloads from before the library existed and flags files that went missing; it never throws and nobody waits for it.
             _ = services.GetRequiredService<IMediaLibraryService>().SyncAsync();
 
@@ -68,7 +90,17 @@ public partial class App : Application
             theme.Apply(settings.Theme);
 
             MainWindow = window;
-            window.Show();
+            var lifecycle = services.GetRequiredService<WindowLifecycle>();
+            lifecycle.Attach(window);
+            SessionEnding += (_, _) => lifecycle.MarkExiting();
+            _tray = services.GetRequiredService<TrayService>();
+            _instance.ListenForShowRequests(() => Dispatcher.BeginInvoke(lifecycle.Show));
+
+            // Started by Windows at sign-in with "Start in the tray" on: stay in the tray. Opened by the user: always show.
+            if (!(StartupCommand.IsStartupLaunch(e.Args) && settings.StartMinimized))
+            {
+                window.Show();
+            }
 
             await services.GetRequiredService<ShellViewModel>().StartAsync().ConfigureAwait(true);
         }
@@ -88,6 +120,9 @@ public partial class App : Application
 
     protected override void OnExit(ExitEventArgs e)
     {
+        _tray?.Dispose();
+        _instance?.Dispose();
+
         if (_host is not null)
         {
             try

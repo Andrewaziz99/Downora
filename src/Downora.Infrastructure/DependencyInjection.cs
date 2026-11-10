@@ -37,6 +37,12 @@ public static class DependencyInjection
         services.AddSingleton<ISettingsService, SettingsService>();
         services.AddSingleton<IJobRecoveryService, JobRecoveryService>();
         services.AddSingleton<IDownloadJobQueries, DownloadJobQueries>();
+        services.AddSingleton<AppMaintenance>();
+        services.AddSingleton<IAppMaintenance>(sp => sp.GetRequiredService<AppMaintenance>());
+        services.AddHostedService(sp => sp.GetRequiredService<AppMaintenance>());
+        services.AddSingleton<StartupSynchronizer>();
+        services.AddSingleton<IStartupEntrySynchronizer>(sp => sp.GetRequiredService<StartupSynchronizer>());
+        services.AddHostedService(sp => sp.GetRequiredService<StartupSynchronizer>());
         services.AddSingleton<IMediaLibraryService, MediaLibraryService>();
         services.AddSingleton<LibraryIndexer>();
         services.AddHostedService(sp => sp.GetRequiredService<LibraryIndexer>());

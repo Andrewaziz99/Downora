@@ -1093,6 +1093,108 @@ public sealed class DownloadFlowTests : IAsyncDisposable
         Assert.False(settings.AutoStartDownloads);
     }
 
+    // ---- Phase 8: settings, history, tray ----
+
+    [Fact]
+    public async Task Settings_saves_retention_updates_and_the_windows_options()
+    {
+        var settings = Get<SettingsViewModel>();
+        await settings.OnNavigatedToAsync(CancellationToken.None);
+        Assert.Null(settings.SelectedHistoryRetention.Value);
+        Assert.True(settings.YtDlpAutoUpdate);
+        Assert.False(settings.LaunchAtStartup);
+        Assert.Equal([null, 30, 90, 180, 365], settings.HistoryRetentionOptions.Select(o => o.Value));
+
+        settings.SelectedHistoryRetention = settings.HistoryRetentionOptions.Single(o => o.Value == 90);
+        settings.YtDlpAutoUpdate = false;
+        settings.LaunchAtStartup = true;
+        settings.StartMinimized = true;
+        settings.CloseToTray = true;
+
+        var saved = _settings.Current;
+        Assert.Equal((90, false, true, true, true), (saved.HistoryRetentionDays, saved.YtDlpAutoUpdate, saved.LaunchAtStartup, saved.StartMinimized, saved.CloseToTray));
+
+        await settings.OnNavigatedToAsync(CancellationToken.None);
+        Assert.Equal(90, settings.SelectedHistoryRetention.Value);
+        Assert.True(settings.CloseToTray);
+    }
+
+    [Fact]
+    public async Task Choosing_an_ffmpeg_saves_it_and_going_back_to_the_managed_copy_clears_it()
+    {
+        var dialogs = Get<IDialogService>();
+        dialogs.PickProgram(Arg.Any<string>(), Arg.Any<string?>()).Returns(@"C:\Tools\ffmpeg\bin\ffmpeg.exe");
+        var settings = Get<SettingsViewModel>();
+        await settings.OnNavigatedToAsync(CancellationToken.None);
+        Assert.False(settings.HasFfmpegPath);
+        Assert.Equal("Using the copy Downora manages", settings.FfmpegPathDisplay);
+        Assert.False(settings.ClearFfmpegPathCommand.CanExecute(null));
+
+        await settings.BrowseFfmpegCommand.ExecuteAsync(null);
+
+        Assert.Equal(@"C:\Tools\ffmpeg\bin\ffmpeg.exe", _settings.Current.FfmpegPathOverride);
+        Assert.True(settings.HasFfmpegPath);
+        Assert.True(settings.ClearFfmpegPathCommand.CanExecute(null));
+        await _tools.Received().GetStatusAsync(Arg.Any<CancellationToken>()); // the tool rows are refreshed
+
+        await settings.ClearFfmpegPathCommand.ExecuteAsync(null);
+
+        Assert.Null(_settings.Current.FfmpegPathOverride);
+        Assert.False(settings.HasFfmpegPath);
+    }
+
+    [Fact]
+    public async Task Cancelling_the_ffmpeg_picker_changes_nothing()
+    {
+        Get<IDialogService>().PickProgram(Arg.Any<string>(), Arg.Any<string?>()).Returns((string?)null);
+        var settings = Get<SettingsViewModel>();
+        await settings.OnNavigatedToAsync(CancellationToken.None);
+
+        await settings.BrowseFfmpegCommand.ExecuteAsync(null);
+
+        Assert.Null(_settings.Current.FfmpegPathOverride);
+    }
+
+    [Fact]
+    public async Task History_filters_by_status_and_removes_single_entries()
+    {
+        var done = Fakes.Job("done", DownloadStatus.Completed);
+        _queries.GetHistoryAsync(Arg.Any<HistoryQuery>(), Arg.Any<CancellationToken>()).Returns([done]);
+        _queries.CountByStatusAsync(Arg.Any<CancellationToken>()).Returns(new Dictionary<DownloadStatus, int> { [DownloadStatus.Completed] = 1 });
+        var history = Get<HistoryViewModel>();
+        await history.OnNavigatedToAsync(CancellationToken.None);
+        Assert.Equal(4, history.StatusFilters.Count);
+
+        history.SelectedStatus = history.StatusFilters.Single(f => f.Value == DownloadStatus.Failed);
+        await Task.Delay(50, TestContext.Current.CancellationToken);
+        await _queries.Received().GetHistoryAsync(Arg.Is<HistoryQuery>(q => q.Status == DownloadStatus.Failed), Arg.Any<CancellationToken>());
+
+        await history.RemoveCommand.ExecuteAsync(history.Items.FirstOrDefault() ?? new DownloadItemViewModel(done, _l));
+        await _queries.Received(1).RemoveFromHistoryAsync(done.Id, Arg.Any<CancellationToken>());
+    }
+
+    [Fact]
+    public void The_phase_8_labels_are_translated()
+    {
+        var ar = new Localizer();
+        ar.SetLanguage(AppLanguage.Arabic);
+        try
+        {
+            foreach (var key in new[] { "Settings_Windows", "Settings_LaunchAtStartup", "Settings_LaunchAtStartupDesc", "Settings_StartMinimized", "Settings_StartMinimizedDesc",
+                "Settings_CloseToTray", "Settings_CloseToTrayDesc", "Settings_KeepHistory", "Settings_KeepHistoryDesc", "Settings_KeepForever", "Settings_Keep30", "Settings_Keep90",
+                "Settings_Keep180", "Settings_Keep365", "Settings_YtDlpAutoUpdate", "Settings_YtDlpAutoUpdateDesc", "Settings_FfmpegOwn", "Settings_FfmpegOwnDesc",
+                "Settings_FfmpegBundled", "Settings_FfmpegPickTitle", "Settings_FfmpegUseBundled", "History_FilterAll", "History_FilterCompleted", "History_FilterFailed",
+                "History_FilterCancelled", "History_Remove", "History_RemoveTip", "Tray_Open", "Tray_PauseAll", "Tray_ResumeAll", "Tray_Exit", "Tray_Active" })
+            {
+                Assert.DoesNotContain("[", ar[key], StringComparison.Ordinal);
+            }
+        }
+        finally
+        {
+            ar.SetLanguage(AppLanguage.English);
+        }
+    }
+
     // ---- Phase 7: playlists ----
 
     private static readonly PlaylistInfo Mix = new(
