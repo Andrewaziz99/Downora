@@ -86,7 +86,7 @@ internal sealed partial class YtDlpDownloadEngine(
         LogStarting(request.JobId, request.Kind, request.Quality, request.CookieBrowser);
         progress?.Report(tracker.Current);
 
-        var spec = new ProcessSpec(ytDlp, arguments, Timeout: null, YtDlpMediaExtractor.Utf8Environment);
+        var spec = new ProcessSpec(ytDlp, arguments, Timeout: null, YtDlpMediaExtractor.Utf8Environment, CaptureStandardOutput: false);
         var result = await runner.RunAsync(spec, OnLine, OnLine, cancellationToken).ConfigureAwait(false);
 
         // The path yt-dlp prints can be garbled when the title has non-Latin characters (Arabic, for one), because

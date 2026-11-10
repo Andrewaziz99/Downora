@@ -32,7 +32,7 @@ public static class FileNames
         }
 
         var builder = new StringBuilder(name.Length);
-        foreach (var c in name.Normalize(NormalizationForm.FormC))
+        foreach (var c in ReplaceBrokenSurrogates(name).Normalize(NormalizationForm.FormC))
         {
             builder.Append(IsUnsafe(c) ? ' ' : c);
         }
@@ -128,6 +128,29 @@ public static class FileNames
         }
 
         return builder.ToString();
+    }
+
+    /// <summary>
+    /// Titles come from JSON, which may hold half an emoji (an unpaired surrogate). Such text is not valid Unicode and
+    /// makes normalization throw, so each broken half becomes a space.
+    /// </summary>
+    private static string ReplaceBrokenSurrogates(string text)
+    {
+        StringBuilder? fixedText = null;
+        for (var i = 0; i < text.Length; i++)
+        {
+            var c = text[i];
+            var broken = char.IsHighSurrogate(c)
+                ? i + 1 >= text.Length || !char.IsLowSurrogate(text[i + 1])
+                : char.IsLowSurrogate(c) && (i == 0 || !char.IsHighSurrogate(text[i - 1]));
+            if (broken)
+            {
+                fixedText ??= new StringBuilder(text);
+                fixedText[i] = ' ';
+            }
+        }
+
+        return fixedText?.ToString() ?? text;
     }
 
     /// <summary>Cuts to a length without splitting a surrogate pair (emoji).</summary>

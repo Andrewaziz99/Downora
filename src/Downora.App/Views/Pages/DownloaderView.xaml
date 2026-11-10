@@ -280,7 +280,24 @@
                         </StackPanel>
                     </Border>
                     <Border Margin="0,12,0,0" Padding="0" Style="{StaticResource Card}">
-                        <ItemsControl ItemsSource="{Binding Entries}" VirtualizingPanel.IsVirtualizing="True">
+                        <ItemsControl
+                            MaxHeight="520"
+                            ItemsSource="{Binding Entries}"
+                            ScrollViewer.CanContentScroll="True"
+                            VirtualizingPanel.IsVirtualizing="True"
+                            VirtualizingPanel.ScrollUnit="Pixel">
+                            <ItemsControl.Template>
+                                <ControlTemplate TargetType="ItemsControl">
+                                    <ScrollViewer Focusable="False" VerticalScrollBarVisibility="Auto">
+                                        <ItemsPresenter />
+                                    </ScrollViewer>
+                                </ControlTemplate>
+                            </ItemsControl.Template>
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <VirtualizingStackPanel />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate DataType="{x:Type vm:PlaylistEntryViewModel}">
                                     <Border x:Name="Row" Padding="16,8" BorderBrush="{DynamicResource Brush.Border}" BorderThickness="0,0,0,1">

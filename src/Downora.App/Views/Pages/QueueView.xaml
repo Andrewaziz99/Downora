@@ -44,9 +44,26 @@
         <TextBlock Grid.Row="2" Margin="0,0,0,12" Style="{StaticResource Text.Error}" Text="{Binding ErrorMessage}" Visibility="{Binding ErrorMessage, Converter={StaticResource HasValueToVisibility}}" />
 
         <Grid Grid.Row="3">
-            <ScrollViewer VerticalScrollBarVisibility="Auto">
-                <ItemsControl ItemTemplate="{StaticResource DownloadCard}" ItemsSource="{Binding Items}" />
-            </ScrollViewer>
+            <!-- Virtualized: a big playlist queues hundreds of downloads, and only the cards on screen are built. -->
+            <ItemsControl
+                ItemTemplate="{StaticResource DownloadCard}"
+                ItemsSource="{Binding Items}"
+                ScrollViewer.CanContentScroll="True"
+                VirtualizingPanel.IsVirtualizing="True"
+                VirtualizingPanel.ScrollUnit="Pixel">
+                <ItemsControl.Template>
+                    <ControlTemplate TargetType="ItemsControl">
+                        <ScrollViewer Focusable="False" VerticalScrollBarVisibility="Auto">
+                            <ItemsPresenter />
+                        </ScrollViewer>
+                    </ControlTemplate>
+                </ItemsControl.Template>
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <VirtualizingStackPanel />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
             <controls:EmptyState
                 VerticalAlignment="Top"
                 Description="{l:Loc Queue_EmptyBody}"

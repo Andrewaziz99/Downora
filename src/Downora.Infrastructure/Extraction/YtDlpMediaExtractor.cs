@@ -37,7 +37,8 @@ internal sealed partial class YtDlpMediaExtractor(
         }
 
         var spec = new ProcessSpec(ytDlp, BuildArguments(url), AnalyzeTimeout, Utf8Environment);
-        LogAnalyzing(url.Platform, url.NormalizedUrl);
+        var safeUrl = LogSafe.Url(url.NormalizedUrl); // never the raw link: it can carry sign-in tokens
+        LogAnalyzing(url.Platform, safeUrl);
 
         var result = await runner.RunAsync(spec, cancellationToken: cancellationToken).ConfigureAwait(false);
         if (result.TimedOut)
@@ -71,6 +72,7 @@ internal sealed partial class YtDlpMediaExtractor(
             "--dump-single-json",
             "--flat-playlist",
             "--ignore-config", // a user's yt-dlp.conf must not change what Downora runs
+            "--no-plugin-dirs", // nor may code from a plugin folder that anything could have written to
             "--no-warnings",
             "--socket-timeout", "20",
             "--retries", "3",

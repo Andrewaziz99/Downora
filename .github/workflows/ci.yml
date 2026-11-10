@@ -41,8 +41,23 @@ jobs:
       - name: Build (Release, warnings as errors)
         run: dotnet build Downora.sln --configuration Release --no-restore
 
-      - name: Test
-        run: dotnet test --solution Downora.sln --configuration Release --no-build
+      - name: Test with coverage
+        shell: bash
+        run: |
+          for project in Core Infrastructure Presentation; do
+            dotnet test --project "tests/Downora.${project}.Tests" --configuration Release --no-build               --coverage --coverage-output-format cobertura --coverage-output "cov-${project}.xml" --results-directory TestResults
+          done
+
+      - name: Coverage gate
+        run: python tools/coverage.py
+
+      - name: Upload coverage reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage
+          path: TestResults/cov-*.xml
+          if-no-files-found: ignore
 
       - name: Check for missing EF Core migrations
         run: |

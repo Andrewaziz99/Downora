@@ -61,9 +61,13 @@ internal sealed partial class ProcessRunner(ILogger<ProcessRunner> logger) : IPr
                 return;
             }
 
-            lock (output)
+            // A long download prints a progress line every moment; callers that follow it line by line don't need them all kept.
+            if (spec.CaptureStandardOutput)
             {
-                output.AppendLine(e.Data);
+                lock (output)
+                {
+                    output.AppendLine(e.Data);
+                }
             }
 
             onOutputLine?.Invoke(e.Data);

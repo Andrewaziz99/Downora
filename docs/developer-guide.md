@@ -107,3 +107,20 @@ Serilog writes to `%LocalAppData%\Downora\logs\downora-YYYYMMDD.log`. Use `[Logg
 - The tray (`TrayService`, WinForms `NotifyIcon`, which is why the App project has `UseWindowsForms`) and `WindowLifecycle` decide together what closing means: with "close to tray" the main window's `Closing` is cancelled and the window hidden; the tray's Exit and Windows sign-out (`SessionEnding`) call `MarkExiting` first so they really close. The icon is disposed in `OnExit`, or it lingers in the tray.
 - `SingleInstance` (named mutex plus a named event) makes a second launch ask the first to show its window and exit. For development, set `DOWNORA_ALLOW_MULTIPLE_INSTANCES=1` to run several copies (they share one database, so use it only for short checks).
 - Adding a setting column still needs a migration with the right default for existing users (`CloseToTray` and `LastToolCheckUtc` default to off / null).
+
+## Coverage
+
+CI runs each test project with coverage and then `python tools/coverage.py`, which merges the reports (a line counts as covered when any project ran it) and fails the build under 92% for Core, 88% for Infrastructure, 90% for Presentation or 90% overall. Today: Core 97%, Infrastructure 93%, Presentation 95%, total 94%. The WPF views (`Downora.App`) have no unit tests and are outside the gate; keep logic in view models and services so it stays inside it. To run it locally:
+
+```
+rmdir /s /q TestResults
+for %p in (Core Infrastructure Presentation) do dotnet test --project tests\Downora.%p.Tests -c Release --no-build --coverage --coverage-output-format cobertura --coverage-output cov-%p.xml --results-directory TestResults
+python tools/coverage.py
+```
+
+## Tests that read hostile input
+
+- Anything that parses what a site or a tool printed (`YtDlpJsonParser`, `YtDlpProgressParser`, `ErrorClassifier`, `FileNames`, `UrlValidator`) has a test that feeds it truncated, mutated and random input and asserts it never throws anything the caller doesn't already handle. Add the same kind of test when you add a parser. These tests use fixed random seeds, so a failure always reproduces.
+- `ScaleTests` build a big playlist, 20,000 jobs and a 10,000-file library and check the queries stay inside a generous time budget.
+- Logging a link goes through `LogSafe.Url`. Never put a raw link, cookie or token in a log message.
+- Opening a downloaded file goes through `MediaFileTypes.IsOpenable`; anything else may only be shown in its folder.

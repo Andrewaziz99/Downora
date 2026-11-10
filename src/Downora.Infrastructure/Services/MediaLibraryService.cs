@@ -80,17 +80,17 @@ internal sealed partial class MediaLibraryService(
         try
         {
             // Old downloads are added once. Afterwards a removed entry must stay removed, so nothing is re-added.
-            var added = 0;
+            var changed = 0;
             if (!settings.Current.LibraryBackfilled)
             {
-                added = await AddMissingEntriesAsync(cancellationToken).ConfigureAwait(false);
+                changed = await AddMissingEntriesAsync(cancellationToken).ConfigureAwait(false);
                 var current = settings.Current;
                 current.LibraryBackfilled = true;
                 await settings.SaveAsync(current, cancellationToken).ConfigureAwait(false);
             }
 
-            await RefreshAvailabilityAsync(cancellationToken).ConfigureAwait(false);
-            return added;
+            changed += await RefreshAvailabilityAsync(cancellationToken).ConfigureAwait(false);
+            return changed;
         }
 #pragma warning disable CA1031 // Keeping the library tidy is best effort; it must never stop the app or a screen from loading.
         catch (Exception ex) when (ex is not OperationCanceledException)
@@ -132,16 +132,27 @@ internal sealed partial class MediaLibraryService(
         return added;
     }
 
-    private async Task RefreshAvailabilityAsync(CancellationToken cancellationToken)
+    private async Task<int> RefreshAvailabilityAsync(CancellationToken cancellationToken)
     {
         await using var db = await contextFactory.CreateDbContextAsync(cancellationToken).ConfigureAwait(false);
         var items = await db.MediaItems.ToListAsync(cancellationToken).ConfigureAwait(false);
+        var changed = 0;
         foreach (var item in items)
         {
-            item.IsMissing = !File.Exists(item.FilePath);
+            var missing = !File.Exists(item.FilePath);
+            if (item.IsMissing != missing)
+            {
+                item.IsMissing = missing;
+                changed++;
+            }
         }
 
-        await db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+        if (changed > 0)
+        {
+            await db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+        }
+
+        return changed;
     }
 
     private static void Fill(MediaItem item, DownloadJob job, MediaProbe? details)

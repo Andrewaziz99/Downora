@@ -98,6 +98,9 @@ public enum UrlProblem
     NotAUrl,
     UnsupportedScheme,
     TooLong,
+
+    /// <summary>The link contains a user name or password (https://user:pass@host/...). It would be saved and logged in the clear.</summary>
+    HasCredentials,
 }
 
 public sealed record UrlValidationResult(

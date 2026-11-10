@@ -349,6 +349,61 @@ public class ViewModelTests
     }
 
     [Fact]
+    public async Task The_library_lists_a_page_at_a_time_and_show_more_asks_for_the_next_one()
+    {
+        var page = Enumerable.Range(0, LibraryViewModel.PageSize).Select(i => new MediaItem { FilePath = $"/m/{i}.mp4", Title = $"T{i}" }).ToList();
+        _library.QueryAsync(Arg.Any<LibraryQuery>(), Arg.Any<CancellationToken>()).Returns(page);
+        await using var services = BuildServices();
+        var library = services.GetRequiredService<LibraryViewModel>();
+
+        await library.OnNavigatedToAsync(CancellationToken.None);
+
+        Assert.True(library.HasMore);
+        await _library.Received().QueryAsync(Arg.Is<LibraryQuery>(q => q.Take == LibraryViewModel.PageSize), Arg.Any<CancellationToken>());
+
+        await library.ShowMoreCommand.ExecuteAsync(null);
+        await _library.Received().QueryAsync(Arg.Is<LibraryQuery>(q => q.Take == LibraryViewModel.PageSize * 2), Arg.Any<CancellationToken>());
+
+        // Fewer entries than asked for: nothing more to show. A new filter starts from the first page again.
+        _library.QueryAsync(Arg.Any<LibraryQuery>(), Arg.Any<CancellationToken>()).Returns([new MediaItem { FilePath = "/m/a.mp4" }]);
+        library.SelectedKind = library.KindFilters.Single(k => k.Value == MediaKind.Audio);
+        await Task.Delay(50, TestContext.Current.CancellationToken);
+        Assert.False(library.HasMore);
+        await _library.Received().QueryAsync(Arg.Is<LibraryQuery>(q => q.Kind == MediaKind.Audio && q.Take == LibraryViewModel.PageSize), Arg.Any<CancellationToken>());
+    }
+
+    [Fact]
+    public async Task The_library_shows_its_list_first_and_reloads_only_when_the_sync_changed_something()
+    {
+        var order = new List<string>();
+        _library.QueryAsync(Arg.Any<LibraryQuery>(), Arg.Any<CancellationToken>()).Returns(_ =>
+        {
+            order.Add("query");
+            return new List<MediaItem> { new() { FilePath = "/m/a.mp4" } };
+        });
+        _library.SyncAsync(Arg.Any<CancellationToken>()).Returns(_ =>
+        {
+            order.Add("sync");
+            return 0;
+        });
+        await using var services = BuildServices();
+        var library = services.GetRequiredService<LibraryViewModel>();
+
+        await library.OnNavigatedToAsync(CancellationToken.None);
+        Assert.Equal(["query", "sync"], order);
+        Assert.Single(library.Items);
+
+        order.Clear();
+        _library.SyncAsync(Arg.Any<CancellationToken>()).Returns(_ =>
+        {
+            order.Add("sync");
+            return 2; // two entries changed: the list is rebuilt
+        });
+        await library.OnNavigatedToAsync(CancellationToken.None);
+        Assert.Equal(["query", "sync", "query"], order);
+    }
+
+    [Fact]
     public async Task Library_syncs_when_shown_and_removing_an_entry_drops_only_the_entry()
     {
         var a = new MediaItem { FilePath = "/m/a.mp4", Title = "A" };

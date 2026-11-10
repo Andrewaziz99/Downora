@@ -37,7 +37,7 @@ public interface IMediaLibraryService
 
     /// <summary>
     /// Adds completed downloads from before the library existed (once) and marks entries whose file is gone (or back). Never throws:
-    /// a failure is logged and the library is left as it was. Returns how many entries were added.
+    /// a failure is logged and the library is left as it was. Returns how many entries changed, so a screen can reload only when needed.
     /// </summary>
     Task<int> SyncAsync(CancellationToken cancellationToken = default);
 

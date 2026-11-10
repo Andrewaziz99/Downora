@@ -481,3 +481,6 @@ $RECYCLE.BIN/
 # Vim temporary swap files
 *.swp
 design-time.db*
+
+# Test and coverage output
+TestResults/

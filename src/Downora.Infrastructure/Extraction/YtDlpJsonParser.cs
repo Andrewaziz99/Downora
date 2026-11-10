@@ -145,19 +145,35 @@ internal static class YtDlpJsonParser
             ? String(thumbs[thumbs.GetArrayLength() - 1], "url")
             : null;
 
+    // Every read first checks that the element is an object: TryGetProperty throws on arrays, strings and null, and
+    // yt-dlp's loosely typed output (or a damaged pipe) can put those anywhere.
     private static string? String(JsonElement element, string name) =>
-        element.TryGetProperty(name, out var value) && value.ValueKind == JsonValueKind.String ? value.GetString() : null;
+        element.ValueKind == JsonValueKind.Object && element.TryGetProperty(name, out var value) && value.ValueKind == JsonValueKind.String
+            ? value.GetString()
+            : null;
 
+    /// <summary>A finite number, or null. Numbers too large for a double (1e999) are "unknown", not an error.</summary>
     private static double? Double(JsonElement element, string name) =>
-        element.TryGetProperty(name, out var value) && value.ValueKind == JsonValueKind.Number ? value.GetDouble() : null;
+        element.ValueKind == JsonValueKind.Object
+        && element.TryGetProperty(name, out var value)
+        && value.ValueKind == JsonValueKind.Number
+        && value.TryGetDouble(out var number)
+        && double.IsFinite(number)
+            ? number
+            : null;
 
-    private static int? Int(JsonElement element, string name) => Double(element, name) is { } d ? (int)Math.Round(d) : null;
+    private static int? Int(JsonElement element, string name) =>
+        Double(element, name) is { } d && Math.Abs(d) < int.MaxValue ? (int)Math.Round(d) : null;
 
-    private static long? Long(JsonElement element, string name) => Double(element, name) is { } d ? (long)Math.Round(d) : null;
+    private static long? Long(JsonElement element, string name) =>
+        Double(element, name) is { } d && Math.Abs(d) < long.MaxValue / 2.0 ? (long)Math.Round(d) : null;
 
     private static bool Bool(JsonElement element, string name) =>
-        element.TryGetProperty(name, out var value) && value.ValueKind == JsonValueKind.True;
+        element.ValueKind == JsonValueKind.Object && element.TryGetProperty(name, out var value) && value.ValueKind == JsonValueKind.True;
 
+    /// <summary>A duration up to ten years; anything longer or negative is a data error and counts as unknown.</summary>
     private static TimeSpan? Seconds(JsonElement element, string name) =>
-        Double(element, name) is { } s and >= 0 ? TimeSpan.FromSeconds(s) : null;
+        Double(element, name) is { } s and >= 0 && s <= MaxSeconds ? TimeSpan.FromSeconds(s) : null;
+
+    private static readonly double MaxSeconds = TimeSpan.FromDays(3650).TotalSeconds;
 }

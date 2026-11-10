@@ -58,6 +58,7 @@
 
         <Grid Grid.Row="3">
             <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <StackPanel>
                 <ItemsControl ItemsSource="{Binding Items}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
@@ -119,6 +120,13 @@
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
+                <ui:Button
+                    Margin="0,4,0,16"
+                    HorizontalAlignment="Center"
+                    Command="{Binding ShowMoreCommand}"
+                    Content="{l:Loc Library_ShowMore}"
+                    Visibility="{Binding HasMore, Converter={StaticResource BoolToVisibility}}" />
+                </StackPanel>
             </ScrollViewer>
             <controls:EmptyState
                 VerticalAlignment="Top"

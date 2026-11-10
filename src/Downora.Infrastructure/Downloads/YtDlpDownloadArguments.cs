@@ -31,6 +31,7 @@ internal static class YtDlpDownloadArguments
         var args = new List<string>
         {
             "--ignore-config", // a user's yt-dlp.conf must not change what Downora runs
+            "--no-plugin-dirs", // nor may code from a plugin folder that anything could have written to
             "--no-playlist",
             "--newline",
             "--progress", // progress is printed even though --print makes yt-dlp otherwise quiet

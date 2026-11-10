@@ -34,7 +34,9 @@ public static class AppSettingsValidator
             errors.Add("History retention must be at least 1 day, or empty to keep history forever.");
         }
 
-        if (!string.IsNullOrWhiteSpace(settings.FfmpegPathOverride) && !Path.IsPathFullyQualified(settings.FfmpegPathOverride))
+        if (!string.IsNullOrWhiteSpace(settings.FfmpegPathOverride)
+            && (!Path.IsPathFullyQualified(settings.FfmpegPathOverride)
+                || !string.Equals(Path.GetExtension(settings.FfmpegPathOverride), ".exe", StringComparison.OrdinalIgnoreCase)))
         {
             errors.Add("The FFmpeg path must be a full path to ffmpeg.exe.");
         }

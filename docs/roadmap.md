@@ -12,6 +12,6 @@ The full plan (architecture, entities, interfaces, risks) is in the project's im
 | 6 | FFmpeg: audio conversion, metadata and cover art, file verification | Done |
 | 7 | Playlists and media library | Done |
 | 8 | Settings screen, history, tool updates, tray, startup behavior | Done |
-| 9 | Test suite, performance and security review | Next |
-| 10 | Inno Setup installer with bundled tools, code signing, user guide | |
+| 9 | Test suite, performance and security review | Done |
+| 10 | Inno Setup installer with bundled tools, code signing, user guide | Next |
 | 11 | Portfolio demo: web prototype on GitHub Pages | |

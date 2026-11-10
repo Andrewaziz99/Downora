@@ -92,6 +92,7 @@
   <data name="Library_SortSize" xml:space="preserve"><value>Size</value></data>
   <data name="Library_Open" xml:space="preserve"><value>Open</value></data>
   <data name="Library_ShowInFolder" xml:space="preserve"><value>Show in folder</value></data>
+  <data name="Library_ShowMore" xml:space="preserve"><value>Show more</value></data>
   <data name="Library_Remove" xml:space="preserve"><value>Remove from library</value></data>
   <data name="Library_RemoveTip" xml:space="preserve"><value>Removes it from this list. The file stays on your disk.</value></data>
   <data name="Library_Missing" xml:space="preserve"><value>File missing</value></data>
@@ -145,6 +146,7 @@
   <data name="Url_Empty" xml:space="preserve"><value>Paste a link first.</value></data>
   <data name="Url_NotAUrl" xml:space="preserve"><value>That doesn't look like a web link.</value></data>
   <data name="Url_UnsupportedScheme" xml:space="preserve"><value>Only http and https links are supported.</value></data>
+  <data name="Url_HasCredentials" xml:space="preserve"><value>Remove the user name and password from the link. Downora doesn't store them.</value></data>
   <data name="Url_TooLong" xml:space="preserve"><value>That link is too long.</value></data>
   <data name="Platform_Other" xml:space="preserve"><value>Website</value></data>
   <data name="Platform_DirectFile" xml:space="preserve"><value>Direct link</value></data>

@@ -51,6 +51,11 @@ public sealed class UrlValidator(ISourceDetector sources) : IUrlValidator
             return new(UrlProblem.UnsupportedScheme);
         }
 
+        if (url.UserInfo.Length > 0)
+        {
+            return new(UrlProblem.HasCredentials);
+        }
+
         if (string.IsNullOrEmpty(url.Host) || (!url.Host.Contains('.', StringComparison.Ordinal) && url.HostNameType == UriHostNameType.Dns))
         {
             return new(UrlProblem.NotAUrl);

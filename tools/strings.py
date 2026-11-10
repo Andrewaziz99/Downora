@@ -68,6 +68,7 @@ S = {
  "Library_SortSize": ("Size", "الحجم"),
  "Library_Open": ("Open", "فتح"),
  "Library_ShowInFolder": ("Show in folder", "إظهار في المجلد"),
+ "Library_ShowMore": ("Show more", "عرض المزيد"),
  "Library_Remove": ("Remove from library", "إزالة من المكتبة"),
  "Library_RemoveTip": ("Removes it from this list. The file stays on your disk.", "تزيله من هذه القائمة. يبقى الملف على قرصك."),
  "Library_Missing": ("File missing", "الملف غير موجود"),
@@ -127,6 +128,7 @@ S = {
  "Url_Empty": ("Paste a link first.", "الصق رابطًا أولًا."),
  "Url_NotAUrl": ("That doesn't look like a web link.", "لا يبدو هذا رابط ويب."),
  "Url_UnsupportedScheme": ("Only http and https links are supported.", "الروابط المدعومة هي http وhttps فقط."),
+ "Url_HasCredentials": ("Remove the user name and password from the link. Downora doesn't store them.", "احذف اسم المستخدم وكلمة المرور من الرابط. لا يخزّنها Downora."),
  "Url_TooLong": ("That link is too long.", "هذا الرابط طويل جدًا."),
 
  "Platform_Other": ("Website", "موقع ويب"),

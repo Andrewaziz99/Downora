@@ -16,6 +16,11 @@ public sealed partial class LibraryViewModel : SearchablePageViewModel
     private readonly IShellService _shell;
     private readonly bool _ready;
 
+    /// <summary>How many entries are shown at first and added by "Show more". Each tile loads a thumbnail, so the list is paged.</summary>
+    internal const int PageSize = 120;
+
+    private int _take = PageSize;
+
     public LibraryViewModel(
         IMediaLibraryService library,
         IShellService shell,
@@ -56,6 +61,10 @@ public sealed partial class LibraryViewModel : SearchablePageViewModel
 
     public ObservableCollection<MediaItemViewModel> Items { get; } = [];
 
+    /// <summary>There may be more entries than are listed.</summary>
+    [ObservableProperty]
+    public partial bool HasMore { get; private set; }
+
     [ObservableProperty]
     public partial bool IsLibraryEmpty { get; private set; } = true;
 
@@ -65,10 +74,19 @@ public sealed partial class LibraryViewModel : SearchablePageViewModel
     protected override async Task LoadAsync(CancellationToken cancellationToken)
     {
         // Title sorts A→Z; the others show largest / newest first.
-        // Files that were moved or deleted since last time are marked, and finished downloads that have no entry get one.
-        await _library.SyncAsync(cancellationToken).ConfigureAwait(true);
+        // The list appears first. Marking files that were moved or deleted (a disk check per entry) and adding finished
+        // downloads that have no entry yet happen afterwards, and the list is rebuilt only if that changed something.
+        await ShowAsync(cancellationToken).ConfigureAwait(true);
+        if (await _library.SyncAsync(cancellationToken).ConfigureAwait(true) > 0)
+        {
+            await ShowAsync(cancellationToken).ConfigureAwait(true);
+        }
+    }
+
+    private async Task ShowAsync(CancellationToken cancellationToken)
+    {
         var descending = SelectedSort.Value != LibrarySort.Title;
-        var query = new LibraryQuery(SearchText, SelectedKind.Value, SelectedSort.Value, descending);
+        var query = new LibraryQuery(SearchText, SelectedKind.Value, SelectedSort.Value, descending, _take);
         var items = await _library.QueryAsync(query, cancellationToken).ConfigureAwait(true);
         cancellationToken.ThrowIfCancellationRequested();
 
@@ -78,15 +96,24 @@ public sealed partial class LibraryViewModel : SearchablePageViewModel
             Items.Add(new MediaItemViewModel(item, L));
         }
 
+        HasMore = items.Count >= _take;
         var filtering = !string.IsNullOrWhiteSpace(SearchText) || SelectedKind.Value is not null;
         IsLibraryEmpty = Items.Count == 0 && !filtering;
         HasNoResults = Items.Count == 0 && filtering;
+    }
+
+    [RelayCommand]
+    private Task ShowMoreAsync()
+    {
+        _take += PageSize;
+        return ReloadAsync(debounce: false);
     }
 
     partial void OnSelectedKindChanged(OptionViewModel<MediaKind?> value)
     {
         if (_ready)
         {
+            _take = PageSize;
             _ = ReloadAsync(debounce: false);
         }
     }
@@ -95,6 +122,7 @@ public sealed partial class LibraryViewModel : SearchablePageViewModel
     {
         if (_ready)
         {
+            _take = PageSize;
             _ = ReloadAsync(debounce: false);
         }
     }

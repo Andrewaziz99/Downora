@@ -30,7 +30,8 @@ public sealed record ProcessSpec(
     IReadOnlyList<string> Arguments,
     TimeSpan? Timeout = null,
     IReadOnlyDictionary<string, string>? Environment = null,
-    string? WorkingDirectory = null);
+    string? WorkingDirectory = null,
+    bool CaptureStandardOutput = true);
 
 public sealed record ProcessResult(int ExitCode, string StandardOutput, string StandardError, bool TimedOut);
 
