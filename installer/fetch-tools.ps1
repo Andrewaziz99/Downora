@@ -51,9 +51,13 @@ function Get-ExpectedHash([string]$sumsText, [string]$fileName) {
         }
     }
 
-    # A file that holds one bare hash (Deno's .sha256sum may be just that).
-    $bare = $lines | Where-Object { $_ -match '^[0-9a-fA-F]{64}$' }
-    if (@($bare).Count -eq 1) { return $bare.ToLowerInvariant() }
+    # A list that names other files but not ours: don't guess (same rule as ToolCatalog.ParseChecksum).
+    $listed = @($lines | Where-Object { $_ -match '^[0-9a-fA-F]{64}\s+\*?\S+$' })
+    if ($listed.Count -gt 0) { throw "No checksum for $fileName was found in the published checksum file." }
+
+    # Otherwise accept a file with exactly one distinct hash anywhere in it: a bare hash, or Deno's Get-FileHash layout ("Hash : ...").
+    $found = @($lines | ForEach-Object { [regex]::Matches($_, '\b[0-9a-fA-F]{64}\b') } | ForEach-Object { $_.Value.ToLowerInvariant() } | Select-Object -Unique)
+    if ($found.Count -eq 1) { return $found[0] }
 
     throw "No checksum for $fileName was found in the published checksum file."
 }
