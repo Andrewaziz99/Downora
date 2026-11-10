@@ -46,6 +46,9 @@ public sealed partial class DownloaderViewModel : PageViewModel, IDisposable
     private string? _lastAnalyzedUrl;
     private UrlValidationResult? _analyzedUrl;
     private MediaInfo? _media;
+    private PlaylistInfo? _playlist;
+    private readonly Dictionary<Guid, DownloadStatus> _batch = [];
+    private bool _selecting;
 
     public DownloaderViewModel(
         IUrlValidator validator,
@@ -81,6 +84,21 @@ public sealed partial class DownloaderViewModel : PageViewModel, IDisposable
             new(AudioFormat.Wav, "AudioFormat_Wav", localizer),
         ];
         SelectedAudioFormat = AudioFormats[0];
+        PlaylistKinds =
+        [
+            new(MediaKind.Video, "Downloader_AsVideo", localizer),
+            new(MediaKind.Audio, "Downloader_AsAudio", localizer),
+        ];
+        PlaylistQualities =
+        [
+            new(QualityPreset.Best, "Quality_Best", localizer),
+            new(QualityPreset.P1080, "Quality_P1080", localizer),
+            new(QualityPreset.P720, "Quality_P720", localizer),
+            new(QualityPreset.P480, "Quality_P480", localizer),
+            new(QualityPreset.P360, "Quality_P360", localizer),
+        ];
+        SelectedPlaylistKind = PlaylistKinds[0];
+        SelectedPlaylistQuality = PlaylistQualities[0];
         feed.Updated += OnFeedUpdated;
     }
 
@@ -178,6 +196,145 @@ public sealed partial class DownloaderViewModel : PageViewModel, IDisposable
 
     public ObservableCollection<PlaylistEntryViewModel> Entries { get; } = [];
 
+    public IReadOnlyList<OptionViewModel<MediaKind>> PlaylistKinds { get; }
+
+    public IReadOnlyList<OptionViewModel<QualityPreset>> PlaylistQualities { get; }
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(PlaylistIsVideo))]
+    public partial OptionViewModel<MediaKind> SelectedPlaylistKind { get; set; }
+
+    [ObservableProperty]
+    public partial OptionViewModel<QualityPreset> SelectedPlaylistQuality { get; set; }
+
+    /// <summary>Video playlists pick a quality; audio playlists pick a format (the same list as for a single link).</summary>
+    public bool PlaylistIsVideo => SelectedPlaylistKind.Value == MediaKind.Video;
+
+    [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(DownloadPlaylistCommand))]
+    public partial int SelectedCount { get; private set; }
+
+    [ObservableProperty]
+    public partial string? SelectedCountText { get; private set; }
+
+    /// <summary>"12 items added to your queue", after the playlist was started.</summary>
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(HasPlaylistStarted))]
+    public partial string? PlaylistStartedMessage { get; private set; }
+
+    public bool HasPlaylistStarted => PlaylistStartedMessage is not null;
+
+    /// <summary>"3 of 12 finished · 1 failed", following the started playlist live.</summary>
+    [ObservableProperty]
+    public partial string? PlaylistProgressText { get; private set; }
+
+    [RelayCommand]
+    private Task OpenQueueAsync() => _navigation.NavigateToAsync<QueueViewModel>();
+
+    [RelayCommand]
+    private void SelectAll() => SetSelection(true);
+
+    [RelayCommand]
+    private void SelectNone() => SetSelection(false);
+
+    private void SetSelection(bool selected)
+    {
+        _selecting = true;
+        try
+        {
+            foreach (var entry in Entries.Where(e => e.IsAvailable))
+            {
+                entry.IsSelected = selected;
+            }
+        }
+        finally
+        {
+            _selecting = false;
+        }
+
+        UpdateSelection();
+    }
+
+    private void UpdateSelection()
+    {
+        if (_selecting)
+        {
+            return;
+        }
+
+        SelectedCount = Entries.Count(e => e.IsSelected);
+        SelectedCountText = L.Format("Downloader_SelectedCount", SelectedCount.ToString("N0", L.Culture));
+    }
+
+    private bool CanDownloadPlaylist() => IsPlaylist && SelectedCount > 0;
+
+    [RelayCommand(CanExecute = nameof(CanDownloadPlaylist))]
+    private Task DownloadPlaylistAsync() => RunSafeAsync(async () =>
+    {
+        if (_playlist is null)
+        {
+            return;
+        }
+
+        if (DownloadTools.Any(t => _tools.GetPath(t) is null))
+        {
+            ShowError(DownloadErrorKind.ToolMissing, null);
+            return;
+        }
+
+        var settings = _settings.Current;
+        var request = new PlaylistDownload
+        {
+            SourceUrl = _playlist.WebpageUrl.Length > 0 ? _playlist.WebpageUrl : _lastAnalyzedUrl ?? string.Empty,
+            Title = _playlist.Title,
+            Uploader = _playlist.Uploader,
+            Platform = _playlist.Platform,
+            Items = [.. Entries.Where(e => e.IsSelected && e.IsAvailable).Select(e => e.ToDownloadItem())],
+            Kind = SelectedPlaylistKind.Value,
+            Quality = SelectedPlaylistKind.Value == MediaKind.Audio ? QualityPreset.AudioOnly : SelectedPlaylistQuality.Value,
+            Container = settings.PreferredVideoContainer,
+            AudioFormat = SelectedAudioFormat.Value,
+            AudioBitrateKbps = settings.DefaultAudioBitrateKbps,
+        };
+
+        var started = await _downloads.StartPlaylistAsync(request).ConfigureAwait(true);
+        _batch.Clear();
+        foreach (var job in started.Jobs)
+        {
+            _batch[job.Id] = job.Status;
+        }
+
+        var message = started.Jobs.Count == 0
+            ? L["Downloader_PlaylistNothingNew"]
+            : L.Format("Downloader_PlaylistAdded", started.Jobs.Count.ToString("N0", L.Culture));
+        if (started.AlreadyQueued > 0 && started.Jobs.Count > 0)
+        {
+            message += " " + L.Format("Downloader_PlaylistSkipped", started.AlreadyQueued.ToString("N0", L.Culture));
+        }
+
+        PlaylistStartedMessage = message;
+        UpdateBatchProgress();
+    }, showLoading: false);
+
+    private void UpdateBatchProgress()
+    {
+        if (_batch.Count == 0)
+        {
+            PlaylistProgressText = null;
+            return;
+        }
+
+        var done = _batch.Values.Count(s => s == DownloadStatus.Completed);
+        var failed = _batch.Values.Count(s => s == DownloadStatus.Failed);
+        var text = L.Format("Downloader_PlaylistProgress", done.ToString("N0", L.Culture), _batch.Count.ToString("N0", L.Culture));
+        if (failed > 0)
+        {
+            text += " · " + L.Format("Downloader_PlaylistFailed", failed.ToString("N0", L.Culture));
+        }
+
+        PlaylistProgressText = text;
+    }
+
     // ---- Failure ----
 
     [ObservableProperty]
@@ -240,6 +397,9 @@ public sealed partial class DownloaderViewModel : PageViewModel, IDisposable
         _analyzedUrl = url;
         StartedDownload = null;
         StartedMessage = null;
+        PlaylistStartedMessage = null;
+        PlaylistProgressText = null;
+        _batch.Clear();
         ErrorMessage = null;
 
         _analysis?.Dispose();
@@ -392,6 +552,12 @@ public sealed partial class DownloaderViewModel : PageViewModel, IDisposable
             started.Apply(e.Update.Job, e.Update.Progress);
             OnPropertyChanged(nameof(ShowStartedSignInAction));
         }
+
+        if (_batch.TryGetValue(e.Update.Job.Id, out var known) && known != e.Update.Job.Status)
+        {
+            _batch[e.Update.Job.Id] = e.Update.Job.Status;
+            UpdateBatchProgress();
+        }
     }
 
     [RelayCommand]
@@ -478,14 +644,20 @@ public sealed partial class DownloaderViewModel : PageViewModel, IDisposable
         var total = playlist.Entries.Aggregate(TimeSpan.Zero, (sum, e) => sum + (e.Duration ?? TimeSpan.Zero));
         PlaylistDurationText = total > TimeSpan.Zero ? L.Format("Downloader_PlaylistTotal", Formatting.Duration(total, culture)) : null;
 
+        _playlist = playlist;
+        _selecting = true;
         Entries.Clear();
         var index = 1;
         foreach (var entry in playlist.Entries)
         {
-            Entries.Add(new PlaylistEntryViewModel(index++, entry, L));
+            Entries.Add(new PlaylistEntryViewModel(index++, entry, L, UpdateSelection) { IsSelected = entry.IsAvailable });
         }
 
+        _selecting = false;
+        UpdateSelection();
+        SelectedPlaylistQuality = PlaylistQualities.FirstOrDefault(q => q.Value == _settings.Current.DefaultVideoQuality) ?? PlaylistQualities[0];
         State = DownloaderState.Playlist;
+        DownloadPlaylistCommand.NotifyCanExecuteChanged();
     }
 
     private void ShowError(DownloadErrorKind kind, string? detail)
@@ -556,12 +728,17 @@ public sealed class QualityOptionViewModel
     public bool IsAvailable { get; }
 }
 
-public sealed class PlaylistEntryViewModel
+public sealed partial class PlaylistEntryViewModel : ObservableObject
 {
-    public PlaylistEntryViewModel(int index, PlaylistEntry entry, Localizer localizer)
+    private readonly PlaylistEntry _entry;
+    private readonly Action? _selectionChanged;
+
+    public PlaylistEntryViewModel(int index, PlaylistEntry entry, Localizer localizer, Action? selectionChanged = null)
     {
         ArgumentNullException.ThrowIfNull(entry);
         ArgumentNullException.ThrowIfNull(localizer);
+        _entry = entry;
+        _selectionChanged = selectionChanged;
         Index = index.ToString("00", localizer.Culture);
         Title = entry.Title;
         Uploader = entry.Uploader;
@@ -578,4 +755,12 @@ public sealed class PlaylistEntryViewModel
     public string? ThumbnailUrl { get; }
     public bool IsAvailable { get; }
     public string StatusText { get; }
+
+    /// <summary>Ticked items are downloaded. Unavailable items (private, deleted) can't be ticked.</summary>
+    [ObservableProperty]
+    public partial bool IsSelected { get; set; }
+
+    partial void OnIsSelectedChanged(bool value) => _selectionChanged?.Invoke();
+
+    internal PlaylistDownloadItem ToDownloadItem() => new(_entry.Url, _entry.Title, _entry.Uploader, _entry.Duration, _entry.ThumbnailUrl);
 }

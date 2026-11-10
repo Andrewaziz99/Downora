@@ -129,6 +129,36 @@ public sealed record NewDownload
     public long? EstimatedBytes { get; init; }
 }
 
+/// <summary>One chosen item of a playlist.</summary>
+public sealed record PlaylistDownloadItem(string Url, string? Title, string? Uploader, TimeSpan? Duration, string? ThumbnailUrl);
+
+/// <summary>A playlist, the items the user ticked and the one format they get downloaded in.</summary>
+public sealed record PlaylistDownload
+{
+    public required string SourceUrl { get; init; }
+
+    public string? Title { get; init; }
+
+    public string? Uploader { get; init; }
+
+    public SourcePlatform Platform { get; init; }
+
+    public required IReadOnlyList<PlaylistDownloadItem> Items { get; init; }
+
+    public MediaKind Kind { get; init; } = MediaKind.Video;
+
+    public QualityPreset Quality { get; init; } = QualityPreset.Best;
+
+    public VideoContainer Container { get; init; } = VideoContainer.Mp4;
+
+    public AudioFormat AudioFormat { get; init; } = AudioFormat.Mp3;
+
+    public int AudioBitrateKbps { get; init; } = 320;
+}
+
+/// <summary>What starting a playlist produced: the new jobs, in playlist order, and the items that weren't added.</summary>
+public sealed record PlaylistStartResult(Guid BatchId, IReadOnlyList<DownloadJob> Jobs, int AlreadyQueued, int Invalid);
+
 /// <summary>The job a start request produced, and whether it is an existing one that was already queued or running.</summary>
 public sealed record DownloadStartResult(DownloadJob Job, bool WasAlreadyActive);
 

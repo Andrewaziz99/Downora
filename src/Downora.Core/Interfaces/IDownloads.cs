@@ -3,8 +3,23 @@ using Downora.Core.Models;
 
 namespace Downora.Core.Interfaces;
 
-/// <summary>What FFprobe found in a finished file.</summary>
-public sealed record MediaProbe(TimeSpan? Duration, bool HasVideo, bool HasAudio);
+/// <summary>What FFprobe found in a finished file. Picture and codec details describe the first real video / audio stream.</summary>
+public sealed record MediaProbe(
+    TimeSpan? Duration,
+    bool HasVideo,
+    bool HasAudio,
+    int? Width = null,
+    int? Height = null,
+    string? VideoCodec = null,
+    string? AudioCodec = null,
+    int? BitrateKbps = null);
+
+/// <summary>Reads a media file's properties.</summary>
+public interface IMediaProbe
+{
+    /// <summary>The file's properties, or null when FFprobe isn't installed or can't read the file.</summary>
+    Task<MediaProbe?> ProbeAsync(string path, CancellationToken cancellationToken = default);
+}
 
 /// <summary>The outcome of checking a finished file. <see cref="Problem"/> is null when the file is fine (or the check couldn't run).</summary>
 public sealed record FileVerification(bool IsValid, string? Problem, bool WasChecked)
@@ -50,6 +65,12 @@ public interface IDownloadJobService
     /// queued or running at the same quality, nothing new is started and that job is returned instead.
     /// </summary>
     Task<DownloadStartResult> StartAsync(NewDownload download, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Queues every item of a playlist as its own job, in playlist order, under one playlist batch. Items that are
+    /// already queued or running in the same format are skipped, as are links that aren't web addresses.
+    /// </summary>
+    Task<PlaylistStartResult> StartPlaylistAsync(PlaylistDownload playlist, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Stops a job (running, waiting or paused) and discards its partial files, so it ends as Cancelled.

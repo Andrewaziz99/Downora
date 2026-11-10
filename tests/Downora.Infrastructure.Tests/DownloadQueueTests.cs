@@ -242,6 +242,93 @@ public sealed class DownloadQueueTests : IAsyncDisposable
         Assert.Empty(_engine.Requests);
     }
 
+    // ---- Playlists ----
+
+    private static PlaylistDownload Playlist(params string[] ids) => new()
+    {
+        SourceUrl = "https://www.youtube.com/playlist?list=PL1",
+        Title = "Road Trip",
+        Uploader = "DJ Sam",
+        Platform = SourcePlatform.YouTube,
+        Items = [.. ids.Select(id => new PlaylistDownloadItem(Url(id), "Video " + id, null, TimeSpan.FromSeconds(30), "https://i.ytimg.com/" + id + ".jpg"))],
+        Quality = QualityPreset.P480,
+    };
+
+    [Fact]
+    public async Task A_playlist_becomes_one_batch_of_jobs_that_run_in_playlist_order()
+    {
+        var service = await StartAsync(max: 1);
+
+        var result = await service.StartPlaylistAsync(Playlist("a", "b", "c"), TestContext.Current.CancellationToken);
+
+        Assert.Equal(["Video a", "Video b", "Video c"], result.Jobs.Select(j => j.Title));
+        Assert.All(result.Jobs, j => Assert.Equal(result.BatchId, j.PlaylistBatchId));
+        Assert.All(result.Jobs, j => Assert.Equal(QualityPreset.P480, j.QualityPreset));
+        Assert.Equal(result.Jobs.Select(j => j.QueueOrder).Order(), result.Jobs.Select(j => j.QueueOrder));
+        Assert.Equal(3, result.Jobs.Select(j => j.QueueOrder).Distinct().Count());
+        Assert.Equal("DJ Sam", result.Jobs[0].Uploader); // an item without its own uploader takes the playlist's
+
+        await using (var db = await _env!.CreateDbAsync())
+        {
+            var batch = await db.PlaylistBatches.SingleAsync(TestContext.Current.CancellationToken);
+            Assert.Equal((result.BatchId, "Road Trip", 3), (batch.Id, batch.Title, batch.ItemCount));
+        }
+
+        // One download at a time: a, then b, then c.
+        await UntilAsync(() => Started("a") == 1, "a started");
+        Assert.Equal(0, Started("b"));
+        Finish("a");
+        await UntilAsync(() => Started("b") == 1, "b started");
+        Finish("b");
+        await UntilAsync(() => Started("c") == 1, "c started");
+    }
+
+    [Fact]
+    public async Task Playlist_items_already_queued_repeated_or_not_web_links_are_skipped_and_counted()
+    {
+        var service = await StartAsync(max: 1);
+        await service.StartAsync(Video("a") with { Quality = QualityPreset.P480 }, TestContext.Current.CancellationToken);
+        var playlist = Playlist("a", "b", "b") with
+        {
+            Items = [.. Playlist("a", "b", "b").Items, new PlaylistDownloadItem("file:///C:/secret.txt", "Local", null, null, null), new PlaylistDownloadItem("not a link", "Junk", null, null, null)],
+        };
+
+        var result = await service.StartPlaylistAsync(playlist, TestContext.Current.CancellationToken);
+
+        Assert.Equal(["Video b"], result.Jobs.Select(j => j.Title));
+        Assert.Equal(2, result.AlreadyQueued); // "a" is running; the second "b" repeats the first
+        Assert.Equal(2, result.Invalid);
+    }
+
+    [Fact]
+    public async Task A_playlist_with_nothing_to_add_creates_no_batch()
+    {
+        var service = await StartAsync(max: 1);
+        await service.StartAsync(Video("a") with { Quality = QualityPreset.P480 }, TestContext.Current.CancellationToken);
+
+        var result = await service.StartPlaylistAsync(Playlist("a"), TestContext.Current.CancellationToken);
+
+        Assert.Empty(result.Jobs);
+        await using var db = await _env!.CreateDbAsync();
+        Assert.Empty(await db.PlaylistBatches.ToListAsync(TestContext.Current.CancellationToken));
+    }
+
+    [Fact]
+    public async Task An_audio_playlist_makes_audio_jobs_in_the_chosen_format_and_waits_when_starting_automatically_is_off()
+    {
+        var service = await StartAsync(max: 2, autoStart: false);
+        var playlist = Playlist("a", "b") with { Kind = MediaKind.Audio, AudioFormat = AudioFormat.Flac, AudioBitrateKbps = 256 };
+
+        var result = await service.StartPlaylistAsync(playlist, TestContext.Current.CancellationToken);
+
+        Assert.All(result.Jobs, j =>
+        {
+            Assert.Equal((MediaKind.Audio, QualityPreset.AudioOnly, AudioFormat.Flac, DownloadStatus.Paused), (j.MediaKind, j.QualityPreset, j.AudioFormat, j.Status));
+            Assert.Null(j.Container);
+        });
+        Assert.Empty(_engine.Requests);
+    }
+
     [Fact]
     public async Task The_engine_is_told_the_tag_settings_and_the_length_to_check_against()
     {

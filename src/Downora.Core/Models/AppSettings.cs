@@ -41,6 +41,9 @@ public class AppSettings
     public bool UseBrowserSession { get; set; }
     public string? BrowserForCookies { get; set; }
 
+    /// <summary>Set once downloads from before the library existed have been added to it; later removals then stay removed.</summary>
+    public bool LibraryBackfilled { get; set; }
+
     public bool LaunchAtStartup { get; set; }
     public bool StartMinimized { get; set; }
 

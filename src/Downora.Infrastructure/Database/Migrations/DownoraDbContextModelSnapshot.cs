@@ -66,6 +66,9 @@ namespace Downora.Infrastructure.Database.Migrations
                     b.Property<bool>("LaunchAtStartup")
                         .HasColumnType("INTEGER");
 
+                    b.Property<bool>("LibraryBackfilled")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int>("MaxConcurrentDownloads")
                         .HasColumnType("INTEGER");
 

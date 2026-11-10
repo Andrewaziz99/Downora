@@ -23,6 +23,7 @@ public class MediaItem
     public string? AudioCodec { get; set; }
     public int? BitrateKbps { get; set; }
 
+    /// <summary>A local image file or, for downloads, the web address of the thumbnail.</summary>
     public string? ThumbnailPath { get; set; }
     public string? SourceUrl { get; set; }
     public SourcePlatform Platform { get; set; }

@@ -51,28 +51,7 @@ internal sealed partial class DownloadJobService(
             return new DownloadStartResult(duplicate, WasAlreadyActive: true);
         }
 
-        var now = time.GetUtcNow().UtcDateTime;
-        var job = new DownloadJob
-        {
-            SourceUrl = download.SourceUrl,
-            NormalizedUrl = download.NormalizedUrl,
-            Platform = download.Platform,
-            Title = download.Title,
-            Uploader = download.Uploader,
-            ThumbnailUrl = download.ThumbnailUrl,
-            Duration = download.Duration,
-            MediaKind = download.Kind,
-            QualityPreset = download.Kind == MediaKind.Audio ? QualityPreset.AudioOnly : download.Quality,
-            Container = download.Kind == MediaKind.Video ? download.Container : null,
-            AudioFormat = download.Kind == MediaKind.Audio ? download.AudioFormat : null,
-            AudioBitrateKbps = download.Kind == MediaKind.Audio ? download.AudioBitrateKbps : null,
-            OutputDirectory = current.DownloadDirectory,
-            TotalBytes = download.EstimatedBytes,
-            // With "start automatically" off the job is held until the user starts it.
-            Status = current.AutoStartDownloads ? DownloadStatus.Waiting : DownloadStatus.Paused,
-            QueueOrder = NextQueueOrder(now.Ticks),
-            CreatedAtUtc = now,
-        };
+        var job = CreateJob(download, current, time.GetUtcNow().UtcDateTime);
 
         db.DownloadJobs.Add(job);
         await db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
@@ -85,6 +64,107 @@ internal sealed partial class DownloadJobService(
         await PumpAsync().ConfigureAwait(false);
         return new DownloadStartResult(snapshot, WasAlreadyActive: false);
     }
+
+    public async Task<PlaylistStartResult> StartPlaylistAsync(PlaylistDownload playlist, CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(playlist);
+        var current = settings.Current;
+        var now = time.GetUtcNow().UtcDateTime;
+
+        await using var db = await contextFactory.CreateDbContextAsync(cancellationToken).ConfigureAwait(false);
+
+        var batch = new PlaylistBatch
+        {
+            SourceUrl = playlist.SourceUrl,
+            Title = playlist.Title,
+            Uploader = playlist.Uploader,
+            ItemCount = playlist.Items.Count,
+            CreatedAtUtc = now,
+        };
+
+        var jobs = new List<DownloadJob>();
+        var alreadyQueued = 0;
+        var invalid = 0;
+        var seen = new HashSet<string>(StringComparer.Ordinal);
+        foreach (var item in playlist.Items)
+        {
+            if (!Uri.TryCreate(item.Url, UriKind.Absolute, out var uri) || uri.Scheme is not ("http" or "https"))
+            {
+                invalid++;
+                continue;
+            }
+
+            var download = new NewDownload
+            {
+                SourceUrl = uri.AbsoluteUri,
+                NormalizedUrl = uri.AbsoluteUri,
+                Platform = playlist.Platform,
+                Title = item.Title,
+                Uploader = item.Uploader ?? playlist.Uploader,
+                ThumbnailUrl = item.ThumbnailUrl,
+                Duration = item.Duration,
+                Kind = playlist.Kind,
+                Quality = playlist.Quality,
+                Container = playlist.Container,
+                AudioFormat = playlist.AudioFormat,
+                AudioBitrateKbps = playlist.AudioBitrateKbps,
+            };
+
+            // The same item twice in one playlist, or one that is already on its way, is not queued again.
+            if (!seen.Add(download.NormalizedUrl)
+                || await FindActiveDuplicateAsync(db, download, cancellationToken).ConfigureAwait(false) is not null)
+            {
+                alreadyQueued++;
+                continue;
+            }
+
+            var job = CreateJob(download, current, now);
+            job.PlaylistBatch = batch;
+            jobs.Add(job);
+        }
+
+        if (jobs.Count == 0)
+        {
+            return new PlaylistStartResult(batch.Id, [], alreadyQueued, invalid);
+        }
+
+        batch.ItemCount = jobs.Count;
+        db.PlaylistBatches.Add(batch);
+        db.DownloadJobs.AddRange(jobs);
+        await db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+        LogPlaylistCreated(batch.Id, jobs.Count, alreadyQueued, invalid);
+
+        var snapshots = jobs.Select(j => j.Clone()).ToList();
+        foreach (var job in jobs)
+        {
+            Publish(job, null);
+        }
+
+        await PumpAsync().ConfigureAwait(false);
+        return new PlaylistStartResult(batch.Id, snapshots, alreadyQueued, invalid);
+    }
+
+    private DownloadJob CreateJob(NewDownload download, AppSettings current, DateTime now) => new()
+    {
+        SourceUrl = download.SourceUrl,
+        NormalizedUrl = download.NormalizedUrl,
+        Platform = download.Platform,
+        Title = download.Title,
+        Uploader = download.Uploader,
+        ThumbnailUrl = download.ThumbnailUrl,
+        Duration = download.Duration,
+        MediaKind = download.Kind,
+        QualityPreset = download.Kind == MediaKind.Audio ? QualityPreset.AudioOnly : download.Quality,
+        Container = download.Kind == MediaKind.Video ? download.Container : null,
+        AudioFormat = download.Kind == MediaKind.Audio ? download.AudioFormat : null,
+        AudioBitrateKbps = download.Kind == MediaKind.Audio ? download.AudioBitrateKbps : null,
+        OutputDirectory = current.DownloadDirectory,
+        TotalBytes = download.EstimatedBytes,
+        // With "start automatically" off the job is held until the user starts it.
+        Status = current.AutoStartDownloads ? DownloadStatus.Waiting : DownloadStatus.Paused,
+        QueueOrder = NextQueueOrder(now.Ticks),
+        CreatedAtUtc = now,
+    };
 
     public async Task<bool> CancelAsync(Guid jobId, CancellationToken cancellationToken = default)
     {
@@ -558,6 +638,9 @@ internal sealed partial class DownloadJobService(
 
     [LoggerMessage(Level = LogLevel.Information, Message = "Download job {JobId} created ({Kind}, {Quality})")]
     private partial void LogCreated(Guid jobId, MediaKind kind, QualityPreset quality);
+
+    [LoggerMessage(Level = LogLevel.Information, Message = "Playlist {BatchId}: queued {Count} items ({AlreadyQueued} already queued, {Invalid} skipped)")]
+    private partial void LogPlaylistCreated(Guid batchId, int count, int alreadyQueued, int invalid);
 
     [LoggerMessage(Level = LogLevel.Information, Message = "Download job {JobId} is already queued or running; not starting another")]
     private partial void LogDuplicate(Guid jobId);

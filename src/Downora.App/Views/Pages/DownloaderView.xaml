@@ -227,6 +227,58 @@
                             <ui:Button Grid.Column="2" VerticalAlignment="Center" Command="{Binding OpenInBrowserCommand}" Content="{l:Loc Downloader_OpenInBrowser}" Icon="{ui:SymbolIcon Globe24}" />
                         </Grid>
                     </Border>
+                    <Border Margin="0,12,0,0" Padding="16,12" Style="{StaticResource Card}">
+                        <StackPanel>
+                            <WrapPanel>
+                                <TextBlock Margin="0,0,8,0" VerticalAlignment="Center" Style="{StaticResource Text.Secondary}" Text="{l:Loc Downloader_PlaylistFormat}" />
+                                <ListBox
+                                    Margin="0,0,12,0"
+                                    VerticalAlignment="Center"
+                                    DisplayMemberPath="Label"
+                                    ItemsSource="{Binding PlaylistKinds}"
+                                    SelectedItem="{Binding SelectedPlaylistKind, Mode=TwoWay}"
+                                    Style="{StaticResource TabStrip}" />
+                                <ComboBox
+                                    Width="190"
+                                    Margin="0,0,12,0"
+                                    AutomationProperties.Name="{l:Loc Downloader_PlaylistFormat}"
+                                    DisplayMemberPath="Label"
+                                    ItemsSource="{Binding PlaylistQualities}"
+                                    SelectedItem="{Binding SelectedPlaylistQuality, Mode=TwoWay}"
+                                    Visibility="{Binding PlaylistIsVideo, Converter={StaticResource BoolToVisibility}}" />
+                                <ComboBox
+                                    Width="190"
+                                    Margin="0,0,12,0"
+                                    AutomationProperties.Name="{l:Loc Downloader_PlaylistFormat}"
+                                    DisplayMemberPath="Label"
+                                    ItemsSource="{Binding AudioFormats}"
+                                    SelectedItem="{Binding SelectedAudioFormat, Mode=TwoWay}"
+                                    Visibility="{Binding PlaylistIsVideo, Converter={StaticResource BoolToVisibility}, ConverterParameter=Invert}" />
+                            </WrapPanel>
+                            <Grid Margin="0,12,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <ui:Button Command="{Binding SelectAllCommand}" Content="{l:Loc Downloader_SelectAll}" />
+                                <ui:Button Grid.Column="1" Margin="6,0,0,0" Command="{Binding SelectNoneCommand}" Content="{l:Loc Downloader_SelectNone}" />
+                                <TextBlock Grid.Column="2" Margin="12,0" VerticalAlignment="Center" Style="{StaticResource Text.Secondary}" Text="{Binding SelectedCountText}" />
+                                <ui:Button
+                                    Grid.Column="3"
+                                    Appearance="Primary"
+                                    Command="{Binding DownloadPlaylistCommand}"
+                                    Content="{l:Loc Downloader_DownloadSelected}"
+                                    Icon="{ui:SymbolIcon ArrowDownload24}" />
+                            </Grid>
+                            <StackPanel Margin="0,12,0,0" Visibility="{Binding HasPlaylistStarted, Converter={StaticResource BoolToVisibility}}">
+                                <TextBlock Style="{StaticResource Text.BodyStrong}" Text="{Binding PlaylistStartedMessage}" TextWrapping="Wrap" />
+                                <TextBlock Margin="0,4,0,0" Style="{StaticResource Text.Secondary}" Text="{Binding PlaylistProgressText}" Visibility="{Binding PlaylistProgressText, Converter={StaticResource HasValueToVisibility}}" />
+                                <ui:Button Margin="0,8,0,0" HorizontalAlignment="Left" Command="{Binding OpenQueueCommand}" Content="{l:Loc Home_ViewQueue}" Icon="{ui:SymbolIcon ArrowRight24}" />
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
                     <Border Margin="0,12,0,0" Padding="0" Style="{StaticResource Card}">
                         <ItemsControl ItemsSource="{Binding Entries}" VirtualizingPanel.IsVirtualizing="True">
                             <ItemsControl.ItemTemplate>
@@ -234,25 +286,32 @@
                                     <Border x:Name="Row" Padding="16,8" BorderBrush="{DynamicResource Brush.Border}" BorderThickness="0,0,0,1">
                                         <Grid>
                                             <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="32" />
                                                 <ColumnDefinition Width="36" />
                                                 <ColumnDefinition Width="Auto" />
                                                 <ColumnDefinition Width="*" />
                                                 <ColumnDefinition Width="Auto" />
                                                 <ColumnDefinition Width="72" />
                                             </Grid.ColumnDefinitions>
-                                            <TextBlock VerticalAlignment="Center" Style="{StaticResource Text.Metric}" Text="{Binding Index}" />
-                                            <Border Grid.Column="1" Width="64" Height="36" Style="{StaticResource Thumbnail}">
+                                            <CheckBox
+                                                MinWidth="0"
+                                                VerticalAlignment="Center"
+                                                AutomationProperties.Name="{Binding Title}"
+                                                IsChecked="{Binding IsSelected, Mode=TwoWay}"
+                                                IsEnabled="{Binding IsAvailable}" />
+                                            <TextBlock Grid.Column="1" VerticalAlignment="Center" Style="{StaticResource Text.Metric}" Text="{Binding Index}" />
+                                            <Border Grid.Column="2" Width="64" Height="36" Style="{StaticResource Thumbnail}">
                                                 <Grid>
                                                     <ui:SymbolIcon FontSize="14" Foreground="{DynamicResource Brush.TextTertiary}" Symbol="Video24" />
                                                     <Image Source="{Binding ThumbnailUrl, Converter={StaticResource ThumbnailConverter}, ConverterParameter=128}" Stretch="UniformToFill" />
                                                 </Grid>
                                             </Border>
-                                            <StackPanel Grid.Column="2" Margin="12,0" VerticalAlignment="Center">
+                                            <StackPanel Grid.Column="3" Margin="12,0" VerticalAlignment="Center">
                                                 <TextBlock Style="{StaticResource Text.BodyStrong}" Text="{Binding Title}" ToolTip="{Binding Title}" />
                                                 <TextBlock Style="{StaticResource Text.Caption}" Text="{Binding Uploader}" Visibility="{Binding Uploader, Converter={StaticResource HasValueToVisibility}}" />
                                             </StackPanel>
-                                            <TextBlock Grid.Column="3" Margin="0,0,12,0" VerticalAlignment="Center" Foreground="{DynamicResource Brush.Status.Failed.Fg}" Style="{StaticResource Text.Caption}" Text="{Binding StatusText}" />
-                                            <TextBlock Grid.Column="4" VerticalAlignment="Center" Style="{StaticResource Text.Metric}" Text="{Binding DurationText}" TextAlignment="Right" />
+                                            <TextBlock Grid.Column="4" Margin="0,0,12,0" VerticalAlignment="Center" Foreground="{DynamicResource Brush.Status.Failed.Fg}" Style="{StaticResource Text.Caption}" Text="{Binding StatusText}" />
+                                            <TextBlock Grid.Column="5" VerticalAlignment="Center" Style="{StaticResource Text.Metric}" Text="{Binding DurationText}" TextAlignment="Right" />
                                         </Grid>
                                     </Border>
                                     <DataTemplate.Triggers>

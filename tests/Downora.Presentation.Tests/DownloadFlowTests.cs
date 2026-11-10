@@ -1093,6 +1093,183 @@ public sealed class DownloadFlowTests : IAsyncDisposable
         Assert.False(settings.AutoStartDownloads);
     }
 
+    // ---- Phase 7: playlists ----
+
+    private static readonly PlaylistInfo Mix = new(
+        "PL1", "Road Trip", "DJ Sam", "https://www.youtube.com/playlist?list=PL1", SourcePlatform.YouTube, 4,
+        [
+            new PlaylistEntry("a", "https://www.youtube.com/watch?v=a", "One", TimeSpan.FromSeconds(60), "https://i.ytimg.com/a.jpg", "DJ Sam", true),
+            new PlaylistEntry("b", "https://www.youtube.com/watch?v=b", "Two", TimeSpan.FromSeconds(70), null, null, true),
+            new PlaylistEntry("c", "https://www.youtube.com/watch?v=c", "[Private video]", null, null, null, false),
+            new PlaylistEntry("d", "https://www.youtube.com/watch?v=d", "Four", TimeSpan.FromSeconds(80), null, "DJ Sam", true),
+        ]);
+
+    private async Task<DownloaderViewModel> PlaylistAsync()
+    {
+        _extractor.AnalyzeAsync(Arg.Any<UrlValidationResult>(), Arg.Any<CancellationToken>()).Returns(AnalysisResult.ForPlaylist(Mix));
+        var vm = Get<DownloaderViewModel>();
+        await vm.AnalyzeAsync("https://www.youtube.com/playlist?list=PL1");
+        return vm;
+    }
+
+    private static readonly string[] OneAndFour = ["One", "Four"];
+
+    private List<DownloadJob> _batchJobs = [];
+
+    private void StartPlaylistReturns(int added, int already = 0, int invalid = 0) =>
+        _downloads.StartPlaylistAsync(Arg.Any<PlaylistDownload>(), Arg.Any<CancellationToken>()).Returns(call =>
+        {
+            _batchJobs = [.. call.Arg<PlaylistDownload>().Items.Take(added)
+                .Select(i => JobFor(new NewDownload { SourceUrl = i.Url, NormalizedUrl = i.Url, Title = i.Title }))];
+            return new PlaylistStartResult(Guid.NewGuid(), _batchJobs.Select(j => j.Clone()).ToList(), already, invalid);
+        });
+
+    [Fact]
+    public async Task Every_available_playlist_item_starts_ticked_and_the_count_follows_the_ticks()
+    {
+        var vm = await PlaylistAsync();
+
+        Assert.Equal(3, vm.SelectedCount);
+        Assert.Equal("3 selected", vm.SelectedCountText);
+        Assert.False(vm.Entries[2].IsSelected); // unavailable items can't be picked
+        Assert.True(vm.DownloadPlaylistCommand.CanExecute(null));
+
+        vm.SelectNoneCommand.Execute(null);
+        Assert.Equal(0, vm.SelectedCount);
+        Assert.False(vm.DownloadPlaylistCommand.CanExecute(null));
+
+        vm.Entries[1].IsSelected = true;
+        Assert.Equal(1, vm.SelectedCount);
+        Assert.True(vm.DownloadPlaylistCommand.CanExecute(null));
+
+        vm.SelectAllCommand.Execute(null);
+        Assert.Equal(3, vm.SelectedCount);
+        Assert.False(vm.Entries[2].IsSelected);
+    }
+
+    [Fact]
+    public async Task Downloading_a_playlist_queues_only_the_ticked_available_items_in_the_chosen_video_quality()
+    {
+        StartPlaylistReturns(2);
+        var vm = await PlaylistAsync();
+        vm.Entries[1].IsSelected = false;
+        vm.SelectedPlaylistQuality = vm.PlaylistQualities.Single(q => q.Value == QualityPreset.P720);
+
+        await vm.DownloadPlaylistCommand.ExecuteAsync(null);
+
+        await _downloads.Received(1).StartPlaylistAsync(
+            Arg.Is<PlaylistDownload>(p =>
+                p.Title == "Road Trip" &&
+                p.Kind == MediaKind.Video &&
+                p.Quality == QualityPreset.P720 &&
+                p.Container == VideoContainer.Mp4 &&
+                p.Items.Select(i => i.Title).SequenceEqual(OneAndFour) &&
+                p.Items[0].Url == "https://www.youtube.com/watch?v=a" &&
+                p.Items[0].ThumbnailUrl == "https://i.ytimg.com/a.jpg"),
+            Arg.Any<CancellationToken>());
+        Assert.Equal("2 items added to your queue.", vm.PlaylistStartedMessage);
+        Assert.True(vm.HasPlaylistStarted);
+        Assert.Equal("0 of 2 finished", vm.PlaylistProgressText);
+    }
+
+    [Fact]
+    public async Task An_audio_playlist_uses_the_chosen_audio_format_and_no_video_quality()
+    {
+        StartPlaylistReturns(3);
+        var vm = await PlaylistAsync();
+        vm.SelectedPlaylistKind = vm.PlaylistKinds.Single(k => k.Value == MediaKind.Audio);
+        vm.SelectedAudioFormat = vm.AudioFormats.Single(f => f.Value == AudioFormat.Flac);
+        Assert.False(vm.PlaylistIsVideo);
+
+        await vm.DownloadPlaylistCommand.ExecuteAsync(null);
+
+        await _downloads.Received(1).StartPlaylistAsync(
+            Arg.Is<PlaylistDownload>(p => p.Kind == MediaKind.Audio && p.Quality == QualityPreset.AudioOnly && p.AudioFormat == AudioFormat.Flac && p.Items.Count == 3),
+            Arg.Any<CancellationToken>());
+    }
+
+    [Fact]
+    public async Task The_playlist_progress_follows_its_jobs_and_counts_failures()
+    {
+        StartPlaylistReturns(3);
+        var vm = await PlaylistAsync();
+        await vm.DownloadPlaylistCommand.ExecuteAsync(null);
+
+        _batchJobs[0].Status = DownloadStatus.Completed;
+        Send(_batchJobs[0]);
+        Assert.Equal("1 of 3 finished", vm.PlaylistProgressText);
+
+        _batchJobs[1].Status = DownloadStatus.Failed;
+        Send(_batchJobs[1]);
+        Assert.Equal("1 of 3 finished · 1 failed", vm.PlaylistProgressText);
+
+        _batchJobs[2].Status = DownloadStatus.Completed;
+        Send(_batchJobs[2]);
+        Assert.Equal("2 of 3 finished · 1 failed", vm.PlaylistProgressText);
+
+        // A download that isn't part of the playlist changes nothing.
+        Send(Fakes.Job("other", DownloadStatus.Completed));
+        Assert.Equal("2 of 3 finished · 1 failed", vm.PlaylistProgressText);
+    }
+
+    [Fact]
+    public async Task Starting_a_playlist_whose_items_are_all_queued_already_says_so_and_adds_nothing()
+    {
+        StartPlaylistReturns(0, already: 3);
+        var vm = await PlaylistAsync();
+
+        await vm.DownloadPlaylistCommand.ExecuteAsync(null);
+
+        Assert.Equal("Everything you picked is already in your queue.", vm.PlaylistStartedMessage);
+        Assert.Null(vm.PlaylistProgressText);
+    }
+
+    [Fact]
+    public async Task Skipped_items_are_mentioned_and_a_new_analysis_clears_the_playlist_message()
+    {
+        StartPlaylistReturns(2, already: 1);
+        var vm = await PlaylistAsync();
+
+        await vm.DownloadPlaylistCommand.ExecuteAsync(null);
+        Assert.Equal("2 items added to your queue. 1 already in your queue were skipped.", vm.PlaylistStartedMessage);
+
+        await vm.AnalyzeAsync("https://www.youtube.com/playlist?list=PL1");
+        Assert.False(vm.HasPlaylistStarted);
+        Assert.Null(vm.PlaylistProgressText);
+    }
+
+    [Fact]
+    public async Task A_playlist_download_without_the_tools_shows_the_install_card_and_starts_nothing()
+    {
+        var vm = await PlaylistAsync();
+        _tools.GetPath(ToolKind.Ffmpeg).Returns((string?)null);
+
+        await vm.DownloadPlaylistCommand.ExecuteAsync(null);
+
+        Assert.True(vm.IsError);
+        await _downloads.DidNotReceiveWithAnyArgs().StartPlaylistAsync(default!, TestContext.Current.CancellationToken);
+    }
+
+    [Fact]
+    public void The_phase_7_labels_are_translated()
+    {
+        var ar = new Localizer();
+        ar.SetLanguage(AppLanguage.Arabic);
+        try
+        {
+            foreach (var key in new[] { "Library_Remove", "Library_RemoveTip", "Downloader_AsVideo", "Downloader_AsAudio", "Downloader_PlaylistFormat", "Downloader_SelectAll",
+                "Downloader_SelectNone", "Downloader_SelectedCount", "Downloader_DownloadSelected", "Downloader_PlaylistAdded", "Downloader_PlaylistSkipped",
+                "Downloader_PlaylistNothingNew", "Downloader_PlaylistProgress", "Downloader_PlaylistFailed" })
+            {
+                Assert.DoesNotContain("[", ar[key], StringComparison.Ordinal);
+            }
+        }
+        finally
+        {
+            ar.SetLanguage(AppLanguage.English);
+        }
+    }
+
     [Fact]
     public async Task Settings_saves_whether_tags_and_cover_art_are_embedded()
     {

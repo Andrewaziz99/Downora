@@ -65,6 +65,8 @@ public sealed partial class LibraryViewModel : SearchablePageViewModel
     protected override async Task LoadAsync(CancellationToken cancellationToken)
     {
         // Title sorts A→Z; the others show largest / newest first.
+        // Files that were moved or deleted since last time are marked, and finished downloads that have no entry get one.
+        await _library.SyncAsync(cancellationToken).ConfigureAwait(true);
         var descending = SelectedSort.Value != LibrarySort.Title;
         var query = new LibraryQuery(SearchText, SelectedKind.Value, SelectedSort.Value, descending);
         var items = await _library.QueryAsync(query, cancellationToken).ConfigureAwait(true);
@@ -105,6 +107,20 @@ public sealed partial class LibraryViewModel : SearchablePageViewModel
             _shell.OpenFile(item.FilePath);
         }
     }
+
+    [RelayCommand]
+    private Task RemoveAsync(MediaItemViewModel? item) => RunSafeAsync(async () =>
+    {
+        if (item is null || !await _library.RemoveAsync(item.Id).ConfigureAwait(true))
+        {
+            return;
+        }
+
+        Items.Remove(item);
+        var filtering = !string.IsNullOrWhiteSpace(SearchText) || SelectedKind.Value is not null;
+        IsLibraryEmpty = Items.Count == 0 && !filtering;
+        HasNoResults = Items.Count == 0 && filtering;
+    }, showLoading: false);
 
     [RelayCommand]
     private void ShowInFolder(MediaItemViewModel? item)

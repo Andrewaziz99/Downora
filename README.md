@@ -8,7 +8,7 @@ Built with C#, .NET 10 and WPF (MVVM). Media extraction runs through yt-dlp and 
 
 ## Status
 
-**Phases 1–6 of 11 are complete.**
+**Phases 1–7 of 11 are complete.**
 
 - **Phase 1, foundation:** the solution, the Generic Host with DI, Serilog logging, SQLite with migrations, persistent settings, crash recovery and CI.
 - **Phase 2, shell UI:** the Fluent Velocity design system in dark and light, a sidebar with all seven pages, English and Arabic with a right-to-left layout, and real data on every page.
@@ -18,6 +18,7 @@ Built with C#, .NET 10 and WPF (MVVM). Media extraction runs through yt-dlp and 
 
 - **Phase 5, download manager:** downloads now run through a real queue. At most the chosen number run at once (Settings › Downloads, 1 to 10; the rest wait in the order they were added), and changing the number takes effect immediately. Pause a download (or all of them) and what is downloaded so far is kept; resume it later and it continues where it stopped. Cancel works on running, waiting and paused downloads. A failed download has a Try again button, on the queue card and in History, that continues from its partial files; a cancelled one starts again from the beginning. Turn off "Start downloads automatically" to hold new downloads until you start them. Closing Downora pauses what was running and keeps its files.
 - **Phase 6, FFmpeg:** audio can now be saved as MP3, M4A, Opus, FLAC (lossless) or WAV. Downloads carry their title, uploader and date in the file's own tags and the thumbnail as cover art (turn either off in Settings › Downloads; WAV and WebM can't hold a cover picture). After every download, FFprobe opens the finished file and checks it has the audio or video you asked for and isn't cut short; a file that fails is removed and shown as "damaged" with a Try again button, instead of being reported as done.
+- **Phase 7, playlists and library:** paste a playlist link and every item is listed with a tick box (private or deleted items can't be ticked). Pick video (with a quality) or audio (with a format), press "Download selected", and the items join the queue in playlist order; items already in your queue are skipped, and the page shows "3 of 12 finished" as they complete. The Media Library now fills itself: each finished download is added with its size, length, resolution and codecs read by FFprobe, downloads from earlier versions are added the first time you open the app, files you moved or deleted are marked "File missing", and "Remove from library" drops an entry without touching the file.
 
 See [docs/roadmap.md](docs/roadmap.md).
 

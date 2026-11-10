@@ -56,6 +56,9 @@ public partial class App : Application
             await services.GetRequiredService<IToolManager>().PrepareAsync().ConfigureAwait(true);
             await services.GetRequiredService<IDownloadJobService>().StartQueueAsync().ConfigureAwait(true);
 
+            // Adds downloads from before the library existed and flags files that went missing; it never throws and nobody waits for it.
+            _ = services.GetRequiredService<IMediaLibraryService>().SyncAsync();
+
             var settings = settingsService.Current;
             services.GetRequiredService<Localizer>().SetLanguage(settings.Language);
 

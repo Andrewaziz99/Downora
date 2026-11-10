@@ -92,6 +92,8 @@
   <data name="Library_SortSize" xml:space="preserve"><value>الحجم</value></data>
   <data name="Library_Open" xml:space="preserve"><value>فتح</value></data>
   <data name="Library_ShowInFolder" xml:space="preserve"><value>إظهار في المجلد</value></data>
+  <data name="Library_Remove" xml:space="preserve"><value>إزالة من المكتبة</value></data>
+  <data name="Library_RemoveTip" xml:space="preserve"><value>تزيله من هذه القائمة. يبقى الملف على قرصك.</value></data>
   <data name="Library_Missing" xml:space="preserve"><value>الملف غير موجود</value></data>
   <data name="Library_EmptyTitle" xml:space="preserve"><value>مكتبتك فارغة</value></data>
   <data name="Library_EmptyBody" xml:space="preserve"><value>تُضاف التنزيلات المكتملة هنا تلقائيًا.</value></data>
@@ -152,6 +154,18 @@
   <data name="Downloader_OpenInBrowser" xml:space="preserve"><value>فتح في المتصفح</value></data>
   <data name="Downloader_SavedTo" xml:space="preserve"><value>يتم حفظ التنزيلات في {0}</value></data>
   <data name="Downloader_Playlist" xml:space="preserve"><value>قائمة تشغيل</value></data>
+  <data name="Downloader_AsVideo" xml:space="preserve"><value>فيديو</value></data>
+  <data name="Downloader_AsAudio" xml:space="preserve"><value>صوت</value></data>
+  <data name="Downloader_PlaylistFormat" xml:space="preserve"><value>تنزيل بصيغة</value></data>
+  <data name="Downloader_SelectAll" xml:space="preserve"><value>تحديد الكل</value></data>
+  <data name="Downloader_SelectNone" xml:space="preserve"><value>إلغاء التحديد</value></data>
+  <data name="Downloader_SelectedCount" xml:space="preserve"><value>تم تحديد {0}</value></data>
+  <data name="Downloader_DownloadSelected" xml:space="preserve"><value>تنزيل المحدد</value></data>
+  <data name="Downloader_PlaylistAdded" xml:space="preserve"><value>تمت إضافة {0} عنصرًا إلى قائمة التنزيل.</value></data>
+  <data name="Downloader_PlaylistSkipped" xml:space="preserve"><value>تم تخطي {0} موجودة بالفعل في القائمة.</value></data>
+  <data name="Downloader_PlaylistNothingNew" xml:space="preserve"><value>كل ما اخترته موجود بالفعل في قائمة التنزيل.</value></data>
+  <data name="Downloader_PlaylistProgress" xml:space="preserve"><value>اكتمل {0} من {1}</value></data>
+  <data name="Downloader_PlaylistFailed" xml:space="preserve"><value>فشل {0}</value></data>
   <data name="Downloader_PlaylistCount" xml:space="preserve"><value>{0} عنصرًا</value></data>
   <data name="Downloader_PlaylistTotal" xml:space="preserve"><value>المدة الكلية {0}</value></data>
   <data name="Downloader_EntryUnavailable" xml:space="preserve"><value>غير متاح</value></data>

@@ -90,19 +90,28 @@
                                             <TextBlock Margin="8,0,0,0" VerticalAlignment="Center" Style="{StaticResource Text.Metric}" Text="{Binding SizeText}" />
                                         </StackPanel>
                                         <TextBlock Margin="0,6,0,0" Foreground="{DynamicResource Brush.Status.Failed.Fg}" Style="{StaticResource Text.Caption}" Text="{l:Loc Library_Missing}" Visibility="{Binding IsMissing, Converter={StaticResource BoolToVisibility}}" />
-                                        <StackPanel Margin="0,10,0,0" Orientation="Horizontal" Visibility="{Binding IsMissing, Converter={StaticResource BoolToVisibility}, ConverterParameter=Invert}">
-                                            <ui:Button
-                                                Command="{Binding DataContext.OpenCommand, ElementName=Root}"
-                                                CommandParameter="{Binding}"
-                                                Content="{l:Loc Library_Open}"
-                                                Icon="{ui:SymbolIcon Play24}" />
+                                        <StackPanel Margin="0,10,0,0" Orientation="Horizontal">
+                                            <StackPanel Orientation="Horizontal" Visibility="{Binding IsMissing, Converter={StaticResource BoolToVisibility}, ConverterParameter=Invert}">
+                                                <ui:Button
+                                                    Command="{Binding DataContext.OpenCommand, ElementName=Root}"
+                                                    CommandParameter="{Binding}"
+                                                    Content="{l:Loc Library_Open}"
+                                                    Icon="{ui:SymbolIcon Play24}" />
+                                                <ui:Button
+                                                    Margin="6,0,0,0"
+                                                    AutomationProperties.Name="{l:Loc Library_ShowInFolder}"
+                                                    Command="{Binding DataContext.ShowInFolderCommand, ElementName=Root}"
+                                                    CommandParameter="{Binding}"
+                                                    Icon="{ui:SymbolIcon FolderOpen24}"
+                                                    ToolTip="{l:Loc Library_ShowInFolder}" />
+                                            </StackPanel>
                                             <ui:Button
                                                 Margin="6,0,0,0"
-                                                AutomationProperties.Name="{l:Loc Library_ShowInFolder}"
-                                                Command="{Binding DataContext.ShowInFolderCommand, ElementName=Root}"
+                                                AutomationProperties.Name="{l:Loc Library_Remove}"
+                                                Command="{Binding DataContext.RemoveCommand, ElementName=Root}"
                                                 CommandParameter="{Binding}"
-                                                Icon="{ui:SymbolIcon FolderOpen24}"
-                                                ToolTip="{l:Loc Library_ShowInFolder}" />
+                                                Icon="{ui:SymbolIcon Delete24}"
+                                                ToolTip="{l:Loc Library_RemoveTip}" />
                                         </StackPanel>
                                     </StackPanel>
                                 </StackPanel>

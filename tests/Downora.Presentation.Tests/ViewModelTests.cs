@@ -349,6 +349,29 @@ public class ViewModelTests
     }
 
     [Fact]
+    public async Task Library_syncs_when_shown_and_removing_an_entry_drops_only_the_entry()
+    {
+        var a = new MediaItem { FilePath = "/m/a.mp4", Title = "A" };
+        var b = new MediaItem { FilePath = "/m/b.mp4", Title = "B", IsMissing = true };
+        _library.QueryAsync(Arg.Any<LibraryQuery>(), Arg.Any<CancellationToken>()).Returns([a, b]);
+        _library.RemoveAsync(Arg.Any<Guid>(), Arg.Any<CancellationToken>()).Returns(true);
+        await using var services = BuildServices();
+        var library = services.GetRequiredService<LibraryViewModel>();
+        await library.OnNavigatedToAsync(CancellationToken.None);
+        await _library.Received(1).SyncAsync(Arg.Any<CancellationToken>());
+        Assert.Equal(["A", "B"], library.Items.Select(i => i.Title));
+
+        await library.RemoveCommand.ExecuteAsync(library.Items[1]);
+
+        await _library.Received(1).RemoveAsync(b.Id, Arg.Any<CancellationToken>());
+        Assert.Equal(["A"], library.Items.Select(i => i.Title));
+        Assert.False(library.IsLibraryEmpty);
+
+        await library.RemoveCommand.ExecuteAsync(library.Items[0]);
+        Assert.True(library.IsLibraryEmpty);
+    }
+
+    [Fact]
     public void Media_item_uses_file_name_when_untitled_and_shows_resolution()
     {
         var item = new MediaItemViewModel(

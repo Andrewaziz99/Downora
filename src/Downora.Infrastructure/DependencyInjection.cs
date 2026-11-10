@@ -38,6 +38,8 @@ public static class DependencyInjection
         services.AddSingleton<IJobRecoveryService, JobRecoveryService>();
         services.AddSingleton<IDownloadJobQueries, DownloadJobQueries>();
         services.AddSingleton<IMediaLibraryService, MediaLibraryService>();
+        services.AddSingleton<LibraryIndexer>();
+        services.AddHostedService(sp => sp.GetRequiredService<LibraryIndexer>());
         services.AddSingleton<IDiskSpaceService, DiskSpaceService>();
 
         // Analysis and external tools.
@@ -48,7 +50,9 @@ public static class DependencyInjection
         services.AddSingleton<IMediaExtractor, YtDlpMediaExtractor>();
 
         // Downloading: the engine drives yt-dlp; the job service saves state and stops with the host so no tool outlives the app.
-        services.AddSingleton<IMediaFileVerifier, FfprobeFileVerifier>();
+        services.AddSingleton<FfprobeFileVerifier>();
+        services.AddSingleton<IMediaFileVerifier>(sp => sp.GetRequiredService<FfprobeFileVerifier>());
+        services.AddSingleton<IMediaProbe>(sp => sp.GetRequiredService<FfprobeFileVerifier>());
         services.AddSingleton<IDownloadEngine, YtDlpDownloadEngine>();
         services.AddSingleton<DownloadJobService>();
         services.AddSingleton<IDownloadJobService>(sp => sp.GetRequiredService<DownloadJobService>());

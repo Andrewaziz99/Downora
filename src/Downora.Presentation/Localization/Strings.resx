@@ -92,6 +92,8 @@
   <data name="Library_SortSize" xml:space="preserve"><value>Size</value></data>
   <data name="Library_Open" xml:space="preserve"><value>Open</value></data>
   <data name="Library_ShowInFolder" xml:space="preserve"><value>Show in folder</value></data>
+  <data name="Library_Remove" xml:space="preserve"><value>Remove from library</value></data>
+  <data name="Library_RemoveTip" xml:space="preserve"><value>Removes it from this list. The file stays on your disk.</value></data>
   <data name="Library_Missing" xml:space="preserve"><value>File missing</value></data>
   <data name="Library_EmptyTitle" xml:space="preserve"><value>Your library is empty</value></data>
   <data name="Library_EmptyBody" xml:space="preserve"><value>Finished downloads are added here automatically.</value></data>
@@ -152,6 +154,18 @@
   <data name="Downloader_OpenInBrowser" xml:space="preserve"><value>Open in browser</value></data>
   <data name="Downloader_SavedTo" xml:space="preserve"><value>Downloads are saved to {0}</value></data>
   <data name="Downloader_Playlist" xml:space="preserve"><value>Playlist</value></data>
+  <data name="Downloader_AsVideo" xml:space="preserve"><value>Video</value></data>
+  <data name="Downloader_AsAudio" xml:space="preserve"><value>Audio</value></data>
+  <data name="Downloader_PlaylistFormat" xml:space="preserve"><value>Download as</value></data>
+  <data name="Downloader_SelectAll" xml:space="preserve"><value>Select all</value></data>
+  <data name="Downloader_SelectNone" xml:space="preserve"><value>Select none</value></data>
+  <data name="Downloader_SelectedCount" xml:space="preserve"><value>{0} selected</value></data>
+  <data name="Downloader_DownloadSelected" xml:space="preserve"><value>Download selected</value></data>
+  <data name="Downloader_PlaylistAdded" xml:space="preserve"><value>{0} items added to your queue.</value></data>
+  <data name="Downloader_PlaylistSkipped" xml:space="preserve"><value>{0} already in your queue were skipped.</value></data>
+  <data name="Downloader_PlaylistNothingNew" xml:space="preserve"><value>Everything you picked is already in your queue.</value></data>
+  <data name="Downloader_PlaylistProgress" xml:space="preserve"><value>{0} of {1} finished</value></data>
+  <data name="Downloader_PlaylistFailed" xml:space="preserve"><value>{0} failed</value></data>
   <data name="Downloader_PlaylistCount" xml:space="preserve"><value>{0} items</value></data>
   <data name="Downloader_PlaylistTotal" xml:space="preserve"><value>Total {0}</value></data>
   <data name="Downloader_EntryUnavailable" xml:space="preserve"><value>Unavailable</value></data>

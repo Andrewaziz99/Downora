@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging;
 namespace Downora.Infrastructure.Downloads;
 
 /// <summary>Opens a finished file with FFprobe and applies <see cref="FileVerificationRules"/>.</summary>
-internal sealed partial class FfprobeFileVerifier(IToolManager tools, IProcessRunner runner, ILogger<FfprobeFileVerifier> logger) : IMediaFileVerifier
+internal sealed partial class FfprobeFileVerifier(IToolManager tools, IProcessRunner runner, ILogger<FfprobeFileVerifier> logger) : IMediaFileVerifier, IMediaProbe
 {
     private static readonly TimeSpan ProbeTimeout = TimeSpan.FromSeconds(60);
 
@@ -54,11 +54,23 @@ internal sealed partial class FfprobeFileVerifier(IToolManager tools, IProcessRu
         return verdict;
     }
 
+    public async Task<MediaProbe?> ProbeAsync(string path, CancellationToken cancellationToken = default)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(path);
+        if (tools.GetPath(ToolKind.Ffprobe) is not { } ffprobe)
+        {
+            return null;
+        }
+
+        var result = await runner.RunAsync(new ProcessSpec(ffprobe, Arguments(path), ProbeTimeout), null, null, cancellationToken).ConfigureAwait(false);
+        return result is { ExitCode: 0, TimedOut: false } ? Parse(result.StandardOutput) : null;
+    }
+
     internal static IReadOnlyList<string> Arguments(string path) =>
     [
         "-v", "error",
         "-print_format", "json",
-        "-show_entries", "format=duration:stream=codec_type",
+        "-show_entries", "format=duration,bit_rate:stream=codec_type,codec_name,width,height:stream_disposition=attached_pic",
         "-i", path,
     ];
 
@@ -76,14 +88,42 @@ internal sealed partial class FfprobeFileVerifier(IToolManager tools, IProcessRu
 
             var hasVideo = false;
             var hasAudio = false;
+            int? width = null;
+            int? height = null;
+            string? videoCodec = null;
+            string? audioCodec = null;
             if (root.TryGetProperty("streams", out var streams) && streams.ValueKind == JsonValueKind.Array)
             {
                 foreach (var stream in streams.EnumerateArray())
                 {
                     var type = stream.TryGetProperty("codec_type", out var t) ? t.GetString() : null;
+                    var codec = stream.TryGetProperty("codec_name", out var c) ? c.GetString() : null;
                     hasVideo |= type == "video";
                     hasAudio |= type == "audio";
+
+                    // An embedded cover is a "video" stream too; it must not stand in for the video's own size and codec.
+                    var isCover = stream.TryGetProperty("disposition", out var disposition)
+                                  && disposition.TryGetProperty("attached_pic", out var pic) && pic.ValueKind == JsonValueKind.Number && pic.GetInt32() == 1;
+                    if (type == "video" && !isCover && videoCodec is null)
+                    {
+                        videoCodec = codec;
+                        width = stream.TryGetProperty("width", out var w) && w.ValueKind == JsonValueKind.Number ? w.GetInt32() : null;
+                        height = stream.TryGetProperty("height", out var h) && h.ValueKind == JsonValueKind.Number ? h.GetInt32() : null;
+                    }
+                    else if (type == "audio" && audioCodec is null)
+                    {
+                        audioCodec = codec;
+                    }
                 }
+            }
+
+            int? bitrate = null;
+            if (root.TryGetProperty("format", out var fmt)
+                && fmt.TryGetProperty("bit_rate", out var br)
+                && long.TryParse(br.GetString(), NumberStyles.Integer, CultureInfo.InvariantCulture, out var bps)
+                && bps > 0)
+            {
+                bitrate = (int)Math.Min(int.MaxValue, bps / 1000);
             }
 
             TimeSpan? duration = null;
@@ -96,7 +136,7 @@ internal sealed partial class FfprobeFileVerifier(IToolManager tools, IProcessRu
                 duration = TimeSpan.FromSeconds(seconds);
             }
 
-            return new MediaProbe(duration, hasVideo, hasAudio);
+            return new MediaProbe(duration, hasVideo, hasAudio, width, height, videoCodec, audioCodec, bitrate);
         }
         catch (JsonException)
         {

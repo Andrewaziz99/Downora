@@ -25,6 +25,18 @@ public interface IDownloadJobQueries
 public interface IMediaLibraryService
 {
     Task<IReadOnlyList<MediaItem>> QueryAsync(LibraryQuery query, CancellationToken cancellationToken = default);
+
+    /// <summary>Adds (or refreshes) the entry for a completed download. Does nothing when the job has no file on disk.</summary>
+    Task AddCompletedAsync(DownloadJob job, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Adds completed downloads from before the library existed (once) and marks entries whose file is gone (or back). Never throws:
+    /// a failure is logged and the library is left as it was. Returns how many entries were added.
+    /// </summary>
+    Task<int> SyncAsync(CancellationToken cancellationToken = default);
+
+    /// <summary>Removes an entry from the library. The file on disk is kept. Returns false when there is no such entry.</summary>
+    Task<bool> RemoveAsync(Guid id, CancellationToken cancellationToken = default);
 }
 
 public interface IDiskSpaceService
