@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en" dir="ltr" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Downora web demo</title>
+<meta name="description" content="Interactive prototype of Downora, a native Windows media downloader. Simulated data: nothing is downloaded.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="banner" id="banner" role="note"></div>
+<div class="app">
+  <aside class="side">
+    <div>
+      <div class="brand"><img src="favicon.svg" alt=""><span>Downora</span><small>demo</small></div>
+      <nav id="nav" aria-label="Main"></nav>
+    </div>
+    <div class="side-foot" id="sidefoot"></div>
+  </aside>
+  <main id="view" tabindex="-1"></main>
+</div>
+<div id="toast" class="toast" role="status" hidden></div>
+<script src="i18n.js"></script>
+<script src="engine.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

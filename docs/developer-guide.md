@@ -136,3 +136,13 @@ Set `DOWNORA_DATA_DIR` to a full folder path and `DOWNORA_ALLOW_MULTIPLE_INSTANC
 - `AppId` in the `.iss` identifies Downora to Windows. Never change it. The running-app check uses the same mutex name as `SingleInstance` (`Downora.SingleInstance.v1`); change both together or not at all.
 - The uninstaller removes `%LocalAppData%\Downora\tools`, `logs` and `thumbnails`, the Run-key entry, and (only if the user says yes) everything else in that folder. Don't run an installed copy's uninstaller on a machine where you use Downora.
 - Don't hand-edit the version in the script: it comes from `Directory.Build.props`, or from the tag in the release workflow.
+
+## Web demo (Phase 11)
+
+`site/` is a static portfolio prototype: `engine.js` (simulated analysis and queue, no DOM, no network), `i18n.js` (English and Arabic), `app.js` (UI), `styles.css` (Fluent Velocity tokens). There is no build step and no external script, font or image.
+
+- Run it: `cd site` then `python -m http.server 8000`, and open http://127.0.0.1:8000.
+- Test it: `node --test site/tests/engine.test.js` (also checks that English and Arabic have the same keys).
+- Honesty rules: the page always shows a banner saying the data is simulated; sample titles are fictional; nothing is fetched. Add a feature to the demo only if the Windows app has it.
+- Try the error paths with addresses containing `private`, `drm`, `region` or `gone`, and the retry path with `flaky`.
+- Publish: `.github/workflows/pages.yml` runs the tests and deploys `site/` on every push to main that touches it. In the repository, set Settings > Pages > Source to "GitHub Actions" once.
