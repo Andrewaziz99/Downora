@@ -48,6 +48,7 @@ public static class DependencyInjection
         services.AddSingleton<IMediaExtractor, YtDlpMediaExtractor>();
 
         // Downloading: the engine drives yt-dlp; the job service saves state and stops with the host so no tool outlives the app.
+        services.AddSingleton<IMediaFileVerifier, FfprobeFileVerifier>();
         services.AddSingleton<IDownloadEngine, YtDlpDownloadEngine>();
         services.AddSingleton<DownloadJobService>();
         services.AddSingleton<IDownloadJobService>(sp => sp.GetRequiredService<DownloadJobService>());

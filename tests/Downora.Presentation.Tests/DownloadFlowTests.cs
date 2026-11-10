@@ -199,7 +199,7 @@ public sealed class DownloadFlowTests : IAsyncDisposable
 
         var vm = await AnalyzedAsync();
 
-        Assert.Equal([AudioFormat.Mp3, AudioFormat.M4a, AudioFormat.Opus], vm.AudioFormats.Select(f => f.Value));
+        Assert.Equal([AudioFormat.Mp3, AudioFormat.M4a, AudioFormat.Opus, AudioFormat.Flac, AudioFormat.Wav], vm.AudioFormats.Select(f => f.Value));
         Assert.Equal(AudioFormat.M4a, vm.SelectedAudioFormat.Value);
     }
 
@@ -1091,6 +1091,53 @@ public sealed class DownloadFlowTests : IAsyncDisposable
         await settings.OnNavigatedToAsync(CancellationToken.None);
         Assert.Equal(5, settings.MaxConcurrentDownloads);
         Assert.False(settings.AutoStartDownloads);
+    }
+
+    [Fact]
+    public async Task Settings_saves_whether_tags_and_cover_art_are_embedded()
+    {
+        var settings = Get<SettingsViewModel>();
+        await settings.OnNavigatedToAsync(CancellationToken.None);
+        Assert.True(settings.EmbedMetadata);
+        Assert.True(settings.EmbedCoverArt);
+
+        settings.EmbedMetadata = false;
+        settings.EmbedCoverArt = false;
+
+        Assert.False(_settings.Current.EmbedMetadata);
+        Assert.False(_settings.Current.EmbedCoverArt);
+        await settings.OnNavigatedToAsync(CancellationToken.None);
+        Assert.False(settings.EmbedMetadata);
+        Assert.False(settings.EmbedCoverArt);
+    }
+
+    [Fact]
+    public void A_card_says_when_the_finished_file_is_being_checked()
+    {
+        var item = new DownloadItemViewModel(Fakes.Job("a", DownloadStatus.Processing), _l);
+
+        item.Apply(Fakes.Job("a", DownloadStatus.Processing), new DownloadProgress(DownloadStage.Verifying, 99, 10, 10, null, null));
+
+        Assert.Equal("Checking the file…", item.StageText);
+    }
+
+    [Fact]
+    public void The_phase_6_labels_and_the_corrupt_file_message_are_translated()
+    {
+        var ar = new Localizer();
+        ar.SetLanguage(AppLanguage.Arabic);
+        try
+        {
+            foreach (var key in new[] { "AudioFormat_Flac", "AudioFormat_Wav", "Stage_Verifying", "Error_CorruptFile_Title", "Error_CorruptFile_Body",
+                "Settings_EmbedMetadata", "Settings_EmbedMetadataDesc", "Settings_EmbedCover", "Settings_EmbedCoverDesc" })
+            {
+                Assert.DoesNotContain("[", ar[key], StringComparison.Ordinal);
+            }
+        }
+        finally
+        {
+            ar.SetLanguage(AppLanguage.English);
+        }
     }
 
     [Fact]

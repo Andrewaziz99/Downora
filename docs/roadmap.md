@@ -9,8 +9,8 @@ The full plan (architecture, entities, interfaces, risks) is in the project's im
 | 3 | Analyze: URL validation, source detection, bundled tools, metadata extraction | Done |
 | 4 | Download: video and audio downloads with live progress | Done |
 | 5 | Download manager: queue, concurrency, pause/resume, cancel, retry | Done |
-| 6 | FFmpeg: audio conversion, metadata and cover art, file verification | Next |
-| 7 | Playlists and media library | |
+| 6 | FFmpeg: audio conversion, metadata and cover art, file verification | Done |
+| 7 | Playlists and media library | Next |
 | 8 | Settings screen, history, tool updates, tray, startup behavior | |
 | 9 | Test suite, performance and security review | |
 | 10 | Inno Setup installer with bundled tools, code signing, user guide | |

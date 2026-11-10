@@ -15,6 +15,9 @@ public enum DownloadStage
 
     /// <summary>Audio extraction, moving the finished file and other clean-up.</summary>
     PostProcessing,
+
+    /// <summary>The finished file is being checked with FFprobe.</summary>
+    Verifying,
 }
 
 /// <summary>A snapshot of a running download. Percent is overall (across the video and audio streams), 0–100.</summary>
@@ -59,6 +62,15 @@ public sealed record DownloadRequest
 
     /// <summary>The browser (yt-dlp name, e.g. "edge") whose sign-in to use, or null for none.</summary>
     public string? CookieBrowser { get; init; }
+
+    /// <summary>Write title, artist and the like into the file's tags.</summary>
+    public bool EmbedMetadata { get; init; }
+
+    /// <summary>Embed the thumbnail as cover art, for formats that can hold it.</summary>
+    public bool EmbedCoverArt { get; init; }
+
+    /// <summary>The length the analysis reported; the finished file is checked against it. Null when unknown.</summary>
+    public TimeSpan? ExpectedDuration { get; init; }
 }
 
 /// <summary>How a download ended, when it wasn't cancelled.</summary>

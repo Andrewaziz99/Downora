@@ -451,6 +451,9 @@ internal sealed partial class DownloadJobService(
         Uploader = job.Uploader,
         EstimatedBytes = job.TotalBytes,
         CookieBrowser = CookieBrowsers.For(settings.Current),
+        EmbedMetadata = settings.Current.EmbedMetadata,
+        EmbedCoverArt = settings.Current.EmbedCoverArt,
+        ExpectedDuration = job.Duration,
     };
 
     private static async Task<DownloadJob?> FindActiveDuplicateAsync(DownoraDbContext db, NewDownload download, CancellationToken cancellationToken)

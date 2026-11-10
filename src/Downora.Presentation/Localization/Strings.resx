@@ -202,6 +202,12 @@
   <data name="Common_Cancel" xml:space="preserve"><value>Cancel</value></data>
   <data name="Common_Refresh" xml:space="preserve"><value>Refresh</value></data>
   <data name="Error_BrowserCookies_Title" xml:space="preserve"><value>Couldn't read your browser sign-in</value></data>
+  <data name="Error_CorruptFile_Title" xml:space="preserve"><value>The downloaded file is damaged</value></data>
+  <data name="Error_CorruptFile_Body" xml:space="preserve"><value>Downora checked the file after downloading and it did not pass, so it was removed. Try again; if it keeps happening the source may be serving a broken stream.</value></data>
+  <data name="Settings_EmbedMetadata" xml:space="preserve"><value>Add title and artist to files</value></data>
+  <data name="Settings_EmbedMetadataDesc" xml:space="preserve"><value>Writes the title, uploader and date into the file's own tags, so music players and file properties show them.</value></data>
+  <data name="Settings_EmbedCover" xml:space="preserve"><value>Add cover art to files</value></data>
+  <data name="Settings_EmbedCoverDesc" xml:space="preserve"><value>Puts the thumbnail inside the file as its cover picture. Not possible for WAV and WebM.</value></data>
   <data name="Error_BrowserCookies_Body" xml:space="preserve"><value>Close the browser and try again, or choose another browser in Settings. Some browsers lock their sign-in data while they are open.</value></data>
   <data name="Downloader_Download" xml:space="preserve"><value>Download</value></data>
   <data name="Downloader_DownloadAudio" xml:space="preserve"><value>Download audio</value></data>
@@ -216,12 +222,15 @@
   <data name="AudioFormat_Mp3" xml:space="preserve"><value>MP3</value></data>
   <data name="AudioFormat_M4a" xml:space="preserve"><value>M4A (AAC)</value></data>
   <data name="AudioFormat_Opus" xml:space="preserve"><value>Opus</value></data>
+  <data name="AudioFormat_Flac" xml:space="preserve"><value>FLAC (lossless)</value></data>
+  <data name="AudioFormat_Wav" xml:space="preserve"><value>WAV (uncompressed)</value></data>
   <data name="Queue_Eta" xml:space="preserve"><value>{0} left</value></data>
   <data name="Queue_OpenFolder" xml:space="preserve"><value>Open folder</value></data>
   <data name="Queue_ShowFile" xml:space="preserve"><value>Show file</value></data>
   <data name="Stage_Starting" xml:space="preserve"><value>Starting…</value></data>
   <data name="Stage_Merging" xml:space="preserve"><value>Joining video and audio…</value></data>
   <data name="Stage_PostProcessing" xml:space="preserve"><value>Finishing up…</value></data>
+  <data name="Stage_Verifying" xml:space="preserve"><value>Checking the file…</value></data>
   <data name="Stage_Cancelling" xml:space="preserve"><value>Cancelling…</value></data>
   <data name="Settings_Cookies" xml:space="preserve"><value>Browser sign-in</value></data>
   <data name="Settings_CookiesUse" xml:space="preserve"><value>Use my browser sign-in</value></data>

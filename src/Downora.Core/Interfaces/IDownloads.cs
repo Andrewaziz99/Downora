@@ -1,6 +1,26 @@
+using Downora.Core.Enums;
 using Downora.Core.Models;
 
 namespace Downora.Core.Interfaces;
+
+/// <summary>What FFprobe found in a finished file.</summary>
+public sealed record MediaProbe(TimeSpan? Duration, bool HasVideo, bool HasAudio);
+
+/// <summary>The outcome of checking a finished file. <see cref="Problem"/> is null when the file is fine (or the check couldn't run).</summary>
+public sealed record FileVerification(bool IsValid, string? Problem, bool WasChecked)
+{
+    public static FileVerification Ok { get; } = new(true, null, true);
+
+    public static FileVerification Skipped { get; } = new(true, null, false);
+
+    public static FileVerification Bad(string problem) => new(false, problem, true);
+}
+
+/// <summary>Checks that a downloaded file opens and holds what was asked for.</summary>
+public interface IMediaFileVerifier
+{
+    Task<FileVerification> VerifyAsync(string path, MediaKind kind, TimeSpan? expectedDuration, CancellationToken cancellationToken = default);
+}
 
 /// <summary>Downloads one item to disk. The only place that knows how a download tool is driven.</summary>
 public interface IDownloadEngine

@@ -21,6 +21,12 @@ public class AppSettings
     public int DefaultAudioBitrateKbps { get; set; } = 320;
     public int MaxConcurrentDownloads { get; set; } = 3;
 
+    /// <summary>Write title, artist, date and the like into the file's own tags.</summary>
+    public bool EmbedMetadata { get; set; } = true;
+
+    /// <summary>Put the thumbnail inside the file as its cover picture (where the format supports it).</summary>
+    public bool EmbedCoverArt { get; set; } = true;
+
     public bool AutoAddToQueue { get; set; }
     public bool AutoStartDownloads { get; set; } = true;
 

@@ -149,7 +149,10 @@ public sealed class DownloadQueueTests : IAsyncDisposable
         Finish("c");
         Finish("d");
         await UntilAsync(() => _service!.WaitForAsync(d.Id).IsCompleted, "queue drained");
-        Assert.Equal(["a", "b", "c", "d"], _engine.Requests.Select(r => r.Title![^1..]));
+        // a and b start side by side, so their order is not fixed; c always starts before d.
+        var started = _engine.Requests.Select(r => r.Title![^1..]).ToList();
+        Assert.Equal(["a", "b"], started.Take(2).Order());
+        Assert.Equal(["c", "d"], started.Skip(2));
         Assert.Equal(DownloadStatus.Completed, await StatusAsync(d.Id));
     }
 
@@ -239,6 +242,25 @@ public sealed class DownloadQueueTests : IAsyncDisposable
         Assert.Empty(_engine.Requests);
     }
 
+    [Fact]
+    public async Task The_engine_is_told_the_tag_settings_and_the_length_to_check_against()
+    {
+        var service = await StartAsync();
+        var settings = _env!.Get<ISettingsService>();
+        var current = settings.Current;
+        current.EmbedMetadata = false;
+        current.EmbedCoverArt = true;
+        await settings.SaveAsync(current, TestContext.Current.CancellationToken);
+
+        await service.StartAsync(Video("tags") with { Duration = TimeSpan.FromSeconds(42) }, TestContext.Current.CancellationToken);
+        await UntilAsync(() => _engine.Requests.Count == 1, "the download started");
+
+        var request = _engine.Requests.Single();
+        Assert.False(request.EmbedMetadata);
+        Assert.True(request.EmbedCoverArt);
+        Assert.Equal(TimeSpan.FromSeconds(42), request.ExpectedDuration);
+    }
+
     // ---- Pause and resume ----
 
     [Fact]
@@ -316,7 +338,7 @@ public sealed class DownloadQueueTests : IAsyncDisposable
             return gate.Task;
         };
         var job = await AddAsync(service, "m");
-        await UntilAsync(() => _engine.Requests.Count == 1, "started");
+        await UntilAsync(() => _updates.Any(u => u.Job.Id == job.Id && u.Job.Status == DownloadStatus.Processing), "joining started");
 
         Assert.False(await service.PauseAsync(job.Id, TestContext.Current.CancellationToken));
         Assert.Equal(DownloadStatus.Processing, await StatusAsync(job.Id));

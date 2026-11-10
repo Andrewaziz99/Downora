@@ -85,6 +85,28 @@
                     AutomationProperties.Name="{l:Loc Settings_AutoStart}"
                     IsChecked="{Binding AutoStartDownloads, Mode=TwoWay}" />
             </ui:CardControl>
+            <ui:CardControl Margin="0,0,0,4" Icon="{ui:SymbolIcon Tag24}">
+                <ui:CardControl.Header>
+                    <StackPanel>
+                        <TextBlock Style="{StaticResource Text.Body}" Text="{l:Loc Settings_EmbedMetadata}" />
+                        <TextBlock MaxWidth="560" HorizontalAlignment="Left" Style="{StaticResource Text.Caption}" Text="{l:Loc Settings_EmbedMetadataDesc}" TextTrimming="None" TextWrapping="Wrap" />
+                    </StackPanel>
+                </ui:CardControl.Header>
+                <ui:ToggleSwitch
+                    AutomationProperties.Name="{l:Loc Settings_EmbedMetadata}"
+                    IsChecked="{Binding EmbedMetadata, Mode=TwoWay}" />
+            </ui:CardControl>
+            <ui:CardControl Margin="0,0,0,4" Icon="{ui:SymbolIcon Image24}">
+                <ui:CardControl.Header>
+                    <StackPanel>
+                        <TextBlock Style="{StaticResource Text.Body}" Text="{l:Loc Settings_EmbedCover}" />
+                        <TextBlock MaxWidth="560" HorizontalAlignment="Left" Style="{StaticResource Text.Caption}" Text="{l:Loc Settings_EmbedCoverDesc}" TextTrimming="None" TextWrapping="Wrap" />
+                    </StackPanel>
+                </ui:CardControl.Header>
+                <ui:ToggleSwitch
+                    AutomationProperties.Name="{l:Loc Settings_EmbedCover}"
+                    IsChecked="{Binding EmbedCoverArt, Mode=TwoWay}" />
+            </ui:CardControl>
 
             <!-- Browser sign-in (opt-in) -->
             <StackPanel x:Name="CookieSection">

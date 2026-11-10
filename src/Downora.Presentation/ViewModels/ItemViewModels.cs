@@ -132,6 +132,7 @@ public sealed partial class DownloadItemViewModel : ObservableObject
                 DownloadStatus.Paused => _localizer["Stage_Paused"],
                 DownloadStatus.Extracting => _localizer["Stage_Starting"],
                 DownloadStatus.Processing when progress?.Stage == DownloadStage.PostProcessing => _localizer["Stage_PostProcessing"],
+                DownloadStatus.Processing when progress?.Stage == DownloadStage.Verifying => _localizer["Stage_Verifying"],
                 DownloadStatus.Processing => _localizer["Stage_Merging"],
                 _ => string.Empty,
             };

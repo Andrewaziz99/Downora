@@ -65,9 +65,11 @@ public sealed class DownloadEngineTests : IDisposable
     private readonly string _folder = Directory.CreateTempSubdirectory("downora-engine-").FullName;
     private readonly IToolManager _tools = Substitute.For<IToolManager>();
     private readonly IDiskSpaceService _disk = Substitute.For<IDiskSpaceService>();
+    private readonly IMediaFileVerifier _verifier = Substitute.For<IMediaFileVerifier>();
 
     public DownloadEngineTests()
     {
+        _verifier.VerifyAsync(Arg.Any<string>(), Arg.Any<MediaKind>(), Arg.Any<TimeSpan?>(), Arg.Any<CancellationToken>()).Returns(FileVerification.Ok);
         _tools.GetPath(ToolKind.YtDlp).Returns("C:/tools/yt-dlp.exe");
         _tools.GetPath(ToolKind.Ffmpeg).Returns("C:/tools/ffmpeg.exe");
         _tools.GetPath(ToolKind.Deno).Returns("C:/tools/deno.exe");
@@ -77,7 +79,7 @@ public sealed class DownloadEngineTests : IDisposable
     public void Dispose() => Directory.Delete(_folder, recursive: true);
 
     private YtDlpDownloadEngine Engine(IProcessRunner runner) =>
-        new(_tools, runner, _disk, NullLogger<YtDlpDownloadEngine>.Instance);
+        new(_tools, runner, _disk, _verifier, NullLogger<YtDlpDownloadEngine>.Instance);
 
     private DownloadRequest Request(Action<DownloadRequestBuilder>? tweak = null)
     {
@@ -129,6 +131,49 @@ public sealed class DownloadEngineTests : IDisposable
 
         // The job's temporary folder (and the hidden parent, once empty) is gone after success.
         Assert.False(Directory.Exists(Path.Combine(_folder, YtDlpDownloadEngine.PartialFolderName)));
+    }
+
+    [Fact]
+    public async Task The_finished_file_is_checked_against_the_expected_length_before_it_counts_as_done()
+    {
+        var request = Request(b => b.ExpectedDuration = TimeSpan.FromSeconds(19));
+        var runner = SuccessfulRun("dl_video_merge.out", "Me at the zoo.mkv", request);
+        var progress = new RecordingProgress();
+
+        var result = await Engine(runner).DownloadAsync(request, progress, TestContext.Current.CancellationToken);
+
+        Assert.True(result.Succeeded);
+        await _verifier.Received(1).VerifyAsync(Path.Combine(_folder, "Me at the zoo.mkv"), MediaKind.Video, TimeSpan.FromSeconds(19), Arg.Any<CancellationToken>());
+        Assert.Equal(DownloadStage.Verifying, progress.Reports[^1].Stage);
+    }
+
+    [Fact]
+    public async Task A_file_that_fails_the_check_is_removed_and_the_download_fails_as_corrupt()
+    {
+        var request = Request();
+        var runner = SuccessfulRun("dl_video_merge.out", "Me at the zoo.mkv", request);
+        _verifier.VerifyAsync(Arg.Any<string>(), Arg.Any<MediaKind>(), Arg.Any<TimeSpan?>(), Arg.Any<CancellationToken>())
+            .Returns(FileVerification.Bad("The file can't be opened."));
+
+        var result = await Engine(runner).DownloadAsync(request, null, TestContext.Current.CancellationToken);
+
+        Assert.False(result.Succeeded);
+        Assert.Equal(DownloadErrorKind.CorruptFile, result.ErrorKind);
+        Assert.Equal("The file can't be opened.", result.ErrorDetail);
+        Assert.False(File.Exists(Path.Combine(_folder, "Me at the zoo.mkv")));
+        Assert.False(Directory.Exists(Path.Combine(_folder, YtDlpDownloadEngine.PartialFolderName)));
+    }
+
+    [Fact]
+    public async Task A_failed_download_is_never_sent_to_the_check()
+    {
+        var request = Request();
+        var runner = new ScriptedProcessRunner { ExitCode = 1, StdErr = "ERROR: Video unavailable" };
+
+        var result = await Engine(runner).DownloadAsync(request, null, TestContext.Current.CancellationToken);
+
+        Assert.False(result.Succeeded);
+        await _verifier.DidNotReceiveWithAnyArgs().VerifyAsync(default!, default, default, TestContext.Current.CancellationToken);
     }
 
     [Fact]
@@ -430,6 +475,9 @@ internal sealed class DownloadRequestBuilder(string folder)
     public long? EstimatedBytes { get; set; }
     public string? CookieBrowser { get; set; }
     public string FileNameTemplate { get; set; } = "{title}";
+    public bool EmbedMetadata { get; set; }
+    public bool EmbedCoverArt { get; set; }
+    public TimeSpan? ExpectedDuration { get; set; }
 
     public DownloadRequest Build() => new()
     {
@@ -446,5 +494,8 @@ internal sealed class DownloadRequestBuilder(string folder)
         Uploader = Uploader,
         EstimatedBytes = EstimatedBytes,
         CookieBrowser = CookieBrowser,
+        EmbedMetadata = EmbedMetadata,
+        EmbedCoverArt = EmbedCoverArt,
+        ExpectedDuration = ExpectedDuration,
     };
 }

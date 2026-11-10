@@ -88,6 +88,9 @@ public enum DownloadErrorKind
     ToolMissing,
     DiskFull,
     BrowserCookies,
+
+    /// <summary>The download finished but the file failed the check (unreadable, wrong streams or cut short).</summary>
+    CorruptFile,
     Unknown,
 }
 

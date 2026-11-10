@@ -13,6 +13,7 @@ internal sealed partial class YtDlpDownloadEngine(
     IToolManager tools,
     IProcessRunner runner,
     IDiskSpaceService disk,
+    IMediaFileVerifier verifier,
     ILogger<YtDlpDownloadEngine> logger) : IDownloadEngine
 {
     /// <summary>Hidden folder inside the download folder that holds every running job's partial files.</summary>
@@ -93,6 +94,16 @@ internal sealed partial class YtDlpDownloadEngine(
         var saved = finishedPath is not null && File.Exists(finishedPath) ? finishedPath : null;
         if (result.ExitCode == 0 && (saved ?? FindSavedFile(request.OutputDirectory, baseName)) is { } file)
         {
+            // A file that doesn't open or was cut short is a failed download, not a finished one.
+            progress?.Report(tracker.Current with { Stage = DownloadStage.Verifying, BytesPerSecond = null, Eta = null });
+            var verdict = await verifier.VerifyAsync(file, request.Kind, request.ExpectedDuration, cancellationToken).ConfigureAwait(false);
+            if (!verdict.IsValid)
+            {
+                DeleteBadFile(file);
+                DeleteTempDirectory(request);
+                return DownloadResult.Failure(DownloadErrorKind.CorruptFile, verdict.Problem);
+            }
+
             var size = new FileInfo(file).Length;
             DeleteTempDirectory(request);
             LogCompleted(request.JobId, size);
@@ -196,6 +207,18 @@ internal sealed partial class YtDlpDownloadEngine(
         }
     }
 
+    private void DeleteBadFile(string file)
+    {
+        try
+        {
+            File.Delete(file);
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        {
+            LogBadFileKept(file, ex);
+        }
+    }
+
     private static void DeleteTempDirectory(DownloadRequest request)
     {
         try
@@ -244,6 +267,9 @@ internal sealed partial class YtDlpDownloadEngine(
 
     [LoggerMessage(Level = LogLevel.Warning, Message = "The download folder {Folder} can't be used")]
     private partial void LogFolderUnavailable(string folder, Exception exception);
+
+    [LoggerMessage(Level = LogLevel.Warning, Message = "Could not remove the bad file {File}")]
+    private partial void LogBadFileKept(string file, Exception exception);
 
     [LoggerMessage(Level = LogLevel.Information, Message = "Removed the partial files of download {JobId}")]
     private partial void LogDiscarded(Guid jobId);

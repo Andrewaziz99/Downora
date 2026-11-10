@@ -189,6 +189,12 @@ S = {
  "Common_Cancel": ("Cancel", "إلغاء"),
  "Common_Refresh": ("Refresh", "تحديث"),
  "Error_BrowserCookies_Title": ("Couldn't read your browser sign-in", "تعذّرت قراءة تسجيل الدخول من المتصفح"),
+ "Error_CorruptFile_Title": ("The downloaded file is damaged", "الملف الذي تم تنزيله تالف"),
+ "Error_CorruptFile_Body": ("Downora checked the file after downloading and it did not pass, so it was removed. Try again; if it keeps happening the source may be serving a broken stream.", "فحص Downora الملف بعد التنزيل ولم يجتز الفحص، لذلك تم حذفه. أعد المحاولة، وإن تكرر الأمر فقد يكون المصدر يقدّم بثًّا تالفًا."),
+ "Settings_EmbedMetadata": ("Add title and artist to files", "إضافة العنوان والفنان إلى الملفات"),
+ "Settings_EmbedMetadataDesc": ("Writes the title, uploader and date into the file's own tags, so music players and file properties show them.", "تكتب العنوان والناشر والتاريخ في وسوم الملف نفسه ليعرضها مشغّل الموسيقى وخصائص الملف."),
+ "Settings_EmbedCover": ("Add cover art to files", "إضافة صورة الغلاف إلى الملفات"),
+ "Settings_EmbedCoverDesc": ("Puts the thumbnail inside the file as its cover picture. Not possible for WAV and WebM.", "تضع الصورة المصغّرة داخل الملف كصورة غلاف. غير ممكن لصيغتي WAV وWebM."),
  "Error_BrowserCookies_Body": ("Close the browser and try again, or choose another browser in Settings. Some browsers lock their sign-in data while they are open.", "أغلق المتصفح وأعد المحاولة، أو اختر متصفحًا آخر من الإعدادات. تقفل بعض المتصفحات بيانات تسجيل الدخول أثناء تشغيلها."),
 
  "Downloader_Download": ("Download", "تنزيل"),
@@ -205,6 +211,8 @@ S = {
  "AudioFormat_Mp3": ("MP3", "MP3"),
  "AudioFormat_M4a": ("M4A (AAC)", "M4A (AAC)"),
  "AudioFormat_Opus": ("Opus", "Opus"),
+ "AudioFormat_Flac": ("FLAC (lossless)", "FLAC (بدون فقد)"),
+ "AudioFormat_Wav": ("WAV (uncompressed)", "WAV (غير مضغوط)"),
 
  "Queue_Eta": ("{0} left", "متبقي {0}"),
  "Queue_OpenFolder": ("Open folder", "فتح المجلد"),
@@ -212,6 +220,7 @@ S = {
  "Stage_Starting": ("Starting…", "جارٍ البدء…"),
  "Stage_Merging": ("Joining video and audio…", "جارٍ دمج الفيديو والصوت…"),
  "Stage_PostProcessing": ("Finishing up…", "جارٍ إنهاء العملية…"),
+ "Stage_Verifying": ("Checking the file…", "جارٍ فحص الملف…"),
  "Stage_Cancelling": ("Cancelling…", "جارٍ الإلغاء…"),
 
  "Settings_Cookies": ("Browser sign-in", "تسجيل الدخول من المتصفح"),

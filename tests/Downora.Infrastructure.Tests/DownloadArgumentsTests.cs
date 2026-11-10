@@ -22,6 +22,47 @@ public class DownloadArgumentsTests
     private static string ValueOf(List<string> args, string option) => args[args.IndexOf(option) + 1];
 
     [Fact]
+    public void Tags_and_cover_art_are_only_asked_for_when_chosen()
+    {
+        var off = Build();
+        Assert.DoesNotContain("--embed-metadata", off);
+        Assert.DoesNotContain("--embed-thumbnail", off);
+
+        var on = Build(b => { b.EmbedMetadata = true; b.EmbedCoverArt = true; });
+        Assert.Contains("--embed-metadata", on);
+        Assert.Contains("--embed-thumbnail", on);
+        Assert.Equal("jpg", ValueOf(on, "--convert-thumbnails")); // WebP covers aren't read by most players
+        Assert.True(on.IndexOf("--convert-thumbnails") < on.IndexOf("--embed-thumbnail"));
+    }
+
+    [Theory]
+    [InlineData(MediaKind.Audio, AudioFormat.Mp3, VideoContainer.Mp4, true)]
+    [InlineData(MediaKind.Audio, AudioFormat.Flac, VideoContainer.Mp4, true)]
+    [InlineData(MediaKind.Audio, AudioFormat.Opus, VideoContainer.Mp4, true)]
+    [InlineData(MediaKind.Audio, AudioFormat.Wav, VideoContainer.Mp4, false)]
+    [InlineData(MediaKind.Video, AudioFormat.Mp3, VideoContainer.Mp4, true)]
+    [InlineData(MediaKind.Video, AudioFormat.Mp3, VideoContainer.Mkv, true)]
+    [InlineData(MediaKind.Video, AudioFormat.Mp3, VideoContainer.WebM, false)]
+    public void Cover_art_is_skipped_for_formats_that_cannot_hold_it(MediaKind kind, AudioFormat audio, VideoContainer container, bool expected)
+    {
+        var args = Build(b => { b.Kind = kind; b.AudioFormat = audio; b.Container = container; b.EmbedCoverArt = true; });
+
+        Assert.Equal(expected, args.Contains("--embed-thumbnail"));
+    }
+
+    [Fact]
+    public void Lossless_audio_gets_no_bitrate_and_its_own_format()
+    {
+        var flac = Build(b => { b.Kind = MediaKind.Audio; b.AudioFormat = AudioFormat.Flac; });
+        var wav = Build(b => { b.Kind = MediaKind.Audio; b.AudioFormat = AudioFormat.Wav; });
+
+        Assert.Equal("flac", ValueOf(flac, "--audio-format"));
+        Assert.Equal("wav", ValueOf(wav, "--audio-format"));
+        Assert.DoesNotContain("--audio-quality", flac);
+        Assert.DoesNotContain("--audio-quality", wav);
+    }
+
+    [Fact]
     public void The_link_always_comes_last_after_two_dashes()
     {
         var args = Build();

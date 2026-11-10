@@ -95,6 +95,14 @@ public sealed partial class SettingsViewModel : Navigation.PageViewModel
     [ObservableProperty]
     public partial bool AutoStartDownloads { get; set; } = true;
 
+    /// <summary>Write title, artist and the like into each downloaded file.</summary>
+    [ObservableProperty]
+    public partial bool EmbedMetadata { get; set; } = true;
+
+    /// <summary>Put the thumbnail inside each file as its cover picture.</summary>
+    [ObservableProperty]
+    public partial bool EmbedCoverArt { get; set; } = true;
+
     /// <summary>Opt-in: let yt-dlp use the sign-in of the chosen browser. Off until the user turns it on.</summary>
     [ObservableProperty]
     public partial bool UseBrowserSession { get; set; }
@@ -165,6 +173,8 @@ public sealed partial class SettingsViewModel : Navigation.PageViewModel
             DownloadDirectory = current.DownloadDirectory;
             MaxConcurrentDownloads = current.MaxConcurrentDownloads;
             AutoStartDownloads = current.AutoStartDownloads;
+            EmbedMetadata = current.EmbedMetadata;
+            EmbedCoverArt = current.EmbedCoverArt;
             UseBrowserSession = current.UseBrowserSession;
             SelectedBrowser = BrowserOptions.FirstOrDefault(o => o.Value == current.BrowserForCookies) ?? BrowserOptions[0];
             ErrorMessage = null;
@@ -210,6 +220,22 @@ public sealed partial class SettingsViewModel : Navigation.PageViewModel
         if (!_loading)
         {
             _ = SaveAsync(s => s.AutoStartDownloads = value);
+        }
+    }
+
+    partial void OnEmbedMetadataChanged(bool value)
+    {
+        if (!_loading)
+        {
+            _ = SaveAsync(s => s.EmbedMetadata = value);
+        }
+    }
+
+    partial void OnEmbedCoverArtChanged(bool value)
+    {
+        if (!_loading)
+        {
+            _ = SaveAsync(s => s.EmbedCoverArt = value);
         }
     }
 

@@ -84,3 +84,10 @@ Serilog writes to `%LocalAppData%\Downora\logs\downora-YYYYMMDD.log`. Use `[Logg
 - The host starts the service before the database and settings are ready, so `IHostedService.StartAsync` only subscribes to settings changes. `App.xaml.cs` calls `IDownloadJobService.StartQueueAsync()` after startup to run jobs left waiting. Do not touch settings or the database from `StartAsync`.
 - Screens call `IDownloadItemActions` (pause, resume, retry, cancel) and never the service directly; actions swallow and log failures so a click can't crash the window.
 - Queue tests use `FakeEngine` with one gate per download (`DownloadQueueTests`), so concurrency is tested deterministically; wait for background work with `UntilAsync`, never a fixed sleep.
+
+## Tags, cover art and file verification (Phase 6)
+
+- yt-dlp does the conversion and tagging (`-x --audio-format`, `--embed-metadata`, `--convert-thumbnails jpg --embed-thumbnail`) with the FFmpeg Downora manages. Cover art is skipped for WAV and WebM (`YtDlpDownloadArguments.CanHoldCoverArt`); asking for it there would only print a warning. `EmbedMetadata` and `EmbedCoverArt` are settings read when a job starts, so changing them affects the next run.
+- After yt-dlp exits successfully the engine reports the `Verifying` stage and calls `IMediaFileVerifier` (`FfprobeFileVerifier`: FFprobe JSON, then the pure `FileVerificationRules`). A file with no audio (audio jobs) or no video (video jobs), no length, or more than 10% (at least 5 s) shorter than the analysed length fails as `CorruptFile` and is deleted. An embedded cover shows up as a video stream, so audio files are never required to be video-free.
+- The check never blocks on the tool: no FFprobe installed or a probe timeout means "not checked" and the file is kept.
+- Adding a column to `AppSettings` needs a migration: `dotnet ef migrations add <Name> --project src/Downora.Infrastructure` (the Infrastructure project is its own startup project via `DesignTimeDbContextFactory`). Give new `bool` columns the default you want existing users to get, since EF writes `false`.

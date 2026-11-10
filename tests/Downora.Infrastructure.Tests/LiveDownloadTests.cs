@@ -39,7 +39,9 @@ public sealed class LiveDownloadTests : IDisposable
         manager.GetPath(ToolKind.Ffmpeg).Returns(Path.Combine(tools, "ffmpeg.exe"));
         manager.GetPath(ToolKind.Deno).Returns(File.Exists(Path.Combine(tools, "deno.exe")) ? Path.Combine(tools, "deno.exe") : null);
         var disk = Substitute.For<IDiskSpaceService>();
-        return new YtDlpDownloadEngine(manager, new ProcessRunner(NullLogger<ProcessRunner>.Instance), disk, NullLogger<YtDlpDownloadEngine>.Instance);
+        manager.GetPath(ToolKind.Ffprobe).Returns(File.Exists(Path.Combine(tools, "ffprobe.exe")) ? Path.Combine(tools, "ffprobe.exe") : null);
+        var runner = new ProcessRunner(NullLogger<ProcessRunner>.Instance);
+        return new YtDlpDownloadEngine(manager, runner, disk, new FfprobeFileVerifier(manager, runner, NullLogger<FfprobeFileVerifier>.Instance), NullLogger<YtDlpDownloadEngine>.Instance);
     }
 
     [Fact]
@@ -74,6 +76,30 @@ public sealed class LiveDownloadTests : IDisposable
 
         Assert.True(result.Succeeded, result.ErrorDetail);
         Assert.EndsWith(".mp3", result.FilePath, StringComparison.OrdinalIgnoreCase);
+    }
+
+    [Theory]
+    [InlineData(AudioFormat.Mp3)]
+    [InlineData(AudioFormat.Flac)]
+    public async Task A_real_audio_download_carries_its_title_and_cover_art(AudioFormat format)
+    {
+        var tools = ToolsFolder();
+        Assert.SkipWhen(tools is null || !File.Exists(Path.Combine(tools, "ffprobe.exe")), "Set DOWNORA_LIVE_TESTS=1 with yt-dlp, FFmpeg and FFprobe installed to run live tests.");
+        var request = new DownloadRequest
+        {
+            JobId = Guid.NewGuid(), Url = Zoo, OutputDirectory = _folder, Kind = MediaKind.Audio, AudioFormat = format, Title = "Me at the zoo",
+            EmbedMetadata = true, EmbedCoverArt = true, ExpectedDuration = TimeSpan.FromSeconds(19),
+        };
+
+        var result = await Engine(tools!).DownloadAsync(request, cancellationToken: TestContext.Current.CancellationToken);
+
+        Assert.True(result.Succeeded, result.ErrorDetail);
+        var probe = new ProcessRunner(NullLogger<ProcessRunner>.Instance);
+        var info = await probe.RunAsync(
+            new ProcessSpec(Path.Combine(tools!, "ffprobe.exe"), ["-v", "error", "-print_format", "json", "-show_entries", "format_tags=title:stream=codec_type", "-i", result.FilePath!]),
+            cancellationToken: TestContext.Current.CancellationToken);
+        Assert.Contains("Me at the zoo", info.StandardOutput, StringComparison.Ordinal);
+        Assert.Contains("\"video\"", info.StandardOutput, StringComparison.Ordinal); // the cover picture shows up as a video stream
     }
 
     [Fact]

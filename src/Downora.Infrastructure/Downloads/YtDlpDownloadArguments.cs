@@ -52,6 +52,8 @@ internal static class YtDlpDownloadArguments
             AddVideo(args, request);
         }
 
+        AddTags(args, request);
+
         args.Add("--ffmpeg-location");
         args.Add(layout.FfmpegPath);
 
@@ -93,6 +95,27 @@ internal static class YtDlpDownloadArguments
         args.Add(url.AbsoluteUri);
         return args;
     }
+
+    private static void AddTags(List<string> args, DownloadRequest request)
+    {
+        if (request.EmbedMetadata)
+        {
+            args.Add("--embed-metadata");
+        }
+
+        if (request.EmbedCoverArt && CanHoldCoverArt(request))
+        {
+            // Thumbnails often come as WebP, which players don't read as cover art, so they become JPEG first.
+            args.Add("--convert-thumbnails");
+            args.Add("jpg");
+            args.Add("--embed-thumbnail");
+        }
+    }
+
+    /// <summary>WAV has no cover picture and WebM can't carry attachments; asking for one would only produce a warning.</summary>
+    internal static bool CanHoldCoverArt(DownloadRequest request) => request.Kind == MediaKind.Audio
+        ? request.AudioFormat != AudioFormat.Wav
+        : request.Container != VideoContainer.WebM;
 
     /// <summary>The <c>-o</c> template: our own sanitized name, with only the extension left for yt-dlp to fill in.</summary>
     internal static string OutputTemplate(string baseName) =>

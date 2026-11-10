@@ -77,6 +77,8 @@ public sealed partial class DownloaderViewModel : PageViewModel, IDisposable
             new(AudioFormat.Mp3, "AudioFormat_Mp3", localizer),
             new(AudioFormat.M4a, "AudioFormat_M4a", localizer),
             new(AudioFormat.Opus, "AudioFormat_Opus", localizer),
+            new(AudioFormat.Flac, "AudioFormat_Flac", localizer),
+            new(AudioFormat.Wav, "AudioFormat_Wav", localizer),
         ];
         SelectedAudioFormat = AudioFormats[0];
         feed.Updated += OnFeedUpdated;

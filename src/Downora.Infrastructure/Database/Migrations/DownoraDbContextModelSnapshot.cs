@@ -45,6 +45,12 @@ namespace Downora.Infrastructure.Database.Migrations
                         .HasMaxLength(1024)
                         .HasColumnType("TEXT");
 
+                    b.Property<bool>("EmbedCoverArt")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("EmbedMetadata")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("FfmpegPathOverride")
                         .HasMaxLength(1024)
                         .HasColumnType("TEXT");
