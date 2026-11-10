@@ -118,9 +118,21 @@ for %p in (Core Infrastructure Presentation) do dotnet test --project tests\Down
 python tools/coverage.py
 ```
 
+## Running a test copy safely
+
+Set `DOWNORA_DATA_DIR` to a full folder path and `DOWNORA_ALLOW_MULTIPLE_INSTANCES=1`, and a second Downora runs with its own database, logs and tools, without touching (or fighting with) the one you use every day.
+
 ## Tests that read hostile input
 
 - Anything that parses what a site or a tool printed (`YtDlpJsonParser`, `YtDlpProgressParser`, `ErrorClassifier`, `FileNames`, `UrlValidator`) has a test that feeds it truncated, mutated and random input and asserts it never throws anything the caller doesn't already handle. Add the same kind of test when you add a parser. These tests use fixed random seeds, so a failure always reproduces.
 - `ScaleTests` build a big playlist, 20,000 jobs and a 10,000-file library and check the queries stay inside a generous time budget.
 - Logging a link goes through `LogSafe.Url`. Never put a raw link, cookie or token in a log message.
 - Opening a downloaded file goes through `MediaFileTypes.IsOpenable`; anything else may only be shown in its folder.
+
+## Installer (Phase 10)
+
+- Everything lives in `installer/`: `Downora.iss` (Inno Setup script), `build-installer.ps1` (publish self-contained win-x64, bundle the tools, optionally sign, compile, write the SHA-256), `fetch-tools.ps1` (downloads the tools and verifies their published checksums, mirroring `ToolCatalog`) and `THIRD-PARTY-NOTICES.txt`. How to build, test, sign and release is in [releasing.md](releasing.md).
+- The bundled tools go in `<app>\tools`; `ToolManager.PrepareAsync` copies them to the data folder on first run and never overwrites what is there (yt-dlp updates itself).
+- `AppId` in the `.iss` identifies Downora to Windows. Never change it. The running-app check uses the same mutex name as `SingleInstance` (`Downora.SingleInstance.v1`); change both together or not at all.
+- The uninstaller removes `%LocalAppData%\Downora\tools`, `logs` and `thumbnails`, the Run-key entry, and (only if the user says yes) everything else in that folder. Don't run an installed copy's uninstaller on a machine where you use Downora.
+- Don't hand-edit the version in the script: it comes from `Directory.Build.props`, or from the tag in the release workflow.

@@ -8,7 +8,7 @@ Built with C#, .NET 10 and WPF (MVVM). Media extraction runs through yt-dlp and 
 
 ## Status
 
-**Phases 1–9 of 11 are complete.**
+**Phases 1–10 of 11 are complete.**
 
 - **Phase 1, foundation:** the solution, the Generic Host with DI, Serilog logging, SQLite with migrations, persistent settings, crash recovery and CI.
 - **Phase 2, shell UI:** the Fluent Velocity design system in dark and light, a sidebar with all seven pages, English and Arabic with a right-to-left layout, and real data on every page.
@@ -21,8 +21,13 @@ Built with C#, .NET 10 and WPF (MVVM). Media extraction runs through yt-dlp and 
 - **Phase 7, playlists and library:** paste a playlist link and every item is listed with a tick box (private or deleted items can't be ticked). Pick video (with a quality) or audio (with a format), press "Download selected", and the items join the queue in playlist order; items already in your queue are skipped, and the page shows "3 of 12 finished" as they complete. The Media Library now fills itself: each finished download is added with its size, length, resolution and codecs read by FFprobe, downloads from earlier versions are added the first time you open the app, files you moved or deleted are marked "File missing", and "Remove from library" drops an entry without touching the file.
 - **Phase 8, settings, history, tools, tray, startup:** Settings gains "Keep download history" (forever, 30, 90, 180 days or a year; older entries are removed, files and library untouched), "Keep yt-dlp up to date" (checked when Downora starts, at most once a day and never while downloads run; on by default), "Use my own FFmpeg", and a Windows section: start Downora when you sign in, start in the tray, and keep running in the tray when you close the window. There is now a tray icon (Open, Pause all, Resume all, Exit; its tooltip shows how many downloads are running), and only one Downora can run at a time: starting a second one brings the first to the front. History can be filtered by Completed, Failed or Cancelled, and any entry can be removed on its own.
 - **Phase 9, review:** a security review ([docs/security-review.md](docs/security-review.md), [SECURITY.md](SECURITY.md)) and a performance review ([docs/performance-review.md](docs/performance-review.md)). Fixes include: the Library only opens known audio and video types (a downloaded program or script is shown in Explorer, never run); links with a user name or password are refused; logs no longer contain tokens from links; yt-dlp no longer loads plugin code; very long playlists and queues are virtualized and the Library shows 120 entries at a time with "Show more". Random-input tests found and fixed two real bugs (half an emoji in a title, and oddly shaped yt-dlp output). Line coverage is 94% and CI now fails if it drops.
+- **Phase 10, installer:** an Inno Setup installer (`installer/`) that is self-contained (no .NET to install), bundles yt-dlp, FFmpeg, FFprobe and Deno so it works offline, installs for the current user without administrator rights, upgrades in place, closes a running Downora, and uninstalls cleanly (asking before it deletes settings and history). A release workflow builds it on a version tag; code signing is built in and switches on when a certificate is added ([docs/releasing.md](docs/releasing.md)). There is a user guide in English and Arabic ([docs/user-guide.md](docs/user-guide.md), [docs/user-guide.ar.md](docs/user-guide.ar.md)).
 
 See [docs/roadmap.md](docs/roadmap.md).
+
+## Install
+
+Download `Downora-Setup-<version>.exe` from the [Releases page](https://github.com/Andrewaziz99/Downora/releases) and run it (see the [user guide](docs/user-guide.md)). The installer is not signed until a code-signing certificate is added, so Windows SmartScreen may ask you to confirm. To build the installer yourself, see [docs/releasing.md](docs/releasing.md).
 
 ## Requirements
 

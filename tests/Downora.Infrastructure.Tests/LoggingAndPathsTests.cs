@@ -57,6 +57,29 @@ public sealed class LoggingAndPathsTests : IDisposable
         Assert.True(Directory.Exists(paths.ThumbnailsDirectory));
     }
 
+    [Fact]
+    public void A_test_copy_can_keep_all_its_data_in_another_folder()
+    {
+        var custom = Path.Combine(_root, "isolated");
+        var before = Environment.GetEnvironmentVariable(AppPaths.DataDirectoryVariable);
+        try
+        {
+            Environment.SetEnvironmentVariable(AppPaths.DataDirectoryVariable, custom);
+            var paths = AppPaths.ForCurrentUser();
+            Assert.Equal(Path.GetFullPath(custom), paths.DataDirectory);
+            Assert.Equal(Path.Combine(Path.GetFullPath(custom), "downora.db"), paths.DatabasePath);
+
+            // A relative or empty value is ignored rather than guessed at.
+            Environment.SetEnvironmentVariable(AppPaths.DataDirectoryVariable, @"relative\folder");
+            Assert.EndsWith(AppPaths.AppFolderName, AppPaths.ForCurrentUser().DataDirectory, StringComparison.Ordinal);
+            Assert.DoesNotContain("relative", AppPaths.ForCurrentUser().DataDirectory, StringComparison.Ordinal);
+        }
+        finally
+        {
+            Environment.SetEnvironmentVariable(AppPaths.DataDirectoryVariable, before);
+        }
+    }
+
     [Theory]
     [InlineData("")]
     [InlineData("   ")]

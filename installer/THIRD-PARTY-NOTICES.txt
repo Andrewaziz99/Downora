@@ -1,0 +1,36 @@
+Downora third-party notices
+===========================
+
+Downora is a front end. It runs the programs below, which are installed in its "tools" folder and copied to
+%LocalAppData%\Downora\tools the first time it starts. Each keeps its own license. Downora does not change them.
+
+yt-dlp
+  Reads links and downloads media.
+  License: The Unlicense (public domain dedication).
+  https://github.com/yt-dlp/yt-dlp
+
+FFmpeg and FFprobe
+  Joins, converts and checks media files. This is the LGPL build of FFmpeg from BtbN's FFmpeg-Builds
+  (ffmpeg-master-latest-win64-lgpl), which contains no GPL or nonfree components.
+  License: GNU Lesser General Public License, version 2.1 or later.
+  FFmpeg is a trademark of Fabrice Bellard, originator of the FFmpeg project.
+  You may replace these two files with your own build: Settings > Tools > "Use my own FFmpeg".
+  The license text is at https://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+  Source code: https://ffmpeg.org/download.html and https://github.com/BtbN/FFmpeg-Builds
+  Downora uses FFmpeg and FFprobe only as separate programs (it starts them and reads their output); it does not link to them.
+
+Deno
+  The JavaScript runtime yt-dlp uses to solve YouTube's challenges.
+  License: MIT.
+  https://github.com/denoland/deno
+
+Libraries inside Downora
+  WPF UI (MIT)                       https://github.com/lepoco/wpfui
+  CommunityToolkit.Mvvm (MIT)        https://github.com/CommunityToolkit/dotnet
+  Entity Framework Core (MIT)        https://github.com/dotnet/efcore
+  Microsoft.Extensions.* (MIT)       https://github.com/dotnet/runtime
+  SQLite (public domain)             https://sqlite.org
+  Serilog (Apache 2.0)               https://github.com/serilog/serilog
+  .NET runtime (MIT)                 https://github.com/dotnet/runtime
+
+Downora only downloads content you own or are allowed to access. It does not bypass DRM, paywalls or other access controls.

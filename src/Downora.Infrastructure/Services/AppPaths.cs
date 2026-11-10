@@ -10,6 +10,12 @@ public sealed class AppPaths : IAppPaths
 {
     public const string AppFolderName = "Downora";
 
+    /// <summary>
+    /// For testing and development: a full path here moves everything Downora keeps (database, logs, tools) to that folder,
+    /// so a test copy never touches the real settings or history. Not meant for everyday use.
+    /// </summary>
+    public const string DataDirectoryVariable = "DOWNORA_DATA_DIR";
+
     public AppPaths(string dataDirectory, string defaultDownloadDirectory)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(dataDirectory);
@@ -29,11 +35,15 @@ public sealed class AppPaths : IAppPaths
     /// <summary>Paths for the signed-in Windows user.</summary>
     public static AppPaths ForCurrentUser()
     {
-        var localAppData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
         var userProfile = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
-        return new AppPaths(
-            Path.Combine(localAppData, AppFolderName),
-            Path.Combine(userProfile, "Downloads", AppFolderName));
+        var downloads = Path.Combine(userProfile, "Downloads", AppFolderName);
+        if (Environment.GetEnvironmentVariable(DataDirectoryVariable) is { Length: > 0 } custom && Path.IsPathFullyQualified(custom))
+        {
+            return new AppPaths(custom, downloads);
+        }
+
+        var localAppData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+        return new AppPaths(Path.Combine(localAppData, AppFolderName), downloads);
     }
 
     public void EnsureCreated()
