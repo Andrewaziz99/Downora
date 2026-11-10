@@ -7,6 +7,20 @@ using NSubstitute;
 
 namespace Downora.Presentation.Tests;
 
+/// <summary>Waits for something that happens on a background task, without a fixed sleep that a slow machine can outrun.</summary>
+internal static class Wait
+{
+    public static async Task UntilAsync(Func<bool> condition, string what)
+    {
+        for (var i = 0; i < 1500 && !condition(); i++)
+        {
+            await Task.Delay(10, TestContext.Current.CancellationToken);
+        }
+
+        Assert.True(condition(), "Timed out waiting for: " + what);
+    }
+}
+
 /// <summary>Tests that change the UI language touch process-wide culture, so they never run in parallel with each other.</summary>
 [CollectionDefinition(Name, DisableParallelization = true)]
 public sealed class CultureSensitive

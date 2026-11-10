@@ -367,7 +367,7 @@ public class ViewModelTests
         // Fewer entries than asked for: nothing more to show. A new filter starts from the first page again.
         _library.QueryAsync(Arg.Any<LibraryQuery>(), Arg.Any<CancellationToken>()).Returns([new MediaItem { FilePath = "/m/a.mp4" }]);
         library.SelectedKind = library.KindFilters.Single(k => k.Value == MediaKind.Audio);
-        await Task.Delay(50, TestContext.Current.CancellationToken);
+        await Wait.UntilAsync(() => !library.HasMore, "the library reloaded for the new filter");
         Assert.False(library.HasMore);
         await _library.Received().QueryAsync(Arg.Is<LibraryQuery>(q => q.Kind == MediaKind.Audio && q.Take == LibraryViewModel.PageSize), Arg.Any<CancellationToken>());
     }

@@ -1052,7 +1052,7 @@ public sealed class DownloadFlowTests : IAsyncDisposable
         _queries.CountByStatusAsync(Arg.Any<CancellationToken>()).Returns(new Dictionary<DownloadStatus, int>());
         failed.Status = DownloadStatus.Waiting;
         Send(failed);
-        await Task.Delay(50, TestContext.Current.CancellationToken);
+        await Wait.UntilAsync(() => history.Items.Count == 0, "History reloaded without the retried job");
         Assert.Empty(history.Items);
     }
 
@@ -1067,7 +1067,7 @@ public sealed class DownloadFlowTests : IAsyncDisposable
         _queries.GetHistoryAsync(Arg.Any<HistoryQuery>(), Arg.Any<CancellationToken>()).Returns([done]);
         _queries.CountByStatusAsync(Arg.Any<CancellationToken>()).Returns(new Dictionary<DownloadStatus, int> { [DownloadStatus.Completed] = 1 });
         Send(done);
-        await Task.Delay(50, TestContext.Current.CancellationToken);
+        await Wait.UntilAsync(() => history.Items.Count == 1, "History gained the finished download");
 
         Assert.Equal(["done"], history.Items.Select(i => i.Title));
     }
@@ -1166,8 +1166,9 @@ public sealed class DownloadFlowTests : IAsyncDisposable
         Assert.Equal(4, history.StatusFilters.Count);
 
         history.SelectedStatus = history.StatusFilters.Single(f => f.Value == DownloadStatus.Failed);
-        await Task.Delay(50, TestContext.Current.CancellationToken);
-        await _queries.Received().GetHistoryAsync(Arg.Is<HistoryQuery>(q => q.Status == DownloadStatus.Failed), Arg.Any<CancellationToken>());
+        await Wait.UntilAsync(
+            () => _queries.ReceivedCalls().Any(c => c.GetArguments().OfType<HistoryQuery>().Any(q => q.Status == DownloadStatus.Failed)),
+            "History asked for failed downloads only");
 
         await history.RemoveCommand.ExecuteAsync(history.Items.FirstOrDefault() ?? new DownloadItemViewModel(done, _l));
         await _queries.Received(1).RemoveFromHistoryAsync(done.Id, Arg.Any<CancellationToken>());

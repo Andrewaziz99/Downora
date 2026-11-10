@@ -44,9 +44,20 @@ jobs:
       - name: Test with coverage
         shell: bash
         run: |
+          # Job logs need a GitHub sign-in to read, so failing tests are also reported as annotations (visible to everyone).
+          status=0
           for project in Core Infrastructure Presentation; do
-            dotnet test --project "tests/Downora.${project}.Tests" --configuration Release --no-build               --coverage --coverage-output-format cobertura --coverage-output "cov-${project}.xml" --results-directory TestResults
+            code=0
+            dotnet test --project "tests/Downora.${project}.Tests" --configuration Release --no-build               --coverage --coverage-output-format cobertura --coverage-output "cov-${project}.xml" --results-directory TestResults               > "test-${project}.log" 2>&1 || code=$?
+            cat "test-${project}.log"
+            if [ "$code" -ne 0 ]; then
+              status=1
+              details=$(grep -A6 -E '^failed ' "test-${project}.log" | head -45 | sed 's/%/%25/g' | awk '{printf "%s%%0A", $0}')
+              [ -z "$details" ] && details=$(tail -25 "test-${project}.log" | sed 's/%/%25/g' | awk '{printf "%s%%0A", $0}')
+              echo "::error title=Tests failed in ${project} (exit ${code})::${details}"
+            fi
           done
+          exit $status
 
       - name: Coverage gate
         run: python tools/coverage.py

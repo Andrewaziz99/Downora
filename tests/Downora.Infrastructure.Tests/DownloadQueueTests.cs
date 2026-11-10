@@ -97,7 +97,7 @@ public sealed class DownloadQueueTests : IAsyncDisposable
     /// <summary>Waits (briefly) for a background condition, such as the queue starting the next download.</summary>
     private static async Task UntilAsync(Func<bool> condition, string what)
     {
-        for (var i = 0; i < 500 && !condition(); i++)
+        for (var i = 0; i < 1500 && !condition(); i++)
         {
             await Task.Delay(10, TestContext.Current.CancellationToken);
         }
